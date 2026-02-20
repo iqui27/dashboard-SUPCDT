@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile.server
+    container_name: secti-backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - .env.production
+    restart: unless-stopped

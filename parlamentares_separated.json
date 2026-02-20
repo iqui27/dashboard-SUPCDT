@@ -1,0 +1,173 @@
+{
+  "multiplasEntries": [
+    {
+      "original": "iolando, manzoni , martins machado",
+      "separados": [
+        "iolando",
+        "manzoni",
+        "martins machado"
+      ],
+      "projeto": "BRASÍLIA GAME FESTIVA",
+      "valor": "1.680.000,00"
+    },
+    {
+      "original": "pastor daniel /jaquelina",
+      "separados": [
+        "pastor daniel",
+        "jaquelina"
+      ],
+      "projeto": "ESCOLA DIGITAL",
+      "valor": "600.000,00"
+    },
+    {
+      "original": "Joaquim Roriz Neto, Lolando",
+      "separados": [
+        "Joaquim Roriz Neto",
+        "Lolando"
+      ],
+      "projeto": "ESCOLA DIGITAL PARA JOVENS - TECNOLOGIA CONTRA A VIOLÊNCIA",
+      "valor": "500.000,00"
+    },
+    {
+      "original": "martins e iolando",
+      "separados": [
+        "martins",
+        "iolando"
+      ],
+      "projeto": "\"REALITY GAMER DF\"",
+      "valor": "1.000.000,00"
+    },
+    {
+      "original": "Jaqueline Silva e lolano",
+      "separados": [
+        "Jaqueline Silva",
+        "lolano"
+      ],
+      "projeto": "ACELERA TECH",
+      "valor": "700.000,00"
+    }
+  ],
+  "parlamentaresUnicos": [
+    [
+      "Daniel Donizet",
+      1
+    ],
+    [
+      "doutora jane",
+      4
+    ],
+    [
+      "eduardo pedrosa",
+      4
+    ],
+    [
+      "Eduardo Pedrosa",
+      2
+    ],
+    [
+      "Fábio Felix",
+      1
+    ],
+    [
+      "Hermeto",
+      1
+    ],
+    [
+      "iolando",
+      5
+    ],
+    [
+      "Iolando",
+      1
+    ],
+    [
+      "jaquelina",
+      1
+    ],
+    [
+      "Jaqueline Silva",
+      6
+    ],
+    [
+      "João Cardoso",
+      1
+    ],
+    [
+      "Joaquim Roriz Neto",
+      1
+    ],
+    [
+      "joaquin roriz neto",
+      3
+    ],
+    [
+      "Lolando",
+      1
+    ],
+    [
+      "lolano",
+      1
+    ],
+    [
+      "manzoni",
+      1
+    ],
+    [
+      "martins",
+      1
+    ],
+    [
+      "martins machado",
+      1
+    ],
+    [
+      "MARTINS MACHADO",
+      1
+    ],
+    [
+      "Max Maciel",
+      2
+    ],
+    [
+      "pastol daniel de castro",
+      1
+    ],
+    [
+      "pastor daniel",
+      2
+    ],
+    [
+      "pastor daniel de casto",
+      1
+    ],
+    [
+      "pastor daniel de castro",
+      2
+    ],
+    [
+      "Paula Belmonte",
+      2
+    ],
+    [
+      "Pepa",
+      1
+    ],
+    [
+      "ricardo vale",
+      2
+    ],
+    [
+      "Rogério Morro da Cruz",
+      2
+    ],
+    [
+      "Thiago Manzoni",
+      8
+    ]
+  ],
+  "estatisticas": {
+    "totalMultiplas": 5,
+    "totalOcorrencias": 60,
+    "totalUnicos": 29
+  }
+}

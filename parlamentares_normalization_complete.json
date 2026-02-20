@@ -1,0 +1,78 @@
+{
+  "mapa": {
+    "doutora jane": "Doutora Jane",
+    "eduardo pedrosa": "Eduardo Pedrosa",
+    "Eduardo Pedrosa": "Eduardo Pedrosa",
+    "iolando": "Iolando",
+    "Iolando": "Iolando",
+    "Lolando": "Iolando",
+    "lolano": "Iolando",
+    "martins e iolando": [
+      "Iolando",
+      "Martins Machado"
+    ],
+    "Jaqueline Silva": "Jaqueline Silva",
+    "Jaqueline Silva e lolano": [
+      "Jaqueline Silva",
+      "Iolando"
+    ],
+    "jaquelina": "Jaqueline Silva",
+    "joaquin roriz neto": "Joaquim Roriz Neto",
+    "Joaquim Roriz Neto, Lolando": [
+      "Joaquim Roriz Neto",
+      "Iolando"
+    ],
+    "manzoni": "Thiago Manzoni",
+    "MARTINS MACHADO": "Martins Machado",
+    "martins": "Martins Machado",
+    "martins machado": "Martins Machado",
+    "iolando, manzoni , martins machado": [
+      "Iolando",
+      "Thiago Manzoni",
+      "Martins Machado"
+    ],
+    "pastol daniel de castro": "Pastor Daniel de Castro",
+    "pastor daniel": "Pastor Daniel de Castro",
+    "pastor daniel /jaquelina": [
+      "Pastor Daniel de Castro",
+      "Jaqueline Silva"
+    ],
+    "pastor daniel de casto": "Pastor Daniel de Castro",
+    "pastor daniel de castro": "Pastor Daniel de Castro",
+    "ricardo vale": "Ricardo Vale",
+    "Daniel Donizet": "Daniel Donizet",
+    "Fábio Felix": "Fábio Felix",
+    "Hermeto": "Hermeto",
+    "João Cardoso": "João Cardoso",
+    "Max Maciel": "Max Maciel",
+    "Paula Belmonte": "Paula Belmonte",
+    "Pepa": "Pepa",
+    "Rogério Morro da Cruz": "Rogério Morro da Cruz",
+    "Thiago Manzoni": "Thiago Manzoni"
+  },
+  "estatisticas": {
+    "totalOriginal": 27,
+    "multiplasEntries": 5,
+    "totalAposSeparacao": 39,
+    "totalUnicos": 17
+  },
+  "listaFinal": [
+    "Daniel Donizet",
+    "Doutora Jane",
+    "Eduardo Pedrosa",
+    "Fábio Felix",
+    "Hermeto",
+    "Iolando",
+    "Jaqueline Silva",
+    "Joaquim Roriz Neto",
+    "João Cardoso",
+    "Martins Machado",
+    "Max Maciel",
+    "Pastor Daniel de Castro",
+    "Paula Belmonte",
+    "Pepa",
+    "Ricardo Vale",
+    "Rogério Morro da Cruz",
+    "Thiago Manzoni"
+  ]
+}

@@ -1,0 +1,36 @@
+export interface SheetFomentoRow {
+  numeroTermoFomento?: string;
+  processoSEI?: string;
+  projeto?: string;
+  situacaoProjeto?: string;
+  statusProjetoRaw?: string;
+  assinaturaPublicacaoRaw?: string;
+  statusDesdeRaw?: string;
+  vigenciaInicioRaw?: string;
+  vigenciaEventoRaw?: string;
+  vigenciaFinalRaw?: string;
+  valorTotalRaw?: string;
+  tipoSituacaoPagamento?: string;
+  parlamentar?: string;
+  osc?: string;
+  presidenteOSC?: string;
+  coordenadorProjeto?: string;
+  regiaoAdministrativa?: string;
+  responsavelParecer?: string;
+  responsavelPlanilha?: string;
+  statusPlanilha?: string;
+  statusDocumentacao?: string;
+  statusEscopoParecer?: string;
+  etapaProjeto?: string;
+  categoria?: string;
+  notasObs?: string;
+  tipoPublicoPrevisto?: string;
+  contrapartidasComissao?: string;
+  financeiroParcela1?: string;
+  financeiroParcela2?: string;
+  financeiroParcela3?: string;
+  financeiroParcela4?: string;
+  relatorioMonitoramentoAvaliacaoComissao?: string;
+  dataPrestacaoContasOSC?: string;
+  prorrogacaoPrestacaoContasMais30?: string;
+}

@@ -1,0 +1,852 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dashboard } from './components/Dashboard';
+import { ProjectSelector } from './components/ProjectSelector';
+import { ManageProjects } from './components/ManageProjects';
+import { PlanilhaManager } from './components/PlanilhaManager';
+import { FomentosTableEditor } from './components/FomentosTableEditor';
+import { Fomento, KPIData, MovimentacaoHistorico, StatusProjeto } from './types/fomento';
+import { fetchFomentosFromSheets } from './lib/googleSheets';
+import { buildAssinaturaDistribution, calculateValorExecutado, cn, createLocalId, exportToCSV } from './lib/utils';
+import { fetchStatusUpdates, StatusUpdate } from './lib/statusUpdates';
+import { createCustomProject, deleteCustomProject, fetchCustomProjects, updateCustomProject } from './lib/customProjects';
+import { fetchProjectOverrides, upsertProjectOverride } from './lib/projectOverrides';
+import { Home, FolderKanban, ClipboardList, Table as TableIcon, PanelLeftClose, PanelLeftOpen, Download, RefreshCw, Moon, Sun, Database, Loader2 } from 'lucide-react';
+import { Button } from './components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './components/ui/select';
+import { DataSourceSummary, LocalDataset, REMOTE_DATA_SOURCE_ID, fetchDataSources, fetchLocalDataset } from './lib/dataSources';
+import { MigrationDashboard } from './components/MigrationDashboard';
+
+type AppTab = 'home' | 'projects' | 'table' | 'manage';
+type ManageSubTab = 'projects' | 'osc' | 'migration';
+
+function deriveStatusFromUpdate(status: string, fallback: StatusProjeto): StatusProjeto {
+  const normalized = status?.trim().toLowerCase();
+  if (!normalized) {
+    return fallback;
+  }
+  if (/(reprov)/.test(normalized)) {
+    return 'Reprovado';
+  }
+  if (/(conclu|assin|finaliz)/.test(normalized)) {
+    return 'Assinado';
+  }
+  if (/(aguard|andamento|pendente)/.test(normalized)) {
+    return 'Não assinado';
+  }
+  return fallback;
+}
+
+function mergeStatusUpdateIntoFomento(fomento: Fomento, update: StatusUpdate): Fomento {
+  const updatedAt = new Date(update.updatedAt);
+  const validDate = Number.isNaN(updatedAt.getTime()) ? new Date() : updatedAt;
+  const statusProjeto = deriveStatusFromUpdate(update.status, fomento.statusProjeto);
+
+  const historicoMovimentacoes = [...(fomento.historicoMovimentacoes ?? [])];
+  const entryId = `status-update-${update.id}`;
+  const historicoEntry: MovimentacaoHistorico = {
+    id: entryId,
+    data: validDate,
+    statusProjeto,
+    situacao: update.status,
+    notas: update.notes
+  };
+  const existingIndex = historicoMovimentacoes.findIndex(item => item.id === entryId);
+  if (existingIndex >= 0) {
+    historicoMovimentacoes[existingIndex] = historicoEntry;
+  } else {
+    historicoMovimentacoes.push(historicoEntry);
+  }
+
+  historicoMovimentacoes.sort((a, b) => b.data.getTime() - a.data.getTime());
+
+  return {
+    ...fomento,
+    statusProjeto,
+    etapaProjeto: update.status ?? fomento.etapaProjeto,
+    situacao: update.status ?? fomento.situacao,
+    notasObs: update.notes ?? fomento.notasObs,
+    statusDesde: validDate,
+    diasParado: statusProjeto === 'Assinado' ? 0 : fomento.diasParado,
+    historicoMovimentacoes,
+    localStatusUpdate: update
+  };
+}
+
+interface ManageContentProps {
+  fomentos: Fomento[];
+  selectedProjectId: string;
+  onSelectProject: (id: string) => void;
+  onUpdateFomento: (fomento: Fomento) => void;
+  onCreateFomento: () => Promise<Fomento>;
+  onAddHistorico: (fomentoId: string, historico: MovimentacaoHistorico) => void;
+  onDeleteFomento?: (fomentoId: string) => Promise<void> | void;
+  manageSubTab: ManageSubTab;
+}
+
+function ManageContent({
+  fomentos,
+  selectedProjectId,
+  onSelectProject,
+  onUpdateFomento,
+  onCreateFomento,
+  onAddHistorico,
+  onDeleteFomento,
+  manageSubTab
+}: ManageContentProps) {
+  return (
+    <div className="flex flex-col gap-4">
+      {manageSubTab === 'projects' ? (
+        <ManageProjects
+          fomentos={fomentos}
+          selectedProjectId={selectedProjectId}
+          onSelectProject={onSelectProject}
+          onUpdateFomento={onUpdateFomento}
+          onCreateFomento={onCreateFomento}
+          onAddHistorico={onAddHistorico}
+          onDeleteFomento={onDeleteFomento}
+        />
+      ) : manageSubTab === 'migration' ? (
+        <MigrationDashboard />
+      ) : (
+        <div className="flex min-h-[320px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border/70 bg-card/40 p-8 text-center">
+          <h2 className="text-lg font-semibold text-foreground">Gestão de OSCs</h2>
+          <p className="max-w-md text-sm text-muted-foreground">
+            Esta seção permitirá cadastrar e gerenciar OSCs vinculadas aos projetos. Em breve adicionaremos campos e integrações para facilitar o acompanhamento das organizações parceiras.
+          </p>
+          <div className="flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-xs text-muted-foreground">
+            <span>Em construção</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function App() {
+  const [fomentos, setFomentos] = useState<Fomento[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activeTab, setActiveTab] = useState<AppTab>('home');
+  const [manageSubTab, setManageSubTab] = useState<ManageSubTab>('projects');
+  const [dataSources, setDataSources] = useState<DataSourceSummary[]>([]);
+  const [selectedDataSourceId, setSelectedDataSourceId] = useState<string>(REMOTE_DATA_SOURCE_ID);
+  const [localDatasets, setLocalDatasets] = useState<Record<string, LocalDataset>>({});
+  const [selectedProjectId, setSelectedProjectId] = useState<string>('');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [isRefreshingSources, setIsRefreshingSources] = useState(false);
+  const loadData = useCallback(async (sourceId?: string) => {
+    setIsLoading(true);
+    try {
+      const targetSource = sourceId ?? selectedDataSourceId;
+
+      const [customProjects, statusUpdates, projectOverrides] = await Promise.all([
+        fetchCustomProjects(),
+        fetchStatusUpdates(),
+        fetchProjectOverrides()
+      ]);
+
+      let sheetData: Fomento[] = [];
+
+      if (targetSource === REMOTE_DATA_SOURCE_ID) {
+        sheetData = await fetchFomentosFromSheets();
+      } else {
+        const cached = localDatasets[targetSource];
+        if (cached) {
+          sheetData = cached.fomentos;
+        } else {
+          const dataset = await fetchLocalDataset(targetSource);
+          sheetData = dataset.fomentos;
+          setLocalDatasets(previous => ({ ...previous, [targetSource]: dataset }));
+        }
+      }
+
+      const updatesMap = new Map<string, StatusUpdate>();
+      statusUpdates.forEach(update => {
+        if (!updatesMap.has(update.projectId)) {
+          updatesMap.set(update.projectId, update);
+        }
+      });
+
+      const allBaseFomentos = [...sheetData, ...customProjects];
+
+      const baseFomentos = allBaseFomentos.map(fomento => ({
+        ...fomento,
+        historicoMovimentacoes: fomento.historicoMovimentacoes ?? []
+      }));
+
+      const overridesMap = new Map(projectOverrides.map(override => [override.projectId, override]));
+
+      const mergedFomentos = baseFomentos.map(fomento => {
+        const override = overridesMap.get(fomento.id);
+        const statusUpdate = updatesMap.get(fomento.id);
+        
+        if (override || statusUpdate) {
+          const updatedFomento = { ...fomento };
+          
+          if (override) {
+            Object.assign(updatedFomento, override.overrides);
+          }
+          
+          if (statusUpdate) {
+            return mergeStatusUpdateIntoFomento(updatedFomento, statusUpdate);
+          }
+          
+          return updatedFomento;
+        }
+        
+        return fomento;
+      });
+
+      setFomentos(mergedFomentos);
+      setSelectedProjectId(prev => {
+        if (!mergedFomentos || mergedFomentos.length === 0) {
+          return '';
+        }
+        if (prev && mergedFomentos.some(f => f.id === prev)) {
+          return prev;
+        }
+        return mergedFomentos[0].id;
+      });
+      setLastUpdated(new Date());
+    } catch (error) {
+      console.error('Failed to load data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [localDatasets, selectedDataSourceId]);
+  const refreshDataSources = useCallback(async () => {
+    setIsRefreshingSources(true);
+    try {
+      const sources = await fetchDataSources();
+      setDataSources(sources);
+      if (sources.length === 0) {
+        if (selectedDataSourceId !== REMOTE_DATA_SOURCE_ID) {
+          setSelectedDataSourceId(REMOTE_DATA_SOURCE_ID);
+          await loadData(REMOTE_DATA_SOURCE_ID);
+        }
+        return;
+      }
+
+      if (!sources.some(source => source.id === selectedDataSourceId)) {
+        const fallback = sources[0]?.id ?? REMOTE_DATA_SOURCE_ID;
+        setSelectedDataSourceId(fallback);
+        await loadData(fallback);
+        return;
+      }
+
+      await loadData(selectedDataSourceId);
+    } catch (error) {
+      console.error('Failed to load data sources', error);
+      await loadData(REMOTE_DATA_SOURCE_ID);
+    } finally {
+      setIsRefreshingSources(false);
+    }
+  }, [selectedDataSourceId, loadData]);
+  
+  useEffect(() => {
+    refreshDataSources();
+  }, [refreshDataSources]);
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      // Forçar atualização do theme-color via JavaScript para Safari
+      let themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])');
+      if (!themeColorMeta) {
+        themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      }
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', '#fdf24e');
+      }
+    } else {
+      document.documentElement.classList.remove('dark');
+      // Forçar atualização do theme-color via JavaScript para Safari
+      let themeColorMeta = document.querySelector('meta[name="theme-color"]:not([media])');
+      if (!themeColorMeta) {
+        themeColorMeta = document.querySelector('meta[name="theme-color"]');
+      }
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', '#285ea4');
+      }
+    }
+  }, [isDarkMode]);
+  const handleExportCSV = () => {
+    exportToCSV(fomentos, `fomentos-2025-${new Date().toISOString().split('T')[0]}.csv`);
+  };
+  const calculateKPIs = (): KPIData => {
+    const statusDistribution = buildAssinaturaDistribution(fomentos);
+    const projetosAtencao = fomentos.filter(f => f.statusProjeto !== 'Assinado' && f.statusProjeto !== 'Reprovado').length;
+    const valorAssinados = fomentos
+      .filter(f => f.statusProjeto === 'Assinado')
+      .reduce((sum, f) => sum + f.valorTotal, 0);
+    const valorNaoAssinados = fomentos
+      .filter(f => f.statusProjeto === 'Não assinado')
+      .reduce((sum, f) => sum + f.valorTotal, 0);
+    const localUpdates = fomentos.filter(f => f.localStatusUpdate).length;
+    return {
+      totalProjetos: fomentos.length,
+      valorTotalAprovado: fomentos.reduce((sum, f) => sum + f.valorTotal, 0),
+      valorExecutado: fomentos.reduce((sum, f) => sum + calculateValorExecutado(f), 0),
+      statusDistribution,
+      projetosAtencao,
+      valorAssinados,
+      valorNaoAssinados,
+      localUpdates
+    };
+  };
+  const kpiData = useMemo(() => calculateKPIs(), [fomentos]);
+  const navItems: { id: AppTab; label: string; icon: typeof Home }[] = [{
+    id: 'home',
+    label: 'Home',
+    icon: Home
+  }, {
+    id: 'projects',
+    label: 'Projetos',
+    icon: FolderKanban
+  }, {
+    id: 'table',
+    label: 'Planilha',
+    icon: Table as TableIcon
+  }, {
+    id: 'manage',
+    label: 'Gerenciar',
+    icon: ClipboardList
+  }];
+  const handleProjectNavigate = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    setActiveTab('projects');
+  };
+  const handleEditProject = (projectId: string) => {
+    setSelectedProjectId(projectId);
+    setActiveTab('manage');
+    setManageSubTab('projects');
+  };
+  const persistOverride = useCallback(async (project: Fomento, fields: Partial<Fomento>) => {
+    const overridePayload: Partial<Fomento> = {};
+    Object.entries(fields).forEach(([key, value]) => {
+      if (value !== undefined) {
+        (overridePayload as Record<string, unknown>)[key] = value;
+      }
+    });
+
+    try {
+      const override = await upsertProjectOverride(project.id, overridePayload);
+      setFomentos(prev => prev.map(fomento => {
+        if (fomento.id !== project.id) {
+          return fomento;
+        }
+
+        return {
+          ...fomento,
+          overrideNeedsSync: override.needsSheetSync,
+          overrideLastUpdatedAt: override.lastOverrideAt,
+          overrideLastSyncedAt: override.lastSheetSyncAt ?? null
+        };
+      }));
+    } catch (error) {
+      console.error('Failed to persist project override', error);
+    }
+  }, []);
+
+  const handleUpdateFomento = useCallback((updated: Fomento) => {
+    let overridePayload: { project: Fomento; fields: Partial<Fomento> } | null = null;
+
+    setFomentos(prev => prev.map(fomento => {
+      if (fomento.id !== updated.id) return fomento;
+      const statusChanged = fomento.statusProjeto !== updated.statusProjeto;
+      const historicoMovimentacoes = statusChanged
+        ? [...fomento.historicoMovimentacoes, {
+          id: createLocalId('historico'),
+          data: new Date(),
+          statusProjeto: updated.statusProjeto,
+          situacao: updated.situacao,
+          etapaProjeto: updated.etapaProjeto,
+          notas: `Status atualizado manualmente em ${new Date().toLocaleString('pt-BR')}`
+        }]
+        : fomento.historicoMovimentacoes;
+      const merged: Fomento = {
+        ...updated,
+        historicoMovimentacoes,
+        statusDesde: statusChanged ? new Date() : updated.statusDesde
+      };
+
+      overridePayload = {
+        project: merged,
+        fields: {
+          statusProjeto: merged.statusProjeto,
+          situacao: merged.situacao,
+          etapaProjeto: merged.etapaProjeto,
+          statusDesde: merged.statusDesde,
+          notasObs: merged.notasObs,
+          responsavelParecer: merged.responsavelParecer,
+          responsavelPlanilha: merged.responsavelPlanilha,
+          responsavelAlteracao: merged.responsavelAlteracao,
+          statusPlanilha: merged.statusPlanilha,
+          statusDocumentacao: merged.statusDocumentacao,
+          statusEscopoParecer: merged.statusEscopoParecer
+        }
+      };
+
+      return merged;
+    }));
+
+    if (updated.origin === 'custom') {
+      updateCustomProject(updated).catch(error => {
+        console.error('Failed to update custom project', error);
+      });
+    }
+
+    if (overridePayload) {
+      const { project: overrideProject, fields: overrideFields } = overridePayload as {
+        project: Fomento;
+        fields: Partial<Fomento>;
+      };
+      persistOverride(overrideProject, overrideFields);
+    }
+  }, [persistOverride]);
+  const handleDeleteFomento = useCallback(async (fomentoId: string) => {
+    let previousFomentos: Fomento[] = [];
+    let nextFomentos: Fomento[] = [];
+    const previousSelectedId = selectedProjectId;
+
+    setFomentos(prev => {
+      previousFomentos = prev;
+      nextFomentos = prev.filter(fomento => fomento.id !== fomentoId);
+      return nextFomentos;
+    });
+
+    if (previousSelectedId === fomentoId) {
+      setSelectedProjectId(nextFomentos[0]?.id ?? '');
+    }
+
+    try {
+      await deleteCustomProject(fomentoId);
+    } catch (error) {
+      console.error('Failed to delete custom project', error);
+      setFomentos(previousFomentos);
+      if (previousSelectedId === fomentoId) {
+        setSelectedProjectId(previousSelectedId);
+      }
+    }
+  }, [selectedProjectId]);
+  const handleCreateFomento = useCallback(async (): Promise<Fomento> => {
+    const novoFomento: Fomento = {
+      id: createLocalId('fomento'),
+      statusProjeto: 'Não assinado',
+      assinaturaPublicacao: '',
+      numeroTermoFomento: '',
+      processoSEI: '',
+      projeto: 'Novo projeto',
+      vigenciaInicio: null,
+      vigenciaEvento: null,
+      vigenciaFinal: null,
+      valorTotal: 0,
+      tipoSituacaoPagamento: '',
+      parlamentar: '',
+      parlamentares: [],
+      emendasParlamentares: [],
+      etapaProjeto: '',
+      osc: '',
+      presidenteOSC: '',
+      coordenadorProjeto: '',
+      regiaoAdministrativa: '',
+      regioesAdministrativas: [],
+      responsavelParecer: '',
+      responsavelPlanilha: '',
+      statusPlanilha: '',
+      statusDocumentacao: '',
+      statusEscopoParecer: '',
+      situacao: '',
+      categoria: 'Outro',
+      notasObs: '',
+      tipoPublicoPrevisto: '',
+      contrapartidasComissao: '',
+      statusDesde: null,
+      financeiroParcela1: '',
+      financeiroParcela2: '',
+      financeiroParcela3: '',
+      financeiroParcela4: '',
+      relatorioMonitoramentoAvaliacaoComissao: '',
+      dataPrestacaoContasOSC: null,
+      prorrogacaoPrestacaoContasMais30: null,
+      diasParado: undefined,
+      diasLimite: undefined,
+      aditivosVigencia: [],
+      aditivosValor: [],
+      prazos: {
+        rma: null,
+        despachoHomologacao: null,
+        relatorioExecucaoObjeto: null,
+        parecerTecnicoRelatorio: null,
+        decisaoFinal: null
+      },
+      historicoMovimentacoes: []
+    };
+    try {
+      const saved = await createCustomProject(novoFomento);
+      setFomentos(prev => [saved, ...prev]);
+      setSelectedProjectId(saved.id);
+      return saved;
+    } catch (error) {
+      console.error('Failed to create project', error);
+      setFomentos(prev => [novoFomento, ...prev]);
+      setSelectedProjectId(novoFomento.id);
+      return novoFomento;
+    }
+  }, []);
+  const handleAddHistorico = useCallback((fomentoId: string, historico: MovimentacaoHistorico) => {
+    let overridePayload: { project: Fomento; fields: Partial<Fomento> } | null = null;
+
+    setFomentos(prev => prev.map(fomento => {
+      if (fomento.id !== fomentoId) {
+        return fomento;
+      }
+
+      const updatedFomento: Fomento = {
+        ...fomento,
+        statusProjeto: historico.statusProjeto,
+        situacao: historico.situacao ?? fomento.situacao,
+        etapaProjeto: historico.etapaProjeto ?? fomento.etapaProjeto,
+        statusDesde: new Date(),
+        historicoMovimentacoes: [...fomento.historicoMovimentacoes, historico]
+      };
+
+      overridePayload = {
+        project: updatedFomento,
+        fields: {
+          historicoMovimentacoes: [...updatedFomento.historicoMovimentacoes],
+          statusProjeto: updatedFomento.statusProjeto,
+          situacao: updatedFomento.situacao,
+          etapaProjeto: updatedFomento.etapaProjeto,
+          statusDesde: updatedFomento.statusDesde,
+          notasObs: updatedFomento.notasObs
+        }
+      };
+      return updatedFomento;
+    }));
+
+    if (!overridePayload) {
+      return;
+    }
+
+    const { project: persistCandidate, fields: overrideFields } = overridePayload as {
+      project: Fomento;
+      fields: Partial<Fomento>;
+    };
+
+    if (persistCandidate.origin === 'custom') {
+      updateCustomProject(persistCandidate).catch(error => {
+        console.error('Failed to persist project history', error);
+      });
+    }
+
+    persistOverride(persistCandidate, overrideFields);
+  }, [persistOverride]);
+  return (
+    <div className="min-h-screen w-full bg-background text-foreground transition-colors">
+      <div className="flex min-h-screen">
+        <aside className={cn('hidden bg-card/70 border-r border-border/60 transition-all duration-200 md:flex md:flex-col md:fixed md:h-screen md:left-0 md:top-0 md:z-10 md:overflow-hidden', isSidebarCollapsed ? 'md:w-20' : 'md:w-64')}>
+          <div className={cn('flex items-start gap-3 border-b border-border/40 px-5 py-6', isSidebarCollapsed ? 'flex-col items-center' : 'flex-row')}>
+            <button
+              type="button"
+              onClick={() => setIsSidebarCollapsed(prev => !prev)}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground shadow-sm transition-colors hover:bg-accent/90"
+              aria-label={isSidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            >
+              {isSidebarCollapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+            </button>
+            {!isSidebarCollapsed && (
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Secti Dashboard</span>
+                <h1 className="mt-1 text-xl font-semibold text-foreground">Painel</h1>
+              </div>
+            )}
+          </div>
+          <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
+            {navItems.map(item => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              const showSubmenu = item.id === 'manage' && !isSidebarCollapsed;
+
+              return (
+                <div key={item.id} className="space-y-1">
+                  <button
+                    onClick={() => setActiveTab(item.id)}
+                    className={cn(
+                      'group flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                      isActive
+                        ? 'bg-accent text-accent-foreground shadow-sm'
+                        : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+                      isSidebarCollapsed && 'justify-center px-2'
+                    )}
+                  >
+                    <span className={cn(
+                      'flex h-9 w-9 items-center justify-center rounded-lg border text-xs font-semibold transition-colors',
+                      isActive
+                        ? 'border-accent/60 bg-accent/90 text-accent-foreground'
+                        : 'border-border text-muted-foreground'
+                    )}>
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    {!isSidebarCollapsed && <span>{item.label}</span>}
+                  </button>
+
+                  {showSubmenu && isActive && (
+                    <div className="ml-12 space-y-1">
+                      <button
+                        type="button"
+                        onClick={() => setManageSubTab('projects')}
+                        className={cn(
+                          'flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors',
+                          manageSubTab === 'projects'
+                            ? 'bg-primary/15 text-foreground'
+                            : 'text-muted-foreground hover:bg-muted/50'
+                        )}
+                      >
+                        <span>Projetos</span>
+                        {manageSubTab === 'projects' && <span className="text-[10px] uppercase text-primary">ativo</span>}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setManageSubTab('osc')}
+                        className={cn(
+                          'flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors',
+                          manageSubTab === 'osc'
+                            ? 'bg-primary/15 text-foreground'
+                            : 'text-muted-foreground hover:bg-muted/50'
+                        )}
+                      >
+                        <span>OSC</span>
+                        {manageSubTab === 'osc' && <span className="text-[10px] uppercase text-primary">ativo</span>}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setManageSubTab('migration')}
+                        className={cn(
+                          'flex w-full items-center justify-between rounded-lg px-3 py-2 text-xs font-medium transition-colors',
+                          manageSubTab === 'migration'
+                            ? 'bg-primary/15 text-foreground'
+                            : 'text-muted-foreground hover:bg-muted/50'
+                        )}
+                      >
+                        <span>Migração</span>
+                        {manageSubTab === 'migration' && <span className="text-[10px] uppercase text-primary">ativo</span>}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </nav>
+          {!isSidebarCollapsed && (
+            <div className="px-4 pb-6 pt-4">
+              <div className="flex items-center justify-center">
+                <img
+                  src={isDarkMode ? '/logosecti_black.svg' : '/logo-secti.png'}
+                  alt="Logo SECTI"
+                  className="h-auto w-full transition-all"
+                />
+              </div>
+            </div>
+          )}
+        </aside>
+        <div className={cn('flex flex-1 flex-col', isSidebarCollapsed ? 'md:ml-20' : 'md:ml-64')}>
+          <div className={cn(
+            'border-b border-border/40 transition-colors',
+            isDarkMode ? 'bg-card text-accent' : 'bg-primary text-primary-foreground'
+          )}>
+            <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-4 md:flex-row md:items-center md:justify-between">
+              <div className="flex flex-col gap-1">
+                <div className={cn(
+                  'flex items-center gap-2 text-xs uppercase tracking-wide',
+                  isDarkMode ? 'text-accent/80' : 'text-primary-foreground/80'
+                )}>
+                  <span className={cn(
+                    'rounded-full px-2 py-1 font-semibold',
+                    isDarkMode ? 'bg-accent/10 text-accent' : 'bg-primary-foreground/20 text-primary-foreground'
+                  )}>Fomentos 2025</span>
+                  {lastUpdated && <span>Atualizado em {lastUpdated.toLocaleDateString('pt-BR')}</span>}
+                </div>
+                <h1 className={cn('text-2xl font-semibold', isDarkMode ? 'text-slate-200' : undefined)}>SECTI - Painel estratégico</h1>
+                <p className={cn('text-sm', isDarkMode ? 'text-slate-300' : 'text-primary-foreground/80')}>Acompanhe indicadores, selecione projetos e gerencie fichas em um único lugar.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <Select
+                  value={selectedDataSourceId}
+                  onValueChange={value => setSelectedDataSourceId(value)}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger
+                    className={cn(
+                      'h-10 w-60 rounded-full border px-3 text-sm font-medium transition-colors',
+                      isDarkMode
+                        ? 'border-accent/50 bg-card/60 text-accent hover:bg-card/40'
+                        : 'border-primary-foreground/40 bg-primary-foreground text-primary hover:bg-primary-foreground/90'
+                    )}
+                  >
+                    <SelectValue placeholder="Selecionar fonte" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {dataSources.map(source => (
+                      <SelectItem key={source.id} value={source.id}>
+                        <div className="flex flex-col">
+                          <span>{source.name}</span>
+                          {source.description && <span className="text-xs text-muted-foreground">{source.description}</span>}
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  onClick={() => loadData()}
+                  disabled={isLoading}
+                  variant="outline"
+                  size="sm"
+                  className={cn(
+                    'h-10 rounded-full border px-3 text-sm font-medium transition-colors',
+                    isDarkMode
+                      ? 'border-accent/50 bg-card/60 text-accent hover:bg-card/40'
+                      : 'border-primary-foreground/40 bg-primary-foreground text-primary hover:bg-primary-foreground/90'
+                  )}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Atualizando...
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw className="mr-2 h-4 w-4" />
+                      Atualizar
+                    </>
+                  )}
+                </Button>
+              </div>
+                <button
+                  type="button"
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  className={cn(
+                    'flex h-9 w-9 items-center justify-center rounded-full border transition-colors',
+                    isDarkMode
+                      ? 'border-accent/50 text-accent hover:bg-card/40'
+                      : 'border-primary-foreground/40 text-primary-foreground hover:bg-primary-foreground/20'
+                  )}
+                  aria-label={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+                >
+                  {isDarkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="space-y-2 border-b px-4 py-3 md:hidden">
+            <Select value={activeTab} onValueChange={value => setActiveTab(value as AppTab)}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Selecione" />
+              </SelectTrigger>
+              <SelectContent>
+                {navItems.map(item => <SelectItem key={item.id} value={item.id}>
+                    {item.label}
+                  </SelectItem>) }
+              </SelectContent>
+            </Select>
+            {activeTab === 'manage' && (
+              <Select value={manageSubTab} onValueChange={value => setManageSubTab(value as ManageSubTab)}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Escolha a visualização" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="projects">Projetos</SelectItem>
+                  <SelectItem value="osc">OSC</SelectItem>
+                  <SelectItem value="migration">Migração</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+            <Select value={selectedDataSourceId} onValueChange={value => setSelectedDataSourceId(value)}>
+              <SelectTrigger
+                className={cn(
+                  'w-full rounded-xl border px-3 py-2 text-sm font-medium transition-colors',
+                  isDarkMode
+                    ? 'border-accent/50 bg-card/60 text-accent hover:bg-card/40'
+                    : 'border-primary-foreground/40 bg-primary-foreground text-primary hover:bg-primary-foreground/90'
+                )}
+              >
+                <SelectValue placeholder="Selecionar fonte" />
+              </SelectTrigger>
+              <SelectContent>
+                {dataSources.map(source => (
+                  <SelectItem key={source.id} value={source.id}>
+                    <div className="flex flex-col">
+                      <span>{source.name}</span>
+                      {source.description && <span className="text-xs text-muted-foreground">{source.description}</span>}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <main className="flex-1 overflow-y-auto">
+            <div className="mx-auto w-full max-w-[1400px] px-4 py-6 md:px-6 md:py-8">
+              {isLoading ? <div className="flex h-64 items-center justify-center">
+                  <div className="text-center">
+                    <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
+                    <p className="text-muted-foreground">Carregando dados...</p>
+                  </div>
+                </div> : fomentos.length === 0 ? <div className="flex h-64 items-center justify-center">
+                  <div className="text-center">
+                    <p className="mb-2 text-lg font-medium">Nenhum dado encontrado</p>
+                    <p className="text-sm text-muted-foreground">
+                      Configure as credenciais do Google Sheets ou aguarde o carregamento dos dados.
+                    </p>
+                  </div>
+                </div> : (() => {
+                  if (activeTab === 'home') {
+                    return <Dashboard fomentos={fomentos} kpiData={kpiData} onProjectSelect={handleProjectNavigate} />;
+                  }
+                  if (activeTab === 'projects') {
+                    return <ProjectSelector fomentos={fomentos} selectedProjectId={selectedProjectId} onSelectProject={setSelectedProjectId} onEditProject={handleEditProject} />;
+                  }
+                  if (activeTab === 'table') {
+                    return (
+                      <div className="space-y-8">
+                        <PlanilhaManager
+                          dataSources={dataSources}
+                          onImportSuccess={async newSource => {
+                            setDataSources(previous => {
+                              const exists = previous.some(source => source.id === newSource.id);
+                              return exists ? previous.map(source => source.id === newSource.id ? newSource : source) : [newSource, ...previous];
+                            });
+                            setSelectedDataSourceId(newSource.id);
+                            setLocalDatasets(prev => {
+                              const next = { ...prev };
+                              delete next[newSource.id];
+                              return next;
+                            });
+                            await loadData(newSource.id);
+                          }}
+                          onRefreshSources={refreshDataSources}
+                          isRefreshingSources={isRefreshingSources}
+                        />
+                        <FomentosTableEditor fomentos={fomentos} onUpdateFomento={handleUpdateFomento} />
+                      </div>
+                    );
+                  }
+                  return (
+                    <ManageContent
+                      fomentos={fomentos}
+                      selectedProjectId={selectedProjectId}
+                      onSelectProject={setSelectedProjectId}
+                      onUpdateFomento={handleUpdateFomento}
+                      onCreateFomento={handleCreateFomento}
+                      onAddHistorico={handleAddHistorico}
+                      onDeleteFomento={handleDeleteFomento}
+                      manageSubTab={manageSubTab}
+                    />
+                  );
+                })()}
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,27 @@
+src/App.tsx(63,11): error TS2322: Type '{ currentTab: string; onTabChange: () => void; showTabs: boolean; }' is not assignable to type 'IntrinsicAttributes & HeaderProps'.
+  Property 'currentTab' does not exist on type 'IntrinsicAttributes & HeaderProps'.
+src/App.tsx(93,9): error TS2322: Type '{ currentTab: AppTab; onTabChange: (tab: string) => void; showTabs: boolean; }' is not assignable to type 'IntrinsicAttributes & HeaderProps'.
+  Property 'currentTab' does not exist on type 'IntrinsicAttributes & HeaderProps'.
+src/components/Dashboard.tsx(1,26): error TS2307: Cannot find module './KPICards' or its corresponding type declarations.
+src/components/Dashboard.tsx(2,35): error TS2307: Cannot find module './AttentionProjects' or its corresponding type declarations.
+src/components/Dashboard.tsx(4,33): error TS2307: Cannot find module './DeadlinesWidget' or its corresponding type declarations.
+src/components/Dashboard.tsx(14,34): error TS2307: Cannot find module './NewFeaturesModal' or its corresponding type declarations.
+src/components/Dashboard.tsx(74,35): error TS2322: Type 'Fomento[]' is not assignable to type 'Projeto[]'.
+  Type 'Fomento' is missing the following properties from type 'Projeto': metas, cronograma
+src/components/Dashboard.tsx(78,23): error TS2322: Type 'Fomento[]' is not assignable to type 'Projeto[]'.
+  Type 'Fomento' is missing the following properties from type 'Projeto': metas, cronograma
+src/components/supcdt/DashboardGeral.tsx(12,11): error TS6133: 'concluidos' is declared but its value is never read.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(38,19): error TS2339: Property 'projeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(38,59): error TS2339: Property 'statusProjeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(46,22): error TS2339: Property 'projeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(48,24): error TS2339: Property 'statusProjeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(283,33): error TS2339: Property 'projeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(320,33): error TS2339: Property 'statusProjeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(388,35): error TS2339: Property 'projeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/components/ParlamentaresManager.tsx(388,75): error TS2339: Property 'statusProjeto' does not exist on type 'Partial<EmendaParlamentar>'.
+src/components/supcdt/ManageProjects/hooks/useProjectForm.ts(32,5): error TS6133: 'onCurrencyError' is declared but its value is never read.
+src/components/supcdt/ManageProjects/ManageProjects.tsx(279,7): error TS2353: Object literal may only specify known properties, and 'status' does not exist in type 'Projeto'.
+src/components/supcdt/ManageProjects/ManageProjects.tsx(335,9): error TS2353: Object literal may only specify known properties, and 'status' does not exist in type 'MovimentacaoHistorico'.
+src/components/supcdt/ManageProjects/ManageProjects.tsx(1114,131): error TS2339: Property 'statusProjeto' does not exist on type 'StatusUpdate'.
+src/components/supcdt/ProjetoModal.tsx(45,17): error TS2322: Type '"Fomento"' is not assignable to type 'Categoria'.
+src/components/supcdt/StatusTimeline.tsx(1,8): error TS6133: 'React' is declared but its value is never read.

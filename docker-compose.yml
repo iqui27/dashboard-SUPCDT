@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  dashboard:
+    # build: .
+    image: iqui27/dashboard-app:latest
+    ports:
+      - "8080:80"
+    environment:
+      # Exemplo: defina variáveis de ambiente necessárias aqui ou via Portainer
+      # VITE_GOOGLE_SHEETS_RANGE: "A1:AE"
+      # VITE_GOOGLE_SHEETS_API_KEY: "sua_chave"
+      # VITE_GOOGLE_SHEET_ID: "seu_id"
+      - VITE_GOOGLE_SHEETS_API_KEY=${VITE_GOOGLE_SHEETS_API_KEY:-}
+      - VITE_GOOGLE_SHEET_ID=${VITE_GOOGLE_SHEET_ID:-}
+      - VITE_GOOGLE_SHEETS_RANGE=${VITE_GOOGLE_SHEETS_RANGE:-}
+    restart: unless-stopped
