@@ -46,8 +46,8 @@ export function Login() {
     setIsLoading(true);
 
     try {
-      // Login com as credenciais padrões de admin
-      await login('admin', '844612');
+      // Login com as credenciais padrões de admin do banco de dados
+      await login('admin', 'admin123');
       navigate(redirectPath, { replace: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Erro ao fazer login de teste';
