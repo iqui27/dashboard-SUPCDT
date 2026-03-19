@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, RefreshCw, Search, ShieldCheck, UserPlus, Users } from 'lucide-react';
 
 import { listAdminUsers, createAdminUser, updateAdminUser, type AdminUser, type UserRole } from '../lib/users';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
@@ -100,6 +100,8 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const selectedUser = useMemo(() => users.find(user => user.id === selectedUserId) ?? null, [users, selectedUserId]);
+  const activeUsersCount = useMemo(() => users.filter(user => user.isActive).length, [users]);
+  const adminUsersCount = useMemo(() => users.filter(user => user.role === 'admin').length, [users]);
   const filteredUsers = useMemo(() => {
     if (!searchQuery.trim()) {
       return users;
@@ -352,22 +354,45 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h2 className="text-xl font-semibold">Gerenciamento de usuários</h2>
-          <p className="text-sm text-muted-foreground">Crie novos usuários e atualize permissões existentes.</p>
+    <div className="space-y-5">
+      <div className="rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">Governança de acesso</p>
+            <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">Gerenciamento de usuários</h2>
+            <p className="mt-2.5 text-sm leading-6 text-slate-600">
+              Controle centralizado de credenciais, perfis e status de acesso do ambiente autenticado da SUPCDT.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Usuários ativos</p>
+              <p className="mt-1 text-xl font-bold text-slate-950">{activeUsersCount}</p>
+              <p className="text-[13px] text-slate-500">credenciais liberadas no ambiente</p>
+            </div>
+            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
+              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Administradores</p>
+              <p className="mt-1 text-xl font-bold text-slate-950">{adminUsersCount}</p>
+              <p className="text-[13px] text-slate-500">contas com controle total</p>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="flex w-full flex-col gap-3 rounded-[1.45rem] border border-white/80 bg-white/85 p-4 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)] sm:flex-row sm:items-center sm:justify-between">
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <form className="flex w-full items-center gap-2 sm:w-auto" onSubmit={handleSearchSubmit}>
-            <Input
-              placeholder="Buscar por nome, usuário ou e-mail"
-              value={searchTerm}
-              onChange={event => setSearchTerm(event.target.value)}
-              className="w-full sm:min-w-[240px]"
-              disabled={isLoading}
-            />
-            <Button type="submit" variant="secondary" disabled={isLoading}>
+            <div className="relative w-full sm:min-w-[280px]">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+              <Input
+                placeholder="Buscar por nome, usuário ou e-mail"
+                value={searchTerm}
+                onChange={event => setSearchTerm(event.target.value)}
+                className="h-11 w-full rounded-full border-slate-200 bg-slate-50 pl-10"
+                disabled={isLoading}
+              />
+            </div>
+            <Button type="submit" variant="secondary" disabled={isLoading} className="h-10 rounded-full">
               Pesquisar
             </Button>
             <Button
@@ -375,21 +400,22 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
               variant="ghost"
               onClick={handleClearSearch}
               disabled={isLoading || (!searchTerm && !searchQuery)}
+              className="h-10 rounded-full"
             >
               Limpar
             </Button>
           </form>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => loadUsers(false)}
-            disabled={isLoading || isRefreshing}
-            className="inline-flex items-center gap-2"
-          >
-            <Loader2 className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-            Atualizar lista
-          </Button>
         </div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => loadUsers(false)}
+          disabled={isLoading || isRefreshing}
+          className="inline-flex h-10 items-center gap-2 rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+        >
+          <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          Atualizar lista
+        </Button>
       </div>
 
       {feedback && (
@@ -399,10 +425,20 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
         </Alert>
       )}
 
-      <Card>
+      <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
         <CardHeader>
-          <CardTitle>Novo usuário</CardTitle>
-          <CardDescription>Defina as credenciais iniciais do usuário. A senha pode ser alterada posteriormente.</CardDescription>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <CardTitle className="flex items-center gap-2 text-lg text-slate-950">
+                <UserPlus className="h-5 w-5 text-sky-700" />
+                Novo usuário
+              </CardTitle>
+              <CardDescription>Defina as credenciais iniciais do usuário. A senha pode ser alterada posteriormente.</CardDescription>
+            </div>
+            <div className="rounded-2xl bg-sky-100 p-3 text-sky-700">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           <form className="grid grid-cols-1 gap-4 md:grid-cols-2" onSubmit={handleCreateUser}>
@@ -486,7 +522,7 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
             </div>
 
             <div className="md:col-span-2 flex justify-end">
-              <Button type="submit" disabled={isCreating} className="inline-flex items-center gap-2">
+              <Button type="submit" disabled={isCreating} className="inline-flex h-10 items-center gap-2 rounded-full bg-slate-950 text-white hover:bg-slate-800">
                 {isCreating && <Loader2 className="h-4 w-4 animate-spin" />}
                 Criar usuário
               </Button>
@@ -495,9 +531,12 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
         <CardHeader>
-          <CardTitle>Usuários cadastrados</CardTitle>
+          <CardTitle className="flex items-center gap-2 text-lg text-slate-950">
+            <Users className="h-5 w-5 text-slate-700" />
+            Usuários cadastrados
+          </CardTitle>
           <CardDescription>Visualize o status de cada usuário e acesse a edição para ajustar permissões.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -600,9 +639,9 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
       </Card>
 
       {selectedUser && (
-        <Card>
+        <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
           <CardHeader>
-            <CardTitle>Editar usuário</CardTitle>
+            <CardTitle className="text-lg text-slate-950">Editar usuário</CardTitle>
             <CardDescription>Atualize os dados do usuário selecionado e ajuste permissões conforme necessário.</CardDescription>
           </CardHeader>
           <CardContent>
@@ -704,10 +743,10 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
                   Última atualização: {formatDate(selectedUser.createdAt)}
                 </div>
                 <div className="flex gap-2">
-                  <Button type="button" variant="outline" onClick={() => setSelectedUserId(null)} disabled={isUpdating}>
+                  <Button type="button" variant="outline" onClick={() => setSelectedUserId(null)} disabled={isUpdating} className="rounded-full">
                     Cancelar
                   </Button>
-                  <Button type="submit" disabled={isUpdating} className="inline-flex items-center gap-2">
+                  <Button type="submit" disabled={isUpdating} className="inline-flex items-center gap-2 rounded-full bg-slate-950 text-white hover:bg-slate-800">
                     {isUpdating && <Loader2 className="h-4 w-4 animate-spin" />}
                     Salvar alterações
                   </Button>

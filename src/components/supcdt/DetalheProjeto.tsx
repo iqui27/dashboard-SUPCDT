@@ -72,25 +72,25 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
   const lacunas = getProjetoLacunasMonitoramento(projeto);
 
   return (
-    <div className="space-y-6 pb-20">
-      <div className="overflow-hidden rounded-[2rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.10),transparent_24%),linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.76))] p-6 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
-        <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
+    <div className="space-y-5 pb-20">
+      <div className="overflow-hidden rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.10),transparent_24%),linear-gradient(135deg,rgba(255,255,255,0.96),rgba(255,255,255,0.76))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+        <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
           <div className="max-w-4xl">
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-slate-950 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white">
+              <span className="rounded-full bg-slate-950 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-white">
                 {status}
               </span>
-              <span className="rounded-full bg-white/80 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+              <span className="rounded-full bg-white/80 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
                 {projeto.categoria || 'Sem categoria'}
               </span>
             </div>
 
-            <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-slate-950">{nome}</h1>
-            <p className="mt-3 max-w-3xl text-base leading-7 text-slate-600">
+            <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">{nome}</h1>
+            <p className="mt-2.5 max-w-3xl text-sm leading-6 text-slate-600">
               {projeto.descricao || 'Este projeto já está cadastrado, mas ainda precisa de descrição operacional mais detalhada para ampliar a leitura executiva.'}
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-4 text-sm text-slate-600">
+            <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[13px] text-slate-600">
               <span className="flex items-center gap-2"><UserRound className="h-4 w-4" /> {osc}</span>
               <span className="flex items-center gap-2"><MapPin className="h-4 w-4" /> {territorio}</span>
               <span className="flex items-center gap-2"><CalendarDays className="h-4 w-4" /> {dataInicio} até {dataFim}</span>
@@ -99,22 +99,22 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           </div>
 
           <div className="flex w-full flex-col gap-3 sm:w-auto">
-            <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-11 rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white">
+            <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-10 rounded-full border-slate-200 bg-white/80 text-slate-700 hover:bg-white">
               <PencilLine className="mr-2 h-4 w-4" />
               Atualizar monitoramento
             </Button>
-            <Button disabled variant="outline" className="h-11 rounded-full border-slate-200 bg-white/80 text-slate-500">
+            <Button disabled variant="outline" className="h-10 rounded-full border-slate-200 bg-white/80 text-slate-500">
               <Download className="mr-2 h-4 w-4" />
               PDF institucional indisponível
             </Button>
-            <Button onClick={() => setIsModalOpen(true)} className="h-11 rounded-full bg-slate-950 text-white hover:bg-slate-800">
+            <Button onClick={() => setIsModalOpen(true)} className="h-10 rounded-full bg-slate-950 text-white hover:bg-slate-800">
               <Plus className="mr-2 h-4 w-4" />
               Novo lançamento
             </Button>
           </div>
         </div>
 
-        <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <div className="mt-4 rounded-[1.35rem] border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           A exportação PDF só será habilitada quando o template institucional, as evidências e as regras de homologação estiverem modelados na base.
         </div>
       </div>
@@ -129,25 +129,25 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           { label: 'Metas Modeladas', value: `${monitoramento.totalMetas}`, helper: 'Linhas de acompanhamento disponíveis' },
           { label: 'Investimento Total', value: formatCurrency(projeto.valorTotal), helper: 'Valor cadastrado na base atual' }
         ].map((item) => (
-          <Card key={item.label} className={`rounded-[1.75rem] border shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] ${getSummaryCardTone(item.label)}`}>
-            <CardHeader className="pb-2">
+          <Card key={item.label} className={`rounded-[1.45rem] border shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] ${getSummaryCardTone(item.label)}`}>
+            <CardHeader className="pb-1.5">
               <CardTitle className="text-sm font-medium text-slate-500">{item.label}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-slate-950">{item.value}</div>
-              <p className="mt-2 text-xs text-slate-500">{item.helper}</p>
+              <div className="text-xl font-bold text-slate-950">{item.value}</div>
+              <p className="mt-1.5 text-xs text-slate-500">{item.helper}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.85fr)]">
-        <div className="space-y-6">
-          <Card className="rounded-[1.75rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.55fr)_minmax(320px,0.85fr)]">
+        <div className="space-y-5">
+          <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <CardHeader>
-              <CardTitle className="text-xl text-slate-950">Objetivo e escopo atual</CardTitle>
+              <CardTitle className="text-lg text-slate-950">Objetivo e escopo atual</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-sm leading-7 text-slate-600">
+            <CardContent className="space-y-4 text-sm leading-6 text-slate-600">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Objetivos</p>
                 <p className="mt-2">{projeto.objetivos || 'Objetivos ainda não detalhados no cadastro atual.'}</p>
@@ -159,9 +159,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[1.75rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+          <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-xl text-slate-950">Acompanhamento das metas</CardTitle>
+              <CardTitle className="text-lg text-slate-950">Acompanhamento das metas</CardTitle>
               <Button variant="outline" size="sm" onClick={() => setIsMetaModalOpen(true)} className="rounded-full">
                 <Plus className="mr-2 h-4 w-4" />
                 Nova meta
@@ -173,14 +173,14 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   const percentual = meta.totalPrevisto > 0 ? (meta.realizadoTotal / meta.totalPrevisto) * 100 : 0;
 
                   return (
-                    <div key={meta.id} className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+                    <div key={meta.id} className="rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4">
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="rounded-full bg-slate-900 px-3 py-1 text-xs font-semibold text-white">{meta.codigo}</span>
                             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">{meta.unidade}</p>
                           </div>
-                          <h3 className="mt-3 text-lg font-semibold text-slate-950">{meta.descricao}</h3>
+                          <h3 className="mt-3 text-base font-semibold text-slate-950">{meta.descricao}</h3>
                         </div>
 
                         <div className="rounded-2xl bg-white px-4 py-3 text-right shadow-sm">
@@ -201,7 +201,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         </div>
                       </div>
 
-                      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                         {Array.from({ length: projeto.cronograma.totalTrimestres || 1 }).map((_, idx) => {
                           const previsto = meta.previstoPorTrimestre[idx] || 0;
                           const realizado = meta.realizadoPorTrimestre[idx] || 0;
@@ -233,9 +233,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[1.75rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+          <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <CardHeader>
-              <CardTitle className="text-xl text-slate-950">Histórico de lançamentos</CardTitle>
+              <CardTitle className="text-lg text-slate-950">Histórico de lançamentos</CardTitle>
             </CardHeader>
             <CardContent>
               {loading ? (
@@ -249,7 +249,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               ) : (
                 <div className="space-y-4">
                   {lancamentos.map((lanc) => (
-                    <div key={lanc.id} className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+                    <div key={lanc.id} className="rounded-[1.35rem] border border-slate-200 bg-slate-50 p-4">
                       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                         <div>
                           <div className="flex flex-wrap items-center gap-2">
@@ -287,10 +287,10 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           </Card>
         </div>
 
-        <div className="space-y-6">
-          <Card className="rounded-[1.75rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+        <div className="space-y-5">
+          <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <CardHeader>
-              <CardTitle className="text-xl text-slate-950">Governança do projeto</CardTitle>
+              <CardTitle className="text-lg text-slate-950">Governança do projeto</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {[
@@ -314,9 +314,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[1.75rem] border-slate-200 bg-slate-950 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
+          <Card className="rounded-[1.45rem] border-slate-200 bg-slate-950 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl text-white">
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
                 <ShieldAlert className="h-5 w-5 text-amber-300" />
                 Lacunas remanescentes
               </CardTitle>
@@ -330,9 +330,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </CardContent>
           </Card>
 
-          <Card className="rounded-[1.75rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+          <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-xl text-slate-950">
+              <CardTitle className="flex items-center gap-2 text-lg text-slate-950">
                 <Radar className="h-5 w-5 text-sky-700" />
                 Painel operacional
               </CardTitle>
