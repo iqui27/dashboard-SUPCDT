@@ -1,7 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import { Save, Wifi, X } from 'lucide-react';
+import { Loader2, MapPinned, Save, Search, Wifi, X } from 'lucide-react';
 import { z } from 'zod';
 
+import { formatCep, lookupCepAddress, normalizeCep } from '../../lib/wifiLocation';
 import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -19,6 +20,7 @@ import {
   getWifiMaintenanceLabel,
   getWifiStatusLabel
 } from '../../types/wifi';
+import { WifiPointLocationPicker } from './WifiPointLocationPicker';
 
 interface WifiPointFormProps {
   point?: WifiPoint | null;
@@ -31,6 +33,7 @@ interface WifiPointFormProps {
 const wifiPointSchema = z.object({
   nome: z.string().min(3, 'Informe um nome para o ponto'),
   endereco: z.string().min(5, 'Informe o endereço do ponto'),
+  cep: z.string().nullable().optional().refine((value) => !value || normalizeCep(value).length === 8, 'CEP deve ter 8 dígitos'),
   regiaoAdministrativa: z.string().min(2, 'Selecione a região administrativa'),
   latitude: z.number().min(-16.2, 'Latitude fora do DF').max(-15.3, 'Latitude fora do DF'),
   longitude: z.number().min(-48.4, 'Longitude fora do DF').max(-47.3, 'Longitude fora do DF'),
@@ -50,6 +53,7 @@ function buildInitialState(point?: WifiPoint | null, initialPosition?: { latitud
   return {
     nome: point?.nome ?? '',
     endereco: point?.endereco ?? '',
+    cep: point?.cep ?? '',
     regiaoAdministrativa: point?.regiaoAdministrativa ?? defaultRegion ?? 'Plano Piloto',
     latitude: String(point?.latitude ?? initialPosition?.latitude ?? -15.7942),
     longitude: String(point?.longitude ?? initialPosition?.longitude ?? -47.8822),
@@ -70,11 +74,79 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
   const [form, setForm] = useState(() => buildInitialState(point, initialPosition, defaultRegion));
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [lookingUpCep, setLookingUpCep] = useState(false);
+  const [cepFeedback, setCepFeedback] = useState<string | null>(null);
+  const [manualCoordinates, setManualCoordinates] = useState(false);
 
   useEffect(() => {
     setForm(buildInitialState(point, initialPosition, defaultRegion));
     setErrors({});
+    setCepFeedback(null);
+    setManualCoordinates(false);
   }, [point, initialPosition, defaultRegion]);
+
+  const handleCoordinateChange = (latitude: number, longitude: number) => {
+    setForm((current) => ({
+      ...current,
+      latitude: latitude.toFixed(6),
+      longitude: longitude.toFixed(6)
+    }));
+    setErrors((current) => {
+      const next = { ...current };
+      delete next.latitude;
+      delete next.longitude;
+      return next;
+    });
+  };
+
+  const handleCepLookup = async () => {
+    if (normalizeCep(form.cep).length !== 8) {
+      setErrors((current) => ({
+        ...current,
+        cep: 'Informe um CEP com 8 dígitos'
+      }));
+      return;
+    }
+
+    setLookingUpCep(true);
+    setCepFeedback(null);
+    try {
+      const result = await lookupCepAddress(form.cep);
+      setForm((current) => ({
+        ...current,
+        cep: result.cep,
+        endereco: result.endereco || current.endereco,
+        regiaoAdministrativa: result.regiaoAdministrativa ?? current.regiaoAdministrativa,
+        latitude: result.latitude !== null ? result.latitude.toFixed(6) : current.latitude,
+        longitude: result.longitude !== null ? result.longitude.toFixed(6) : current.longitude
+      }));
+      setErrors((current) => {
+        const next = { ...current };
+        delete next.cep;
+        delete next.endereco;
+        delete next.regiaoAdministrativa;
+        delete next.latitude;
+        delete next.longitude;
+        return next;
+      });
+      setCepFeedback(
+        result.regiaoAdministrativa
+          ? `CEP localizado. Endereco preenchido e mapa aproximado em ${result.regiaoAdministrativa}. Ajuste o ponto exato no mapa abaixo.`
+          : 'CEP localizado. Confira o endereco e marque o ponto exato no mapa abaixo.'
+      );
+    } catch (error) {
+      setErrors((current) => ({
+        ...current,
+        cep: error instanceof Error ? error.message : 'Nao foi possivel consultar o CEP.'
+      }));
+    } finally {
+      setLookingUpCep(false);
+    }
+  };
+
+  const numericLatitude = Number(form.latitude) || -15.7942;
+  const numericLongitude = Number(form.longitude) || -47.8822;
+  const numericCoverageRadius = Number(form.coberturaRaioMetros) || 250;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -82,6 +154,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
     const parsed = wifiPointSchema.safeParse({
       nome: form.nome,
       endereco: form.endereco,
+      cep: form.cep.trim() ? formatCep(form.cep) : null,
       regiaoAdministrativa: form.regiaoAdministrativa,
       latitude: Number(form.latitude),
       longitude: Number(form.longitude),
@@ -136,7 +209,13 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
         </div>
 
         <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-6 overscroll-contain">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
+            {initialPosition && !point && (
+              <div className="rounded-[1.5rem] border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 md:col-span-2">
+                O ponto inicial veio do mapa principal. Use o mapa abaixo para refinar a localizacao exata antes de salvar.
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label>Nome do ponto</Label>
               <Input value={form.nome} onChange={(e) => setForm((current) => ({ ...current, nome: e.target.value }))} className="rounded-2xl" />
@@ -157,21 +236,116 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             </div>
 
             <div className="space-y-2 md:col-span-2">
+              <Label>CEP</Label>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Input
+                    value={form.cep}
+                    inputMode="numeric"
+                    placeholder="00000-000"
+                    onChange={(e) => {
+                      setForm((current) => ({ ...current, cep: formatCep(e.target.value) }));
+                      setCepFeedback(null);
+                    }}
+                    className="rounded-2xl pl-9"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleCepLookup}
+                  disabled={lookingUpCep}
+                  className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                >
+                  {lookingUpCep ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Buscando...
+                    </>
+                  ) : (
+                    <>
+                      <Search className="mr-2 h-4 w-4" />
+                      Preencher por CEP
+                    </>
+                  )}
+                </Button>
+              </div>
+              {errors.cep && <p className="text-xs text-rose-600">{errors.cep}</p>}
+              {cepFeedback && <p className="text-xs text-slate-500">{cepFeedback}</p>}
+            </div>
+
+            <div className="space-y-2 md:col-span-2">
               <Label>Endereço</Label>
               <Input value={form.endereco} onChange={(e) => setForm((current) => ({ ...current, endereco: e.target.value }))} className="rounded-2xl" />
               {errors.endereco && <p className="text-xs text-rose-600">{errors.endereco}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label>Latitude</Label>
-              <Input type="number" step="0.000001" value={form.latitude} onChange={(e) => setForm((current) => ({ ...current, latitude: e.target.value }))} className="rounded-2xl" />
-              {errors.latitude && <p className="text-xs text-rose-600">{errors.latitude}</p>}
-            </div>
+            <div className="space-y-3 md:col-span-2">
+              <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <MapPinned className="h-4 w-4 text-sky-700" />
+                      <Label className="text-sm font-semibold text-slate-900">Localização exata</Label>
+                    </div>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      O CEP ajuda a preencher o endereco. O ponto final deve ser marcado no mapa abaixo, sem depender de latitude e longitude manual.
+                    </p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setManualCoordinates((current) => !current)}
+                    className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                  >
+                    {manualCoordinates ? 'Ocultar coordenadas' : 'Ajuste manual'}
+                  </Button>
+                </div>
 
-            <div className="space-y-2">
-              <Label>Longitude</Label>
-              <Input type="number" step="0.000001" value={form.longitude} onChange={(e) => setForm((current) => ({ ...current, longitude: e.target.value }))} className="rounded-2xl" />
-              {errors.longitude && <p className="text-xs text-rose-600">{errors.longitude}</p>}
+                <div className="mt-4">
+                  <WifiPointLocationPicker
+                    latitude={numericLatitude}
+                    longitude={numericLongitude}
+                    coverageRadius={Math.min(1500, Math.max(50, numericCoverageRadius))}
+                    onChange={handleCoordinateChange}
+                  />
+                </div>
+
+                {manualCoordinates && (
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label>Latitude</Label>
+                      <Input
+                        type="number"
+                        step="0.000001"
+                        value={form.latitude}
+                        onChange={(e) => setForm((current) => ({ ...current, latitude: e.target.value }))}
+                        className="rounded-2xl bg-white"
+                      />
+                      {errors.latitude && <p className="text-xs text-rose-600">{errors.latitude}</p>}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Longitude</Label>
+                      <Input
+                        type="number"
+                        step="0.000001"
+                        value={form.longitude}
+                        onChange={(e) => setForm((current) => ({ ...current, longitude: e.target.value }))}
+                        className="rounded-2xl bg-white"
+                      />
+                      {errors.longitude && <p className="text-xs text-rose-600">{errors.longitude}</p>}
+                    </div>
+                  </div>
+                )}
+
+                {!manualCoordinates && (errors.latitude || errors.longitude) && (
+                  <div className="mt-3 text-xs text-rose-600">
+                    {errors.latitude || errors.longitude}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="space-y-2">

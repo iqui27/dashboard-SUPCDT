@@ -93,7 +93,7 @@ export function App() {
         projetosCount={projetos.length}
       />
 
-      <main className="mx-auto w-full max-w-[1480px] px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+      <main className="mx-auto w-full max-w-[1480px] px-4 pb-10 pt-4 sm:px-6 lg:px-8">
         {loading ? (
           <div className="flex min-h-[55vh] items-center justify-center">
             <div className="flex flex-col items-center gap-4 rounded-[1.75rem] border border-white/80 bg-white/85 px-8 py-10 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">

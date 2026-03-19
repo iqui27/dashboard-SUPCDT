@@ -31,6 +31,7 @@ export function WifiTable({ points, onEditPoint, onDeletePoint }: WifiTableProps
                 </div>
                 <h4 className="mt-3 text-lg font-semibold text-slate-950">{point.nome}</h4>
                 <p className="mt-1 text-sm text-slate-600">{point.endereco}</p>
+                {point.cep && <p className="mt-1 text-xs uppercase tracking-[0.16em] text-slate-400">CEP {point.cep}</p>}
               </div>
             </div>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -88,6 +89,7 @@ export function WifiTable({ points, onEditPoint, onDeletePoint }: WifiTableProps
                   <div>
                     <p className="font-semibold text-slate-950">{point.nome}</p>
                     <p className="text-sm text-slate-500">{point.endereco}</p>
+                    {point.cep && <p className="text-xs uppercase tracking-[0.16em] text-slate-400">CEP {point.cep}</p>}
                   </div>
                 </TableCell>
                 <TableCell>{point.regiaoAdministrativa}</TableCell>

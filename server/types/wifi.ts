@@ -9,6 +9,7 @@ export interface DBWifiPoint {
   _id?: ObjectId;
   nome: string;
   endereco: string;
+  cep?: string | null;
   regiaoAdministrativa: string;
   latitude: number;
   longitude: number;
@@ -30,6 +31,7 @@ export interface WifiPointApi {
   id: string;
   nome: string;
   endereco: string;
+  cep?: string | null;
   regiaoAdministrativa: string;
   latitude: number;
   longitude: number;
@@ -50,6 +52,7 @@ export interface WifiPointApi {
 export interface WifiPointInput {
   nome?: string;
   endereco?: string;
+  cep?: string | null;
   regiaoAdministrativa?: string;
   latitude?: number;
   longitude?: number;

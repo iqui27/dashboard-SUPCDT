@@ -36,7 +36,7 @@ test.describe('QA funcional local @local-functional', () => {
     await expect(wifiTable.getByText(/^Ponto QA Asa Norte$/)).toBeVisible();
     await expect(wifiTable.getByText(/^Ponto QA Ceilandia$/)).toBeVisible();
 
-    await page.getByPlaceholder(/Buscar por ponto, endereço, RA ou responsável/i).fill('Ceilandia');
+    await page.getByPlaceholder(/Buscar por ponto,.*RA ou responsável/i).fill('Ceilandia');
     await expect(wifiTable.getByText(/^Ponto QA Ceilandia$/)).toBeVisible();
   });
 });

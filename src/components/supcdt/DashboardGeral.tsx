@@ -288,103 +288,103 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
 
   return (
     <motion.div
-      className="space-y-8 pb-12"
+      className="space-y-6 pb-12"
       variants={containerVariants}
       initial="hidden"
       animate="show"
     >
       <motion.div
         variants={itemVariants}
-        className="overflow-hidden rounded-[2rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.18),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.7))] p-6 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]"
+        className="overflow-hidden rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.18),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.7))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]"
       >
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-sky-700/80">SUPCDT Monitoramento</p>
-            <h2 className="mt-3 text-4xl font-extrabold tracking-tight text-slate-950">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">SUPCDT Monitoramento</p>
+            <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">
               Leitura executiva do portfólio com base nos dados reais disponíveis.
             </h2>
-            <p className="mt-3 max-w-2xl text-base text-slate-600">
+            <p className="mt-2.5 max-w-2xl text-sm leading-6 text-slate-600">
               O painel agora consolida investimento, risco, saúde da entrega, incidentes e necessidade de ação. A leitura ficou mais próxima da operação real e já prepara a governança do módulo Wi-Fi Social.
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
+            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Base carregada</p>
-              <p className="mt-1 text-2xl font-bold text-slate-950">{projetos.length}</p>
-              <p className="text-sm text-slate-500">projetos no portfólio atual</p>
+              <p className="mt-1 text-xl font-bold text-slate-950">{projetos.length}</p>
+              <p className="text-[13px] text-slate-500">projetos no portfólio atual</p>
             </div>
-            <div className="rounded-2xl border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
+            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
               <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Integração</p>
-              <p className="mt-1 text-2xl font-bold text-slate-950">{portfolio.chavesIntegracao}</p>
-              <p className="text-sm text-slate-500">chaves prontas para cruzar com outro dashboard</p>
+              <p className="mt-1 text-xl font-bold text-slate-950">{portfolio.chavesIntegracao}</p>
+              <p className="text-[13px] text-slate-500">chaves prontas para cruzar com outro dashboard</p>
             </div>
           </div>
         </div>
       </motion.div>
 
       <motion.div variants={itemVariants} className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
+        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-slate-500">Investimento Total</span>
-            <div className="rounded-xl bg-sky-100 p-2 text-sky-700">
+            <div className="rounded-lg bg-sky-100 p-2 text-sky-700">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="mt-4 text-3xl font-bold text-slate-950">{formatCurrency(portfolio.investimentoTotal)}</h3>
-          <p className="mt-2 text-sm text-slate-500">Soma dos projetos atualmente cadastrados</p>
+          <h3 className="mt-3 text-[1.9rem] font-bold text-slate-950">{formatCurrency(portfolio.investimentoTotal)}</h3>
+          <p className="mt-2 text-[13px] text-slate-500">Soma dos projetos atualmente cadastrados</p>
         </div>
 
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
+        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-slate-500">Projetos Ativos</span>
-            <div className="rounded-xl bg-teal-100 p-2 text-teal-700">
+            <div className="rounded-lg bg-teal-100 p-2 text-teal-700">
               <Activity className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="mt-4 text-3xl font-bold text-slate-950">
+          <h3 className="mt-3 text-[1.9rem] font-bold text-slate-950">
             {portfolio.projetosAtivos}
             <span className="ml-2 text-lg font-medium text-slate-400">/ {projetos.length}</span>
           </h3>
-          <p className="mt-2 text-sm text-slate-500">Status operacionais em andamento, ativo ou assinado</p>
+          <p className="mt-2 text-[13px] text-slate-500">Status operacionais em andamento, ativo ou assinado</p>
         </div>
 
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
+        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-slate-500">Exigem Ação</span>
-            <div className="rounded-xl bg-amber-100 p-2 text-amber-700">
+            <div className="rounded-lg bg-amber-100 p-2 text-amber-700">
               <Radar className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="mt-4 text-3xl font-bold text-slate-950">{portfolio.projetosPrecisaAcao}</h3>
-          <p className="mt-2 text-sm text-slate-500">Projetos com acionamento operacional prioritário</p>
+          <h3 className="mt-3 text-[1.9rem] font-bold text-slate-950">{portfolio.projetosPrecisaAcao}</h3>
+          <p className="mt-2 text-[13px] text-slate-500">Projetos com acionamento operacional prioritário</p>
         </div>
 
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
+        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-slate-500">Incidentes Abertos</span>
-            <div className="rounded-xl bg-rose-100 p-2 text-rose-700">
+            <div className="rounded-lg bg-rose-100 p-2 text-rose-700">
               <AlertTriangle className="h-4 w-4" />
             </div>
           </div>
-          <h3 className="mt-4 text-3xl font-bold text-slate-950">{portfolio.incidentesAbertos}</h3>
-          <p className="mt-2 text-sm text-slate-500">Soma dos incidentes operacionais em acompanhamento</p>
+          <h3 className="mt-3 text-[1.9rem] font-bold text-slate-950">{portfolio.incidentesAbertos}</h3>
+          <p className="mt-2 text-[13px] text-slate-500">Soma dos incidentes operacionais em acompanhamento</p>
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(340px,0.9fr)]">
-        <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+      <motion.div variants={itemVariants} className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(340px,0.9fr)]">
+        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-xl font-semibold text-slate-950">Distribuição por categoria</h3>
-              <p className="mt-1 text-sm text-slate-500">Leitura rápida do tipo de iniciativa já registrada</p>
+              <h3 className="text-lg font-semibold text-slate-950">Distribuição por categoria</h3>
+              <p className="mt-1 text-[13px] text-slate-500">Leitura rápida do tipo de iniciativa já registrada</p>
             </div>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
               dados reais
             </span>
           </div>
 
-          <div className="mt-6 h-[280px] w-full">
+          <div className="mt-5 h-[240px] w-full">
             {portfolio.chartData.length ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={portfolio.chartData} layout="vertical" margin={{ top: 0, right: 24, left: 12, bottom: 0 }}>
@@ -422,13 +422,13 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-            <h3 className="flex items-center gap-2 text-xl font-semibold text-slate-950">
+        <div className="space-y-5">
+          <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+            <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-950">
               <AlertTriangle className="h-5 w-5 text-amber-600" />
               Radar de atenção
             </h3>
-            <div className="mt-5 space-y-3">
+            <div className="mt-4 space-y-3">
               {portfolio.alertas.length ? (
                 portfolio.alertas.slice(0, 5).map((alerta) => (
                   <div
@@ -451,13 +451,13 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
             </div>
           </div>
 
-          <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 p-6 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
+          <div className="rounded-[1.45rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
             <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-sky-200/80">
               <Link2 className="h-4 w-4" />
               Próxima camada
             </div>
-            <h3 className="mt-3 text-xl font-semibold">Gaps já mapeados para monitoramento profissional</h3>
-            <div className="mt-5 grid gap-2">
+            <h3 className="mt-3 text-lg font-semibold">Gaps já mapeados para monitoramento profissional</h3>
+            <div className="mt-4 grid gap-2">
               {portfolio.lacunas.length ? (
                 portfolio.lacunas.map((lacuna) => (
                   <div key={lacuna} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
@@ -474,15 +474,15 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="space-y-5">
+      <motion.div variants={itemVariants} className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-2xl font-bold tracking-tight text-slate-950">Portfólio monitorado</h3>
-            <p className="mt-1 text-sm text-slate-500">Cada card mostra risco, saúde, incidentes, progresso físico e a chave de integração disponível.</p>
+            <h3 className="text-xl font-bold tracking-tight text-slate-950">Portfólio monitorado</h3>
+            <p className="mt-1 text-[13px] text-slate-500">Cada card mostra risco, saúde, incidentes, progresso físico e a chave de integração disponível.</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 2xl:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
           {projetos.map((projeto) => {
             const status = getProjetoStatus(projeto);
             const statusOperacional = getProjetoStatusOperacional(projeto);
@@ -502,7 +502,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
             return (
               <div
                 key={projeto.id}
-                className={`rounded-[1.75rem] border p-6 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 ${tone.surface}`}
+                className={`rounded-[1.45rem] border p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 ${tone.surface}`}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div>

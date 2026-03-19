@@ -45,6 +45,7 @@ export interface WifiPoint {
   id: string;
   nome: string;
   endereco: string;
+  cep?: string | null;
   regiaoAdministrativa: RegiaoAdministrativaDf | string;
   latitude: number;
   longitude: number;
@@ -65,6 +66,7 @@ export interface WifiPoint {
 export interface WifiPointInput {
   nome: string;
   endereco: string;
+  cep?: string | null;
   regiaoAdministrativa: RegiaoAdministrativaDf | string;
   latitude: number;
   longitude: number;
