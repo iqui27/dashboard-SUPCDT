@@ -200,6 +200,47 @@
   }
 }
 
+/* Mantém o Leaflet abaixo de overlays e modais da aplicação. */
+.leaflet-container {
+  z-index: 0;
+}
+
+.leaflet-map-pane {
+  z-index: 10;
+}
+
+.leaflet-tile-pane {
+  z-index: 20;
+}
+
+.leaflet-overlay-pane,
+.leaflet-zoom-box,
+.leaflet-image-layer,
+.leaflet-layer {
+  z-index: 30;
+}
+
+.leaflet-shadow-pane {
+  z-index: 40;
+}
+
+.leaflet-marker-pane {
+  z-index: 50;
+}
+
+.leaflet-tooltip-pane {
+  z-index: 60;
+}
+
+.leaflet-popup-pane {
+  z-index: 70;
+}
+
+.leaflet-top,
+.leaflet-bottom {
+  z-index: 80;
+}
+
 /* Safe areas para iPhone (notch, dynamic island, home indicator) */
 @supports (padding: env(safe-area-inset-bottom)) {
   .safe-area-inset-bottom {

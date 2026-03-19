@@ -129,7 +129,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
   };
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
+    <div className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
       <div className="relative my-2 flex min-h-0 max-h-[calc(100dvh-1rem)] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:my-6 sm:max-h-[calc(100dvh-3rem)]">
         <div className="sticky top-0 z-10 flex shrink-0 items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] px-6 py-5 backdrop-blur-sm">
           <div>
