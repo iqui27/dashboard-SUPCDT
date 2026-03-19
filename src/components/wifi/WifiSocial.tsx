@@ -3,9 +3,9 @@ import { LayoutGrid, ListFilter, MapPinned, Plus, RadioTower, Search, ShieldAler
 import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
-import { createWifiPoint, deleteWifiPoint, fetchWifiPoints, fetchWifiStats, updateWifiPoint } from '../../lib/api/wifi';
+import { ApiRequestError, createWifiPoint, deleteWifiPoint, fetchWifiPoints, fetchWifiStats, updateWifiPoint } from '../../lib/api/wifi';
 import { Projeto, getProjetoNome, getProjetoStatus } from '../../types/projeto';
-import { REGIOES_ADMINISTRATIVAS_DF, WIFI_POINT_STATUSES, WifiPoint, WifiPointInput, WifiStats, getWifiStatusLabel } from '../../types/wifi';
+import { REGIOES_ADMINISTRATIVAS_DF, WIFI_POINT_STATUSES, WifiPoint, WifiPointInput, WifiStats, buildWifiStatsFromPoints, getWifiStatusLabel } from '../../types/wifi';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -53,6 +53,8 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingPoint, setEditingPoint] = useState<WifiPoint | null>(null);
   const [initialPosition, setInitialPosition] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [apiStatus, setApiStatus] = useState<'ready' | 'partial' | 'unavailable'>('ready');
+  const [apiMessage, setApiMessage] = useState<string | null>(null);
 
   const linkedProject = useMemo(
     () => projetos.find((projeto) => getProjetoNome(projeto).toLowerCase().includes('wifi')),
@@ -66,18 +68,43 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
 
     setLoading(true);
     try {
-      const [nextPoints, nextStats] = await Promise.all([
-        fetchWifiPoints(token, {
-          search: search.trim() || undefined,
-          status: statusFilter !== 'todos' ? statusFilter : undefined,
-          regiaoAdministrativa: regionFilter !== 'todas' ? regionFilter : undefined
-        }),
-        fetchWifiStats(token)
-      ]);
+      const nextPoints = await fetchWifiPoints(token, {
+        search: search.trim() || undefined,
+        status: statusFilter !== 'todos' ? statusFilter : undefined,
+        regiaoAdministrativa: regionFilter !== 'todas' ? regionFilter : undefined
+      });
+
+      let nextStats: WifiStats;
+      let nextApiStatus: 'ready' | 'partial' | 'unavailable' = 'ready';
+      let nextApiMessage: string | null = null;
+
+      try {
+        nextStats = await fetchWifiStats(token);
+      } catch (error) {
+        if (error instanceof ApiRequestError && error.status === 404) {
+          nextStats = buildWifiStatsFromPoints(nextPoints);
+          nextApiStatus = 'partial';
+          nextApiMessage = 'O backend publicado ainda não expõe /api/wifi/stats. As métricas exibidas abaixo foram derivadas no cliente a partir dos pontos carregados.';
+        } else {
+          throw error;
+        }
+      }
 
       setPoints(nextPoints);
       setStats(nextStats);
-    } catch {
+      setApiStatus(nextApiStatus);
+      setApiMessage(nextApiMessage);
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 404) {
+        setPoints([]);
+        setStats(EMPTY_STATS);
+        setApiStatus('unavailable');
+        setApiMessage('O backend publicado ainda não tem o módulo Wi‑Fi Social habilitado. As rotas /api/wifi e/ou /api/wifi/stats responderam 404 neste ambiente.');
+        return;
+      }
+
+      setApiStatus('ready');
+      setApiMessage(null);
       toast.error('Erro ao carregar a operação do Wi‑Fi Social.');
     } finally {
       setLoading(false);
@@ -112,8 +139,17 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
       setModalOpen(false);
       setEditingPoint(null);
       setInitialPosition(null);
+      setApiStatus('ready');
+      setApiMessage(null);
       await loadData();
-    } catch {
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 404) {
+        setApiStatus('unavailable');
+        setApiMessage('O ambiente atual não publicou as rotas de escrita do Wi‑Fi Social. Publique o backend mais recente para cadastrar ou editar pontos.');
+        toast.error('A API publicada ainda não suporta cadastro de pontos Wi‑Fi.');
+        return;
+      }
+
       toast.error('Não foi possível salvar o ponto.');
     }
   };
@@ -131,8 +167,17 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
     try {
       await deleteWifiPoint(token, point.id);
       toast.success('Ponto removido.');
+      setApiStatus('ready');
+      setApiMessage(null);
       await loadData();
-    } catch {
+    } catch (error) {
+      if (error instanceof ApiRequestError && error.status === 404) {
+        setApiStatus('unavailable');
+        setApiMessage('O ambiente atual não publicou as rotas de escrita do Wi‑Fi Social. Publique o backend mais recente para excluir pontos.');
+        toast.error('A API publicada ainda não suporta exclusão de pontos Wi‑Fi.');
+        return;
+      }
+
       toast.error('Não foi possível excluir o ponto.');
     }
   };
@@ -190,7 +235,11 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
             ))}
           </div>
 
-          <Button onClick={() => openCreateModal()} className="h-11 rounded-full bg-slate-950 px-5 text-white hover:bg-slate-800">
+          <Button
+            onClick={() => openCreateModal()}
+            disabled={apiStatus === 'unavailable'}
+            className="h-11 rounded-full bg-slate-950 px-5 text-white hover:bg-slate-800 disabled:bg-slate-300"
+          >
             <Plus className="mr-2 h-4 w-4" />
             Novo ponto
           </Button>
@@ -251,6 +300,18 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
         </div>
       </div>
 
+      {apiMessage && (
+        <div
+          className={`rounded-[1.5rem] border px-5 py-4 text-sm ${
+            apiStatus === 'unavailable'
+              ? 'border-amber-200 bg-amber-50 text-amber-900'
+              : 'border-sky-200 bg-sky-50 text-sky-900'
+          }`}
+        >
+          {apiMessage}
+        </div>
+      )}
+
       {loading ? (
         <div className="flex min-h-[45vh] items-center justify-center rounded-[1.75rem] border border-white/80 bg-white/85 px-8 py-10 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
           <div className="flex flex-col items-center gap-4">
@@ -260,6 +321,19 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
               <p className="mt-1 text-sm text-slate-500">Buscando pontos, cobertura e métricas territoriais.</p>
             </div>
           </div>
+        </div>
+      ) : apiStatus === 'unavailable' ? (
+        <div className="rounded-[1.75rem] border border-dashed border-amber-200 bg-white/85 px-8 py-14 text-center shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+          <p className="text-lg font-semibold text-slate-950">Módulo Wi‑Fi Social indisponível neste ambiente</p>
+          <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-slate-600">
+            O frontend foi publicado antes do backend que expõe as rotas de Wi‑Fi Social. O restante do dashboard pode continuar operando, mas esta área depende da publicação das rotas
+            {' '}
+            <code>/api/wifi</code>
+            {' '}
+            e
+            {' '}
+            <code>/api/wifi/stats</code>.
+          </p>
         </div>
       ) : (
         <>

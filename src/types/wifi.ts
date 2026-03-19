@@ -202,3 +202,56 @@ export function sortWifiPointsByPriority(points: WifiPoint[]): WifiPoint[] {
     return (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
   });
 }
+
+export function buildWifiStatsFromPoints(points: WifiPoint[]): WifiStats {
+  const sortedPoints = sortWifiPointsByPriority(points);
+  const criticalPoints = sortedPoints.filter((point) => getWifiPointPriorityScore(point) >= 9);
+  const regionTotals = points.reduce((acc, point) => {
+    acc.set(point.regiaoAdministrativa, (acc.get(point.regiaoAdministrativa) || 0) + 1);
+    return acc;
+  }, new Map<string, number>());
+  const criticalRegions = points.reduce((acc, point) => {
+    if (getWifiPointPriorityScore(point) >= 6) {
+      acc.set(point.regiaoAdministrativa, (acc.get(point.regiaoAdministrativa) || 0) + 1);
+    }
+    return acc;
+  }, new Map<string, number>());
+  const speedValues = points
+    .map((point) => point.velocidadeMbps)
+    .filter((value): value is number => typeof value === 'number' && Number.isFinite(value));
+
+  return {
+    totalPontos: points.length,
+    online: points.filter((point) => point.status === 'online').length,
+    instavel: points.filter((point) => point.status === 'instavel').length,
+    offline: points.filter((point) => point.status === 'offline').length,
+    implantacao: points.filter((point) => point.status === 'implantacao').length,
+    precisaAcao: points.filter((point) => point.precisaAcao).length,
+    manutencaoPendente: points.filter((point) => point.statusManutencao === 'pendente' || point.statusManutencao === 'corretiva').length,
+    incidentesAbertos: points.reduce((sum, point) => sum + (point.incidentesAbertos || 0), 0),
+    pontosCriticos: criticalPoints.length,
+    totalUsuarios: points.reduce((sum, point) => sum + (point.usuariosConectados || 0), 0),
+    velocidadeMedia: speedValues.length
+      ? Number((speedValues.reduce((sum, value) => sum + value, 0) / speedValues.length).toFixed(1))
+      : 0,
+    regioesAtendidas: regionTotals.size,
+    distribStatus: [
+      { name: 'Online', value: points.filter((point) => point.status === 'online').length },
+      { name: 'Instável', value: points.filter((point) => point.status === 'instavel').length },
+      { name: 'Offline', value: points.filter((point) => point.status === 'offline').length },
+      { name: 'Implantação', value: points.filter((point) => point.status === 'implantacao').length }
+    ],
+    pontosPorRegiao: Array.from(regionTotals.entries())
+      .map(([regiaoAdministrativa, total]) => ({ regiaoAdministrativa, total }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10),
+    regioesCriticas: Array.from(criticalRegions.entries())
+      .map(([regiaoAdministrativa, total]) => ({ regiaoAdministrativa, total }))
+      .sort((a, b) => b.total - a.total)
+      .slice(0, 10),
+    filaAtencao: sortedPoints.slice(0, 5),
+    recentes: [...points]
+      .sort((a, b) => (b.updatedAt ?? '').localeCompare(a.updatedAt ?? ''))
+      .slice(0, 5)
+  };
+}

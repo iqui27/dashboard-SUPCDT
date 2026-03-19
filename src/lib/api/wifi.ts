@@ -1,6 +1,34 @@
 import { API_URL } from './base';
 import { WifiPoint, WifiPointInput, WifiStats } from '../../types/wifi';
 
+export class ApiRequestError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = 'ApiRequestError';
+    this.status = status;
+  }
+}
+
+async function parseApiError(response: Response, fallbackMessage: string): Promise<never> {
+  let message = fallbackMessage;
+
+  try {
+    const contentType = response.headers.get('content-type') ?? '';
+    if (contentType.includes('application/json')) {
+      const payload = await response.json();
+      if (typeof payload?.error === 'string' && payload.error.trim()) {
+        message = payload.error.trim();
+      }
+    }
+  } catch {
+    // Mantém a mensagem padrão quando o corpo não for parseável.
+  }
+
+  throw new ApiRequestError(message, response.status);
+}
+
 function withQuery(params: Record<string, string | undefined>) {
   const searchParams = new URLSearchParams();
 
@@ -32,7 +60,7 @@ export async function fetchWifiPoints(
   );
 
   if (!response.ok) {
-    throw new Error('Falha ao carregar pontos Wi-Fi');
+    await parseApiError(response, 'Falha ao carregar pontos Wi-Fi');
   }
 
   return response.json();
@@ -46,7 +74,7 @@ export async function fetchWifiStats(token: string): Promise<WifiStats> {
   });
 
   if (!response.ok) {
-    throw new Error('Falha ao carregar métricas Wi-Fi');
+    await parseApiError(response, 'Falha ao carregar métricas Wi-Fi');
   }
 
   return response.json();
@@ -63,7 +91,7 @@ export async function createWifiPoint(token: string, payload: WifiPointInput): P
   });
 
   if (!response.ok) {
-    throw new Error('Falha ao criar ponto Wi-Fi');
+    await parseApiError(response, 'Falha ao criar ponto Wi-Fi');
   }
 
   return response.json();
@@ -80,7 +108,7 @@ export async function updateWifiPoint(token: string, id: string, payload: WifiPo
   });
 
   if (!response.ok) {
-    throw new Error('Falha ao atualizar ponto Wi-Fi');
+    await parseApiError(response, 'Falha ao atualizar ponto Wi-Fi');
   }
 
   return response.json();
@@ -95,6 +123,6 @@ export async function deleteWifiPoint(token: string, id: string): Promise<void> 
   });
 
   if (!response.ok) {
-    throw new Error('Falha ao excluir ponto Wi-Fi');
+    await parseApiError(response, 'Falha ao excluir ponto Wi-Fi');
   }
 }
