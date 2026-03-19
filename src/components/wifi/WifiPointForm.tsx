@@ -1,8 +1,9 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { createPortal } from 'react-dom';
 import { Loader2, MapPinned, Save, Search, Wifi, X } from 'lucide-react';
 import { z } from 'zod';
 
-import { formatCep, lookupCepAddress, normalizeCep } from '../../lib/wifiLocation';
+import { formatCep, lookupCepAddress, normalizeCep, reverseLookupPointAddress } from '../../lib/wifiLocation';
 import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -76,14 +77,111 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
   const [saving, setSaving] = useState(false);
   const [lookingUpCep, setLookingUpCep] = useState(false);
   const [cepFeedback, setCepFeedback] = useState<string | null>(null);
+  const [pointFeedback, setPointFeedback] = useState<string | null>(null);
+  const [lookingUpPointAddress, setLookingUpPointAddress] = useState(false);
   const [manualCoordinates, setManualCoordinates] = useState(false);
+  const initialLookupDoneRef = useRef(false);
+  const reverseLookupRequestRef = useRef(0);
 
   useEffect(() => {
     setForm(buildInitialState(point, initialPosition, defaultRegion));
     setErrors({});
     setCepFeedback(null);
+    setPointFeedback(null);
     setManualCoordinates(false);
+    initialLookupDoneRef.current = false;
+    reverseLookupRequestRef.current = 0;
   }, [point, initialPosition, defaultRegion]);
+
+  useEffect(() => {
+    const scrollY = window.scrollY;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalBodyPosition = document.body.style.position;
+    const originalBodyTop = document.body.style.top;
+    const originalBodyLeft = document.body.style.left;
+    const originalBodyRight = document.body.style.right;
+    const originalBodyWidth = document.body.style.width;
+
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+
+    return () => {
+      document.documentElement.style.overflow = originalHtmlOverflow;
+      document.body.style.overflow = originalBodyOverflow;
+      document.body.style.position = originalBodyPosition;
+      document.body.style.top = originalBodyTop;
+      document.body.style.left = originalBodyLeft;
+      document.body.style.right = originalBodyRight;
+      document.body.style.width = originalBodyWidth;
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
+
+  const applyReverseLookup = useCallback(async (latitude: number, longitude: number) => {
+    const requestId = reverseLookupRequestRef.current + 1;
+    reverseLookupRequestRef.current = requestId;
+    setLookingUpPointAddress(true);
+    setPointFeedback('Buscando endereço exato para o ponto selecionado...');
+
+    try {
+      const result = await reverseLookupPointAddress(latitude, longitude);
+      if (reverseLookupRequestRef.current !== requestId) {
+        return;
+      }
+
+      setForm((current) => ({
+        ...current,
+        endereco: result.endereco || current.endereco,
+        cep: result.cep || current.cep,
+        regiaoAdministrativa: result.regiaoAdministrativa ?? current.regiaoAdministrativa,
+        latitude: latitude.toFixed(6),
+        longitude: longitude.toFixed(6)
+      }));
+      setErrors((current) => {
+        const next = { ...current };
+        delete next.endereco;
+        delete next.cep;
+        delete next.regiaoAdministrativa;
+        delete next.latitude;
+        delete next.longitude;
+        return next;
+      });
+      setPointFeedback(
+        result.endereco
+          ? 'Localização identificada. Endereço preenchido automaticamente a partir do ponto marcado no mapa.'
+          : 'Ponto atualizado no mapa. Não foi possível obter um endereço completo para essa coordenada.'
+      );
+    } catch (error) {
+      if (reverseLookupRequestRef.current !== requestId) {
+        return;
+      }
+
+      setPointFeedback(
+        error instanceof Error
+          ? `${error.message} O ponto foi mantido no mapa e o endereço pode ser ajustado manualmente.`
+          : 'O ponto foi marcado no mapa, mas o endereço não pôde ser identificado automaticamente.'
+      );
+    } finally {
+      if (reverseLookupRequestRef.current === requestId) {
+        setLookingUpPointAddress(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!initialPosition || point || initialLookupDoneRef.current) {
+      return;
+    }
+
+    initialLookupDoneRef.current = true;
+    void applyReverseLookup(initialPosition.latitude, initialPosition.longitude);
+  }, [applyReverseLookup, initialPosition, point]);
 
   const handleCoordinateChange = (latitude: number, longitude: number) => {
     setForm((current) => ({
@@ -97,6 +195,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
       delete next.longitude;
       return next;
     });
+    void applyReverseLookup(latitude, longitude);
   };
 
   const handleCepLookup = async () => {
@@ -110,6 +209,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
 
     setLookingUpCep(true);
     setCepFeedback(null);
+    setPointFeedback(null);
     try {
       const result = await lookupCepAddress(form.cep);
       setForm((current) => ({
@@ -187,9 +287,20 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-[120] flex items-start justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
-      <div className="relative my-2 flex min-h-0 max-h-[calc(100dvh-1rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:my-6 sm:max-h-[calc(100dvh-3rem)]">
+  if (typeof document === 'undefined') {
+    return null;
+  }
+
+  return createPortal(
+    <div className="fixed inset-0 z-[160] bg-slate-950/70 backdrop-blur-sm">
+      <div className="absolute inset-0 overflow-hidden px-3 py-3 sm:px-6 sm:py-5">
+        <div className="flex min-h-full items-center justify-center">
+          <div
+            className="relative flex min-h-0 max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:max-h-[calc(100dvh-2.5rem)]"
+            role="dialog"
+            aria-modal="true"
+            aria-label={point ? 'Editar ponto Wi-Fi' : 'Novo ponto Wi-Fi'}
+          >
         <div className="sticky top-0 z-10 flex shrink-0 items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] px-6 py-5 backdrop-blur-sm">
           <div>
             <div className="flex items-center gap-2">
@@ -247,6 +358,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                     onChange={(e) => {
                       setForm((current) => ({ ...current, cep: formatCep(e.target.value) }));
                       setCepFeedback(null);
+                      setPointFeedback(null);
                     }}
                     className="rounded-2xl pl-9"
                   />
@@ -290,7 +402,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                       <Label className="text-sm font-semibold text-slate-900">Localização exata</Label>
                     </div>
                     <p className="mt-1 text-xs leading-5 text-slate-500">
-                      O CEP ajuda a preencher o endereco. O ponto final deve ser marcado no mapa abaixo, sem depender de latitude e longitude manual.
+                      Você pode usar o CEP ou simplesmente marcar o ponto no mapa. Ao mover o marcador, o endereço e o CEP tentam ser preenchidos automaticamente.
                     </p>
                   </div>
                   <Button
@@ -311,6 +423,13 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                     onChange={handleCoordinateChange}
                   />
                 </div>
+
+                {(pointFeedback || lookingUpPointAddress) && (
+                  <div className="mt-3 flex items-start gap-2 rounded-[1.15rem] border border-slate-200 bg-white px-3.5 py-3 text-xs leading-5 text-slate-600">
+                    {lookingUpPointAddress ? <Loader2 className="mt-0.5 h-3.5 w-3.5 animate-spin text-sky-700" /> : <MapPinned className="mt-0.5 h-3.5 w-3.5 text-sky-700" />}
+                    <span>{pointFeedback}</span>
+                  </div>
+                )}
 
                 {manualCoordinates && (
                   <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -433,7 +552,10 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             </Button>
           </div>
         </form>
+          </div>
+        </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

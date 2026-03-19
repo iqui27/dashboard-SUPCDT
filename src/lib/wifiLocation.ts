@@ -104,6 +104,31 @@ export interface WifiCepLookupResult {
   longitude: number | null;
 }
 
+interface ReverseLookupResponse {
+  display_name?: string;
+  address?: {
+    postcode?: string;
+    road?: string;
+    pedestrian?: string;
+    footway?: string;
+    cycleway?: string;
+    path?: string;
+    neighbourhood?: string;
+    suburb?: string;
+    quarter?: string;
+    city_district?: string;
+    town?: string;
+    city?: string;
+    municipality?: string;
+    state?: string;
+    state_district?: string;
+    house_number?: string;
+    amenity?: string;
+    building?: string;
+    attraction?: string;
+  };
+}
+
 export function normalizeCep(value?: string | null) {
   return (value ?? '').replace(/\D/g, '').slice(0, 8);
 }
@@ -154,6 +179,44 @@ export function getRegiaoAdministrativaCenter(regiao?: string | null) {
   return resolved ?? DEFAULT_DF_POSITION;
 }
 
+function buildReverseLookupAddress(payload: ReverseLookupResponse) {
+  const address = payload.address;
+  if (!address) {
+    return payload.display_name ?? '';
+  }
+
+  const streetName =
+    address.road ??
+    address.pedestrian ??
+    address.footway ??
+    address.cycleway ??
+    address.path ??
+    address.amenity ??
+    address.building ??
+    address.attraction;
+
+  const streetLine = buildAddressLine([
+    streetName,
+    address.house_number
+  ]);
+
+  const neighborhoodLine = buildAddressLine([
+    address.neighbourhood,
+    address.suburb,
+    address.quarter,
+    address.city_district
+  ]);
+
+  const localityLine = buildAddressLine([
+    address.town,
+    address.city,
+    address.municipality,
+    address.state
+  ]);
+
+  return buildAddressLine([streetLine, neighborhoodLine, localityLine]) || payload.display_name || '';
+}
+
 export async function lookupCepAddress(cepValue: string): Promise<WifiCepLookupResult> {
   const cep = normalizeCep(cepValue);
 
@@ -199,5 +262,38 @@ export async function lookupCepAddress(cepValue: string): Promise<WifiCepLookupR
     regiaoAdministrativa,
     latitude: center?.latitude ?? null,
     longitude: center?.longitude ?? null
+  };
+}
+
+export async function reverseLookupPointAddress(latitude: number, longitude: number): Promise<WifiCepLookupResult> {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude.toFixed(6)}&lon=${longitude.toFixed(6)}&zoom=18&addressdetails=1`,
+    {
+      method: 'GET',
+      headers: {
+        'Accept-Language': 'pt-BR'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error('Nao foi possivel localizar o endereco desse ponto agora.');
+  }
+
+  const payload = await response.json() as ReverseLookupResponse;
+  const regiaoAdministrativa = resolveRegiaoAdministrativaFromParts(
+    payload.address?.suburb,
+    payload.address?.city_district,
+    payload.address?.neighbourhood,
+    payload.address?.state_district,
+    payload.display_name
+  );
+
+  return {
+    cep: formatCep(payload.address?.postcode ?? ''),
+    endereco: buildReverseLookupAddress(payload),
+    regiaoAdministrativa,
+    latitude,
+    longitude
   };
 }
