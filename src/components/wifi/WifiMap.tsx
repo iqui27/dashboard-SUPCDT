@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import L from 'leaflet';
-import { Circle, MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import { Circle, MapContainer, Marker, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 import {
   AlertTriangle,
   Gauge,
@@ -11,7 +11,8 @@ import {
   PenSquare,
   RadioTower,
   Users,
-  Wrench
+  Wrench,
+  X
 } from 'lucide-react';
 
 import {
@@ -31,6 +32,12 @@ interface WifiMapProps {
   points: WifiPoint[];
   onCreateAt: (latitude: number, longitude: number) => void;
   onEditPoint: (point: WifiPoint) => void;
+}
+
+interface WifiPointDetailCardProps {
+  point: WifiPoint;
+  onEditPoint: (point: WifiPoint) => void;
+  onClose?: () => void;
 }
 
 function buildMarkerIcon(status: WifiPointStatus, active = false) {
@@ -57,6 +64,148 @@ function MapClickHandler({ onCreateAt }: Pick<WifiMapProps, 'onCreateAt'>) {
   return null;
 }
 
+function MapViewportSync({ selectedPoint }: { selectedPoint: WifiPoint | null }) {
+  const map = useMap();
+
+  useEffect(() => {
+    const invalidate = () => map.invalidateSize({ animate: false });
+
+    const rafId = window.requestAnimationFrame(invalidate);
+    const timeoutId = window.setTimeout(invalidate, 180);
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.clearTimeout(timeoutId);
+    };
+  }, [map]);
+
+  useEffect(() => {
+    if (!selectedPoint) {
+      return;
+    }
+
+    map.flyTo([selectedPoint.latitude, selectedPoint.longitude], Math.max(map.getZoom(), 13), {
+      animate: true,
+      duration: 0.6
+    });
+  }, [map, selectedPoint]);
+
+  return null;
+}
+
+function WifiPointDetailCard({ point, onEditPoint, onClose }: WifiPointDetailCardProps) {
+  return (
+    <div className="rounded-[1.5rem] border border-white/85 bg-white/96 p-4 shadow-[0_24px_70px_-36px_rgba(15,23,42,0.42)] backdrop-blur-md">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700/75">Ponto selecionado</p>
+          <h4 className="mt-2 text-xl font-bold tracking-tight text-slate-950">{point.nome}</h4>
+          <p className="mt-2 text-sm leading-6 text-slate-600">{point.endereco}</p>
+          {point.cep && <p className="mt-1 text-xs font-medium text-slate-500">CEP {point.cep}</p>}
+        </div>
+        {onClose ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9 rounded-full text-slate-500 hover:bg-slate-100"
+            onClick={onClose}
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        ) : null}
+      </div>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiStatusTone(point.status)}`}>
+          {getWifiStatusLabel(point.status)}
+        </span>
+        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiPointPriorityTone(getWifiPointPriorityLevel(point))}`}>
+          Prioridade {getWifiPointPriorityLevel(point)}
+        </span>
+        <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiMaintenanceTone(point.statusManutencao)}`}>
+          {getWifiMaintenanceLabel(point.statusManutencao)}
+        </span>
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
+            <LocateFixed className="h-3.5 w-3.5" />
+            Cobertura
+          </div>
+          <p className="mt-2 text-lg font-bold text-slate-950">{point.coberturaRaioMetros} m</p>
+          <p className="text-[13px] text-slate-500">{point.regiaoAdministrativa}</p>
+        </div>
+
+        <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
+            <Users className="h-3.5 w-3.5" />
+            Usuários
+          </div>
+          <p className="mt-2 text-lg font-bold text-slate-950">{point.usuariosConectados ?? 0}</p>
+          <p className="text-[13px] text-slate-500">conexões registradas</p>
+        </div>
+
+        <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
+            <Gauge className="h-3.5 w-3.5" />
+            Velocidade
+          </div>
+          <p className="mt-2 text-lg font-bold text-slate-950">{point.velocidadeMbps ?? 0} Mbps</p>
+          <p className="text-[13px] text-slate-500">média operacional</p>
+        </div>
+
+        <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
+            <RadioTower className="h-3.5 w-3.5" />
+            Incidentes
+          </div>
+          <p className="mt-2 text-lg font-bold text-slate-950">{point.incidentesAbertos}</p>
+          <p className="text-[13px] text-slate-500">ocorrência(s) aberta(s)</p>
+        </div>
+      </div>
+
+      <div className="mt-4 space-y-3">
+        <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+            <Wrench className="h-4 w-4 text-sky-700" />
+            Operação e manutenção
+          </div>
+          <div className="mt-3 space-y-2 text-[13px] leading-5 text-slate-600">
+            <p><strong className="font-semibold text-slate-900">Responsável:</strong> {point.responsavelOperacional || 'Não definido'}</p>
+            <p><strong className="font-semibold text-slate-900">Última manutenção:</strong> {point.ultimaManutencao ? new Date(point.ultimaManutencao).toLocaleDateString('pt-BR') : 'Sem manutenção registrada'}</p>
+            <p><strong className="font-semibold text-slate-900">Ação:</strong> {point.precisaAcao ? 'Prioritária' : 'Rotina operacional'}</p>
+          </div>
+        </div>
+
+        {point.precisaAcao && (
+          <div className="flex items-start gap-2 rounded-[1.2rem] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+            Este ponto está marcado para atuação prioritária da equipe de campo.
+          </div>
+        )}
+
+        {point.observacoes && (
+          <div className="rounded-[1.2rem] border border-slate-200/80 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-600">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Observações</p>
+            <p className="mt-2">{point.observacoes}</p>
+          </div>
+        )}
+      </div>
+
+      <Button
+        type="button"
+        className="mt-4 h-11 w-full rounded-full bg-slate-950 text-white hover:bg-slate-800"
+        onClick={() => onEditPoint(point)}
+      >
+        <PenSquare className="mr-2 h-4 w-4" />
+        Editar ponto
+      </Button>
+    </div>
+  );
+}
+
 export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
   const [selectedPointId, setSelectedPointId] = useState<string | null>(null);
 
@@ -81,8 +230,8 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
     }
 
     const selectedStillExists = selectedPointId && points.some((point) => point.id === selectedPointId);
-    if (!selectedPointId || !selectedStillExists) {
-      setSelectedPointId(points[0].id);
+    if (selectedPointId && !selectedStillExists) {
+      setSelectedPointId(null);
     }
   }, [points, selectedPointId]);
 
@@ -96,7 +245,9 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
       <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h3 className="text-base font-semibold text-slate-950">Mapa do DF</h3>
-          <p className="mt-1 text-[13px] text-slate-500">Clique no mapa para abrir o cadastro com a posição inicial preenchida. Clique em um ponto para abrir o painel operacional detalhado.</p>
+          <p className="mt-1 text-[13px] text-slate-500">
+            Clique no mapa para abrir o cadastro com a posição inicial preenchida. Clique em um ponto para abrir o painel operacional detalhado.
+          </p>
         </div>
         <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
           <MapPin className="h-3.5 w-3.5" />
@@ -104,18 +255,31 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
         </div>
       </div>
 
-      <div className="grid xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="relative min-h-[420px] border-b border-slate-100 xl:min-h-[560px] xl:border-b-0 xl:border-r xl:border-slate-100">
-          <div className="pointer-events-none absolute left-4 top-4 z-[90] max-w-[280px] rounded-[1.15rem] border border-white/80 bg-white/92 px-3.5 py-3 text-xs leading-5 text-slate-600 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm">
-            Toque ou clique para cadastrar um novo ponto. O detalhe operacional do ponto selecionado aparece ao lado, sem cortar a leitura dentro do mapa.
+      <div className="relative">
+        <div className="relative h-[420px] w-full md:h-[520px] xl:h-[620px]">
+          <div className="pointer-events-none absolute left-4 top-4 z-[90] hidden max-w-[240px] rounded-[1.15rem] border border-white/80 bg-white/92 px-3.5 py-3 text-xs leading-5 text-slate-600 shadow-[0_16px_40px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm md:block">
+            Clique no mapa para cadastrar um novo ponto. Clique em um marcador para abrir o painel operacional.
           </div>
 
-          <MapContainer center={[-15.7942, -47.8822]} zoom={10.5} scrollWheelZoom className="h-[420px] w-full md:h-[500px] xl:h-[560px]">
+          {selectedPoint ? (
+            <div className="pointer-events-none absolute bottom-4 right-4 z-[90] hidden w-[380px] max-w-[calc(100%-2rem)] lg:block">
+              <div className="pointer-events-auto">
+                <WifiPointDetailCard
+                  point={selectedPoint}
+                  onEditPoint={onEditPoint}
+                  onClose={() => setSelectedPointId(null)}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <MapContainer center={[-15.7942, -47.8822]} zoom={10.5} scrollWheelZoom className="h-full w-full">
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; CARTO'
               url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             />
             <MapClickHandler onCreateAt={onCreateAt} />
+            <MapViewportSync selectedPoint={selectedPoint} />
 
             {points.map((point) => {
               const color = getWifiStatusColor(point.status);
@@ -147,119 +311,21 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
           </MapContainer>
         </div>
 
-        <aside className="flex min-h-[320px] flex-col bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))]">
-          {selectedPoint ? (
-            <>
-              <div className="border-b border-slate-100 px-5 py-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700/75">Ponto selecionado</p>
-                    <h4 className="mt-2 text-xl font-bold tracking-tight text-slate-950">{selectedPoint.nome}</h4>
-                    <p className="mt-2 text-sm leading-6 text-slate-600">{selectedPoint.endereco}</p>
-                    {selectedPoint.cep && <p className="mt-1 text-xs font-medium text-slate-500">CEP {selectedPoint.cep}</p>}
-                  </div>
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiStatusTone(selectedPoint.status)}`}>
-                    {getWifiStatusLabel(selectedPoint.status)}
-                  </span>
-                  <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiPointPriorityTone(getWifiPointPriorityLevel(selectedPoint))}`}>
-                    Prioridade {getWifiPointPriorityLevel(selectedPoint)}
-                  </span>
-                  <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getWifiMaintenanceTone(selectedPoint.statusManutencao)}`}>
-                    {getWifiMaintenanceLabel(selectedPoint.statusManutencao)}
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid gap-3 px-5 py-4 sm:grid-cols-2 xl:grid-cols-1">
-                <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
-                    <LocateFixed className="h-3.5 w-3.5" />
-                    Cobertura
-                  </div>
-                  <p className="mt-2 text-lg font-bold text-slate-950">{selectedPoint.coberturaRaioMetros} m</p>
-                  <p className="text-[13px] text-slate-500">{selectedPoint.regiaoAdministrativa}</p>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
-                    <Users className="h-3.5 w-3.5" />
-                    Usuários
-                  </div>
-                  <p className="mt-2 text-lg font-bold text-slate-950">{selectedPoint.usuariosConectados ?? 0}</p>
-                  <p className="text-[13px] text-slate-500">conexões registradas</p>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
-                    <Gauge className="h-3.5 w-3.5" />
-                    Velocidade
-                  </div>
-                  <p className="mt-2 text-lg font-bold text-slate-950">{selectedPoint.velocidadeMbps ?? 0} Mbps</p>
-                  <p className="text-[13px] text-slate-500">média operacional</p>
-                </div>
-
-                <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-slate-500">
-                    <RadioTower className="h-3.5 w-3.5" />
-                    Incidentes
-                  </div>
-                  <p className="mt-2 text-lg font-bold text-slate-950">{selectedPoint.incidentesAbertos}</p>
-                  <p className="text-[13px] text-slate-500">ocorrência(s) aberta(s)</p>
-                </div>
-              </div>
-
-              <div className="space-y-3 px-5 pb-5">
-                <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 shadow-sm">
-                  <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    <Wrench className="h-4 w-4 text-sky-700" />
-                    Operação e manutenção
-                  </div>
-                  <div className="mt-3 space-y-2 text-[13px] leading-5 text-slate-600">
-                    <p><strong className="font-semibold text-slate-900">Responsável:</strong> {selectedPoint.responsavelOperacional || 'Não definido'}</p>
-                    <p><strong className="font-semibold text-slate-900">Última manutenção:</strong> {selectedPoint.ultimaManutencao ? new Date(selectedPoint.ultimaManutencao).toLocaleDateString('pt-BR') : 'Sem manutenção registrada'}</p>
-                    <p><strong className="font-semibold text-slate-900">Ação:</strong> {selectedPoint.precisaAcao ? 'Prioritária' : 'Rotina operacional'}</p>
-                  </div>
-                </div>
-
-                {selectedPoint.precisaAcao && (
-                  <div className="flex items-start gap-2 rounded-[1.2rem] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-                    Este ponto está marcado para atuação prioritária da equipe de campo.
-                  </div>
-                )}
-
-                {selectedPoint.observacoes && (
-                  <div className="rounded-[1.2rem] border border-slate-200/80 bg-white px-4 py-3 text-sm leading-6 text-slate-600 shadow-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">Observações</p>
-                    <p className="mt-2">{selectedPoint.observacoes}</p>
-                  </div>
-                )}
-
-                <Button
-                  type="button"
-                  className="h-11 w-full rounded-full bg-slate-950 text-white hover:bg-slate-800"
-                  onClick={() => onEditPoint(selectedPoint)}
-                >
-                  <PenSquare className="mr-2 h-4 w-4" />
-                  Editar ponto
-                </Button>
-              </div>
-            </>
-          ) : (
-            <div className="flex flex-1 flex-col items-center justify-center px-6 py-10 text-center">
-              <div className="rounded-full bg-slate-100 p-3 text-slate-500">
-                <MapPin className="h-5 w-5" />
-              </div>
-              <p className="mt-4 text-base font-semibold text-slate-900">Selecione um ponto no mapa</p>
-              <p className="mt-2 max-w-xs text-sm leading-6 text-slate-500">
-                O detalhe operacional aparece aqui sem recortar conteúdo dentro do mapa.
-              </p>
+        {selectedPoint ? (
+          <div className="border-t border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] p-4 lg:hidden">
+            <WifiPointDetailCard
+              point={selectedPoint}
+              onEditPoint={onEditPoint}
+              onClose={() => setSelectedPointId(null)}
+            />
+          </div>
+        ) : (
+          <div className="border-t border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] px-4 py-5">
+            <div className="rounded-[1.2rem] border border-dashed border-slate-200 bg-white/70 px-4 py-4 text-sm leading-6 text-slate-500">
+              Clique em um marcador para abrir o painel operacional do ponto sem comprimir o mapa.
             </div>
-          )}
-        </aside>
+          </div>
+        )}
       </div>
     </div>
   );
