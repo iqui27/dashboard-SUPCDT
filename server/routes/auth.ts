@@ -8,6 +8,26 @@ import { sendPasswordResetEmail } from '../services/email.js';
 
 const router = express.Router();
 
+function resolvePasswordResetBaseUrl(req: Request): string {
+  const fallback = process.env.APP_BASE_URL || 'https://dashboard-supcdt.vercel.app';
+  const requestOrigin = req.headers.origin?.trim();
+
+  if (!requestOrigin) {
+    return fallback;
+  }
+
+  const allowedOrigins = new Set(
+    [
+      process.env.FRONTEND_URL,
+      fallback,
+      'https://dashboard-supcdt.vercel.app',
+      'https://dashboard-supcdt-iqui27s-projects.vercel.app'
+    ].filter((value): value is string => typeof value === 'string' && value.length > 0)
+  );
+
+  return allowedOrigins.has(requestOrigin) ? requestOrigin : fallback;
+}
+
 // POST /api/auth/login
 router.post('/login', async (req: Request, res: Response) => {
   try {
@@ -221,7 +241,7 @@ router.post('/forgot-password', async (req: Request, res: Response) => {
     }
 
     const { token, expiresAt } = await createPasswordResetToken(dbUser._id.toString());
-    const resetLink = `${process.env.APP_BASE_URL || 'https://dashboard-secti-2025.vercel.app'}/reset-password?token=${token}`;
+    const resetLink = `${resolvePasswordResetBaseUrl(req)}/reset-password?token=${token}`;
 
     await sendPasswordResetEmail({
       to: personalEmail,
