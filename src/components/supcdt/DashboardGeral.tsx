@@ -16,6 +16,8 @@ import {
   Projeto,
   getProjetoIncidentesAbertos,
   getProjetoLacunasMonitoramento,
+  getProjetoMonitoramento,
+  getProjetoMonitoramentoOperacional,
   getProjetoNivelRisco,
   getProjetoNome,
   getProjetoOsc,
@@ -491,9 +493,11 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
             const tone = getStatusTone(status);
             const alerta = buildProjetoAlerta(projeto);
             const progresso = getProjetoPercentualExecucao(projeto);
+            const monitoramento = getProjetoMonitoramento(projeto);
+            const operacional = getProjetoMonitoramentoOperacional(projeto);
             const territorio = getProjetoTerritorio(projeto) ?? 'Cobertura ainda não detalhada';
             const responsavel = getProjetoResponsavel(projeto) ?? 'Responsável ainda não informado';
-            const manutencaoStatus = projeto.monitoramento.operacional.manutencaoStatus || 'Sem rotina';
+            const manutencaoStatus = operacional.manutencaoStatus || 'Sem rotina';
 
             return (
               <div
@@ -571,7 +575,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                     </div>
                     <div className="text-right">
                       <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Metas</p>
-                      <p className="mt-1 text-lg font-semibold text-slate-950">{projeto.monitoramento.totalMetas}</p>
+                      <p className="mt-1 text-lg font-semibold text-slate-950">{monitoramento.totalMetas}</p>
                     </div>
                   </div>
 

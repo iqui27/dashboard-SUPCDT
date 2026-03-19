@@ -7,6 +7,8 @@ import { updateProjeto } from '../../lib/api/projetos';
 import {
   Projeto,
   ProjetoEvidencia,
+  getProjetoMonitoramento,
+  getProjetoMonitoramentoOperacional,
   getProjetoNome,
   getProjetoNivelRisco,
   getProjetoPrecisaAcao,
@@ -57,7 +59,8 @@ function textToEvidencias(value: string): ProjetoEvidencia[] {
 
 export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: ProjetoMonitoramentoModalProps) {
   const { token } = useAuth();
-  const operacional = projeto.monitoramento.operacional;
+  const monitoramento = getProjetoMonitoramento(projeto);
+  const operacional = getProjetoMonitoramentoOperacional(projeto);
 
   const [loading, setLoading] = useState(false);
   const [statusOperacional, setStatusOperacional] = useState(getProjetoStatusOperacional(projeto));
@@ -93,7 +96,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
         {
           ...projeto,
           monitoramento: {
-            ...projeto.monitoramento,
+            ...monitoramento,
             operacional: {
               ...operacional,
               statusOperacional,

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowUpRight, Link2, MapPin, Plus, Search, Target, UserRound } from 'lucide-react';
 
 import { CriacaoProjetoWizard } from './CriacaoProjetoWizard';
-import { Projeto, getProjetoNivelRisco, getProjetoNome, getProjetoOsc, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio } from '../../types/projeto';
+import { Projeto, getProjetoMonitoramento, getProjetoNivelRisco, getProjetoNome, getProjetoOsc, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio } from '../../types/projeto';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { formatCurrency } from '../../lib/currencyUtils';
@@ -94,6 +94,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
           const statusOperacional = getProjetoStatusOperacional(projeto);
           const nivelRisco = getProjetoNivelRisco(projeto);
           const precisaAcao = getProjetoPrecisaAcao(projeto);
+          const monitoramento = getProjetoMonitoramento(projeto);
           const osc = getProjetoOsc(projeto) ?? 'OSC ainda não informada';
           const territorio = getProjetoTerritorio(projeto) ?? 'Cobertura ainda não detalhada';
           const responsavel = getProjetoResponsavel(projeto) ?? 'Responsável ainda não informado';
@@ -154,7 +155,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-600">
                   <Target className="h-4 w-4 text-slate-400" />
-                  <span>{projeto.monitoramento.totalMetas} metas modeladas</span>
+                  <span>{monitoramento.totalMetas} metas modeladas</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-600">
                   <Link2 className="h-4 w-4 text-slate-400" />

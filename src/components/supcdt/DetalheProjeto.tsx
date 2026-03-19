@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { CalendarDays, Download, Link2, MapPin, PencilLine, Plus, Radar, ShieldAlert, UserRound } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Projeto, Lancamento, getProjetoIncidentesAbertos, getProjetoLacunasMonitoramento, getProjetoNivelRisco, getProjetoNome, getProjetoNumeroTermo, getProjetoNumeroUnico, getProjetoOsc, getProjetoParceiro, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoSaudeEntrega, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio, parseProjetoDate } from '../../types/projeto';
+import { Projeto, Lancamento, getProjetoIncidentesAbertos, getProjetoLacunasMonitoramento, getProjetoMonitoramento, getProjetoMonitoramentoOperacional, getProjetoNivelRisco, getProjetoNome, getProjetoNumeroTermo, getProjetoNumeroUnico, getProjetoOsc, getProjetoParceiro, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoSaudeEntrega, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio, parseProjetoDate } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { fetchLancamentosDeProjeto } from '../../lib/api/lancamentos';
 import { formatCurrency } from '../../lib/currencyUtils';
@@ -65,7 +65,8 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
   const saudeEntrega = getProjetoSaudeEntrega(projeto);
   const precisaAcao = getProjetoPrecisaAcao(projeto);
   const incidentesAbertos = getProjetoIncidentesAbertos(projeto);
-  const operacional = projeto.monitoramento.operacional;
+  const monitoramento = getProjetoMonitoramento(projeto);
+  const operacional = getProjetoMonitoramentoOperacional(projeto);
   const dataInicio = formatBRDate(parseProjetoDate(projeto.dataInicio));
   const dataFim = formatBRDate(parseProjetoDate(projeto.dataFim));
   const lacunas = getProjetoLacunasMonitoramento(projeto);
@@ -124,8 +125,8 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           { label: 'Status Operacional', value: statusOperacional, helper: 'Leitura operacional mais recente' },
           { label: 'Nível de Risco', value: nivelRisco, helper: precisaAcao ? 'Exige ação prioritária' : 'Sem urgência sinalizada' },
           { label: 'Saúde da Entrega', value: saudeEntrega, helper: `${incidentesAbertos} incidente(s) abertos` },
-          { label: 'Progresso Físico', value: `${progresso.toFixed(0)}%`, helper: `${projeto.monitoramento.totalRealizado} de ${projeto.monitoramento.totalPrevisto}` },
-          { label: 'Metas Modeladas', value: `${projeto.monitoramento.totalMetas}`, helper: 'Linhas de acompanhamento disponíveis' },
+          { label: 'Progresso Físico', value: `${progresso.toFixed(0)}%`, helper: `${monitoramento.totalRealizado} de ${monitoramento.totalPrevisto}` },
+          { label: 'Metas Modeladas', value: `${monitoramento.totalMetas}`, helper: 'Linhas de acompanhamento disponíveis' },
           { label: 'Investimento Total', value: formatCurrency(projeto.valorTotal), helper: 'Valor cadastrado na base atual' }
         ].map((item) => (
           <Card key={item.label} className={`rounded-[1.75rem] border shadow-[0_20px_60px_-42px_rgba(15,23,42,0.35)] ${getSummaryCardTone(item.label)}`}>
@@ -362,7 +363,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                 <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Execução consolidada</p>
                 <p className="mt-1 text-sm font-medium text-slate-900">
-                  {projeto.monitoramento.totalRealizado} de {projeto.monitoramento.totalPrevisto}
+                  {monitoramento.totalRealizado} de {monitoramento.totalPrevisto}
                 </p>
               </div>
               <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">

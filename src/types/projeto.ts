@@ -189,6 +189,48 @@ export interface LancamentoValor {
   observacao?: string;
 }
 
+const DEFAULT_MONITORAMENTO_OPERACIONAL: MonitoramentoOperacional = {
+  statusOperacional: 'Planejado',
+  nivelRisco: 'Médio',
+  saudeEntrega: 'Observação',
+  precisaAcao: false,
+  incidentesAbertos: 0,
+  manutencaoStatus: 'Sem rotina',
+  resumoExecutivo: null,
+  bloqueios: [],
+  proximosPassos: [],
+  evidencias: [],
+  coberturaDetalhada: [],
+  responsavelOperacional: null,
+  ultimaAtualizacao: null
+};
+
+function normalizeStringList(values: unknown): string[] {
+  if (!Array.isArray(values)) {
+    return [];
+  }
+
+  return values
+    .map((value) => (typeof value === 'string' ? value.trim() : ''))
+    .filter(Boolean);
+}
+
+function normalizeEvidencias(values: unknown): ProjetoEvidencia[] {
+  if (!Array.isArray(values)) {
+    return [];
+  }
+
+  return values
+    .map((item) => {
+      const evidencia = item as ProjetoEvidencia | undefined;
+      return {
+        titulo: typeof evidencia?.titulo === 'string' ? evidencia.titulo.trim() : '',
+        url: typeof evidencia?.url === 'string' ? evidencia.url.trim() : ''
+      };
+    })
+    .filter((item) => item.titulo && item.url);
+}
+
 const PLACEHOLDER_VALUES = new Set([
   '',
   'a definir',
@@ -265,31 +307,83 @@ export function parseProjetoDate(value?: string | null): Date | null {
 }
 
 export function getProjetoPercentualExecucao(projeto: Projeto): number {
-  return Number.isFinite(projeto.monitoramento?.percentualExecucao)
-    ? projeto.monitoramento.percentualExecucao
+  const percentualExecucao = Number(getProjetoMonitoramento(projeto).percentualExecucao);
+  return Number.isFinite(percentualExecucao)
+    ? percentualExecucao
     : 0;
 }
 
 export function getProjetoLacunasMonitoramento(projeto: Projeto): string[] {
-  return projeto.monitoramento?.lacunas ?? [];
+  return getProjetoMonitoramento(projeto).lacunas;
+}
+
+export function getProjetoMonitoramentoOperacional(projeto?: Partial<Projeto> | null): MonitoramentoOperacional {
+  const operacional = projeto?.monitoramento?.operacional;
+
+  return {
+    ...DEFAULT_MONITORAMENTO_OPERACIONAL,
+    statusOperacional: sanitizeDisplayValue(operacional?.statusOperacional) ?? DEFAULT_MONITORAMENTO_OPERACIONAL.statusOperacional,
+    nivelRisco: sanitizeDisplayValue(operacional?.nivelRisco) ?? DEFAULT_MONITORAMENTO_OPERACIONAL.nivelRisco,
+    saudeEntrega: sanitizeDisplayValue(operacional?.saudeEntrega) ?? DEFAULT_MONITORAMENTO_OPERACIONAL.saudeEntrega,
+    precisaAcao: Boolean(operacional?.precisaAcao),
+    incidentesAbertos: Number(operacional?.incidentesAbertos) || 0,
+    manutencaoStatus: sanitizeDisplayValue(operacional?.manutencaoStatus) ?? DEFAULT_MONITORAMENTO_OPERACIONAL.manutencaoStatus,
+    resumoExecutivo: sanitizeDisplayValue(operacional?.resumoExecutivo) ?? null,
+    bloqueios: normalizeStringList(operacional?.bloqueios),
+    proximosPassos: normalizeStringList(operacional?.proximosPassos),
+    evidencias: normalizeEvidencias(operacional?.evidencias),
+    coberturaDetalhada: normalizeStringList(operacional?.coberturaDetalhada),
+    responsavelOperacional:
+      sanitizeDisplayValue(operacional?.responsavelOperacional) ?? sanitizeDisplayValue(projeto?.responsavelSECTI) ?? null,
+    ultimaAtualizacao: typeof operacional?.ultimaAtualizacao === 'string' ? operacional.ultimaAtualizacao : null
+  };
+}
+
+export function getProjetoMonitoramento(projeto?: Partial<Projeto> | null): ProjetoMonitoramento {
+  const monitoramento = projeto?.monitoramento;
+
+  return {
+    totalMetas: Number(monitoramento?.totalMetas) || (Array.isArray(projeto?.metas) ? projeto.metas.length : 0),
+    totalPrevisto: Number(monitoramento?.totalPrevisto) || 0,
+    totalRealizado: Number(monitoramento?.totalRealizado) || 0,
+    percentualExecucao: Number(monitoramento?.percentualExecucao) || 0,
+    diasRestantes: typeof monitoramento?.diasRestantes === 'number' ? monitoramento.diasRestantes : null,
+    lacunas: normalizeStringList(monitoramento?.lacunas),
+    operacional: getProjetoMonitoramentoOperacional(projeto)
+  };
+}
+
+export function normalizeProjeto(projeto: Projeto): Projeto {
+  return {
+    ...projeto,
+    metas: Array.isArray(projeto.metas) ? projeto.metas : [],
+    cronograma: {
+      totalTrimestres: Math.max(1, Number(projeto.cronograma?.totalTrimestres) || 1)
+    },
+    monitoramento: getProjetoMonitoramento(projeto)
+  };
+}
+
+export function normalizeProjetos(projetos: Projeto[]): Projeto[] {
+  return Array.isArray(projetos) ? projetos.map(normalizeProjeto) : [];
 }
 
 export function getProjetoStatusOperacional(projeto: Projeto): string {
-  return sanitizeDisplayValue(projeto.monitoramento?.operacional?.statusOperacional) ?? 'Planejado';
+  return sanitizeDisplayValue(getProjetoMonitoramentoOperacional(projeto).statusOperacional) ?? 'Planejado';
 }
 
 export function getProjetoNivelRisco(projeto: Projeto): string {
-  return sanitizeDisplayValue(projeto.monitoramento?.operacional?.nivelRisco) ?? 'Médio';
+  return sanitizeDisplayValue(getProjetoMonitoramentoOperacional(projeto).nivelRisco) ?? 'Médio';
 }
 
 export function getProjetoSaudeEntrega(projeto: Projeto): string {
-  return sanitizeDisplayValue(projeto.monitoramento?.operacional?.saudeEntrega) ?? 'Observação';
+  return sanitizeDisplayValue(getProjetoMonitoramentoOperacional(projeto).saudeEntrega) ?? 'Observação';
 }
 
 export function getProjetoPrecisaAcao(projeto: Projeto): boolean {
-  return Boolean(projeto.monitoramento?.operacional?.precisaAcao);
+  return getProjetoMonitoramentoOperacional(projeto).precisaAcao;
 }
 
 export function getProjetoIncidentesAbertos(projeto: Projeto): number {
-  return Number(projeto.monitoramento?.operacional?.incidentesAbertos) || 0;
+  return getProjetoMonitoramentoOperacional(projeto).incidentesAbertos;
 }
