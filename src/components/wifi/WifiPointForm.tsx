@@ -115,9 +115,9 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-      <div className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)]">
-        <div className="flex items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] px-6 py-5">
+    <div className="fixed inset-0 z-[70] flex items-start justify-center overflow-y-auto bg-slate-950/70 p-4 backdrop-blur-sm sm:p-6">
+      <div className="relative my-2 flex min-h-0 max-h-[calc(100dvh-1rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:my-6 sm:max-h-[calc(100dvh-3rem)]">
+        <div className="sticky top-0 z-10 flex shrink-0 items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] px-6 py-5 backdrop-blur-sm">
           <div>
             <div className="flex items-center gap-2">
               <Wifi className="h-5 w-5 text-sky-700" />
@@ -130,12 +130,12 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
               Cadastre a localização, status, raio de cobertura, manutenção e necessidade de ação do ponto.
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
+          <Button type="button" variant="ghost" size="icon" onClick={onClose} className="rounded-full">
             <X className="h-5 w-5 text-slate-500" />
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
+        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-6 overscroll-contain">
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-2">
               <Label>Nome do ponto</Label>
@@ -251,7 +251,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             </div>
           </div>
 
-          <div className="mt-6 flex justify-end gap-3 border-t border-slate-100 pt-4">
+          <div className="sticky bottom-0 z-10 -mx-6 mt-6 flex justify-end gap-3 border-t border-slate-100 bg-white/95 px-6 py-4 backdrop-blur-sm">
             <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>Cancelar</Button>
             <Button type="submit" disabled={saving} className="rounded-full bg-slate-950 text-white hover:bg-slate-800">
               {saving ? 'Salvando...' : point ? 'Salvar alterações' : 'Cadastrar ponto'}
