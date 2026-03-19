@@ -153,6 +153,14 @@ export async function listUsers() {
     const users = await db.collection(USERS_COLLECTION).find().sort({ createdAt: -1 }).toArray();
     return users.map(sanitizeUser);
 }
+export async function listAssignableUsers() {
+    const db = await getDatabase();
+    const users = await db.collection(USERS_COLLECTION)
+        .find({ isActive: true })
+        .sort({ fullName: 1, username: 1 })
+        .toArray();
+    return users.map(sanitizeUser);
+}
 export async function ensureAdminUser() {
     const adminUsername = process.env.ADMIN_USERNAME?.trim() || 'admin';
     const configuredAdminPassword = process.env.ADMIN_PASSWORD?.trim();

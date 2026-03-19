@@ -16,6 +16,15 @@ export interface AdminUser {
   department?: string | null;
 }
 
+export interface AssignableUser {
+  id: string;
+  username: string;
+  email: string | null;
+  role: UserRole;
+  fullName?: string | null;
+  department?: string | null;
+}
+
 export interface CreateAdminUserInput {
   username: string;
   password: string;
@@ -55,6 +64,18 @@ export async function listAdminUsers(): Promise<AdminUser[]> {
   });
 
   const data = await handleResponse<{ users: AdminUser[] }>(response);
+  return data.users;
+}
+
+export async function listAssignableUsers(): Promise<AssignableUser[]> {
+  const response = await fetch(`${API_URL}/auth/users/options`, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    }
+  });
+
+  const data = await handleResponse<{ users: AssignableUser[] }>(response);
   return data.users;
 }
 

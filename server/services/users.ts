@@ -198,6 +198,16 @@ export async function listUsers(): Promise<UserWithoutPassword[]> {
   return users.map(sanitizeUser);
 }
 
+export async function listAssignableUsers(): Promise<UserWithoutPassword[]> {
+  const db = await getDatabase();
+  const users = await db.collection<User>(USERS_COLLECTION)
+    .find({ isActive: true })
+    .sort({ fullName: 1, username: 1 })
+    .toArray();
+
+  return users.map(sanitizeUser);
+}
+
 export async function ensureAdminUser(): Promise<void> {
   const adminUsername = process.env.ADMIN_USERNAME?.trim() || 'admin';
   const configuredAdminPassword = process.env.ADMIN_PASSWORD?.trim();

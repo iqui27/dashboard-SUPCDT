@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { getUserByUsername, getUserByEmail, getUserByIdentifier, updateLastLogin, listUsers, createUser, updateUser } from '../services/users.js';
+import { getUserByUsername, getUserByEmail, getUserByIdentifier, updateLastLogin, listAssignableUsers, listUsers, createUser, updateUser } from '../services/users.js';
 import { comparePassword, generateToken } from '../services/auth.js';
 import { LoginRequest, sanitizeUser } from '../types/user.js';
 import { requireAdmin, requireAuth } from '../middleware/auth.js';
@@ -71,6 +71,16 @@ router.get('/me', requireAuth, async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Get current user error:', error);
     return res.status(500).json({ error: 'Erro ao buscar usuário' });
+  }
+});
+
+router.get('/users/options', requireAuth, async (_req: Request, res: Response) => {
+  try {
+    const users = await listAssignableUsers();
+    return res.json({ users });
+  } catch (error) {
+    console.error('List assignable users error:', error);
+    return res.status(500).json({ error: 'Erro ao listar usuários ativos' });
   }
 });
 
@@ -243,4 +253,3 @@ router.post('/reset-password', async (req: Request, res: Response) => {
     return res.status(400).json({ error: message });
   }
 });
-

@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from 'react';
 import { Activity, Save, ShieldAlert, X } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProjeto } from '../../lib/api/projetos';
 import {
@@ -214,15 +215,10 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Responsável operacional</Label>
-                  <Input
-                    value={responsavelOperacional}
-                    onChange={(e) => setResponsavelOperacional(e.target.value)}
-                    placeholder="Servidor(a) responsável pelo acompanhamento"
-                    className="rounded-2xl"
-                  />
-                </div>
+                <ResponsavelOperacionalField
+                  value={responsavelOperacional}
+                  onChange={setResponsavelOperacional}
+                />
               </div>
 
               <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3">

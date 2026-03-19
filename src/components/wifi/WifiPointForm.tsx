@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react';
 import { Save, Wifi, X } from 'lucide-react';
 import { z } from 'zod';
 
+import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
@@ -219,10 +220,10 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
               {errors.incidentesAbertos && <p className="text-xs text-rose-600">{errors.incidentesAbertos}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label>Responsável operacional</Label>
-              <Input value={form.responsavelOperacional} onChange={(e) => setForm((current) => ({ ...current, responsavelOperacional: e.target.value }))} className="rounded-2xl" />
-            </div>
+            <ResponsavelOperacionalField
+              value={form.responsavelOperacional}
+              onChange={(value) => setForm((current) => ({ ...current, responsavelOperacional: value }))}
+            />
 
             <div className="space-y-2">
               <Label>Última manutenção</Label>
