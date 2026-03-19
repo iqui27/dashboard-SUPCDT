@@ -18,6 +18,25 @@ export interface LoginResponse {
   user: User;
 }
 
+export interface UserManagementVisibilityUser {
+  fullName?: string | null;
+  username?: string | null;
+}
+
+const USERS_TAB_ALLOWED_FULL_NAME = 'HENRIQUE DO VALE ROCHA FILHO';
+
+function normalizeAccessValue(value?: string | null) {
+  return (value ?? '')
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toUpperCase();
+}
+
+export function canAccessUserManagement(user?: UserManagementVisibilityUser | null) {
+  return normalizeAccessValue(user?.fullName) === USERS_TAB_ALLOWED_FULL_NAME;
+}
+
 export async function login(username: string, password: string): Promise<LoginResponse> {
   const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',

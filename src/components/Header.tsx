@@ -2,6 +2,7 @@ import { FileSpreadsheet, FolderKanban, LayoutDashboard, LogOut, Menu, ShieldChe
 import { useState } from 'react';
 
 import { useAuth } from '../contexts/AuthContext';
+import { canAccessUserManagement } from '../lib/auth';
 import { Button } from './ui/button';
 
 interface HeaderProps {
@@ -31,6 +32,7 @@ export function Header({
 }: HeaderProps) {
   const { user, logout } = useAuth();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const canAccessUsersTab = canAccessUserManagement(user);
 
   const tabs = [
     { id: 'dashboard', label: 'Painel', icon: LayoutDashboard },
@@ -39,7 +41,7 @@ export function Header({
     { id: 'relatorios', label: 'Relatórios', icon: FileSpreadsheet }
   ];
 
-  if (user?.role === 'admin') {
+  if (canAccessUsersTab) {
     tabs.push({ id: 'usuarios', label: 'Usuários', icon: Users });
   }
 

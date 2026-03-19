@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { Header } from './components/Header';
 import { ModuleLoadingState } from './components/ModuleLoadingState';
 import { useAuth } from './contexts/AuthContext';
+import { canAccessUserManagement } from './lib/auth';
 import { fetchProjetos } from './lib/api/projetos';
 import { Projeto } from './types/projeto';
 
@@ -23,6 +24,7 @@ export function App() {
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const canAccessUsersTab = canAccessUserManagement(user);
 
   const loadProjetos = useCallback(async () => {
     if (!token) return;
@@ -42,6 +44,12 @@ export function App() {
       loadProjetos();
     }
   }, [user, token, requirePasswordChange, loadProjetos]);
+
+  useEffect(() => {
+    if (currentTab === 'usuarios' && !canAccessUsersTab) {
+      setCurrentTab('dashboard');
+    }
+  }, [canAccessUsersTab, currentTab]);
 
   if (!user) {
     return null;
@@ -156,7 +164,7 @@ export function App() {
 
                 {currentTab === 'relatorios' && <Relatorios projetos={projetos} />}
 
-                {currentTab === 'usuarios' && user.role === 'admin' && <UserManagement currentUserId={user.id} />}
+                {currentTab === 'usuarios' && canAccessUsersTab && <UserManagement currentUserId={user.id} />}
               </Suspense>
             </motion.div>
           </AnimatePresence>
