@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+import { API_URL } from './api/base';
 
 export interface User {
   id: string;
@@ -19,7 +19,7 @@ export interface LoginResponse {
 }
 
 export async function login(username: string, password: string): Promise<LoginResponse> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+  const response = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export async function getCurrentUser(): Promise<User> {
     throw new Error('Token não encontrado');
   }
 
-  const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+  const response = await fetch(`${API_URL}/auth/me`, {
     headers: {
       'Authorization': `Bearer ${token}`
     }
@@ -58,7 +58,7 @@ export async function getCurrentUser(): Promise<User> {
 export async function logout(): Promise<void> {
   const token = getAuthToken();
   if (token) {
-    await fetch(`${API_BASE_URL}/api/auth/logout`, {
+    await fetch(`${API_URL}/auth/logout`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -70,7 +70,7 @@ export async function logout(): Promise<void> {
 }
 
 export async function requestPasswordReset(institutionalEmail: string, personalEmail: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/forgot-password`, {
+  const response = await fetch(`${API_URL}/auth/forgot-password`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -86,7 +86,7 @@ export async function requestPasswordReset(institutionalEmail: string, personalE
 }
 
 export async function resetPassword(token: string, password: string): Promise<void> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/reset-password`, {
+  const response = await fetch(`${API_URL}/auth/reset-password`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

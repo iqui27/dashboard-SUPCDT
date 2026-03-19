@@ -1,0 +1,19 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: dashboard-supcdt-mongo-e2e
+    ports:
+      - "127.0.0.1:27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: dashboard_supcdt_e2e
+    volumes:
+      - mongo-e2e-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand({ ping: 1 })"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  mongo-e2e-data:

@@ -183,9 +183,9 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
         role: createForm.role
       });
 
-      setFeedback({ type: 'success', message: 'Usuário criado com sucesso.' });
       setCreateForm(INITIAL_CREATE_FORM);
       await loadUsers(false);
+      setFeedback({ type: 'success', message: 'Usuário criado com sucesso.' });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Erro ao criar usuário';
       setFeedback({ type: 'error', message });

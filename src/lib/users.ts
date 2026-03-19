@@ -1,6 +1,5 @@
 import { getAuthHeaders } from './auth';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
+import { API_URL } from './api/base';
 
 export type UserRole = 'admin' | 'editor' | 'viewer';
 
@@ -48,7 +47,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export async function listAdminUsers(): Promise<AdminUser[]> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/users`, {
+  const response = await fetch(`${API_URL}/auth/users`, {
     headers: {
       'Content-Type': 'application/json',
       ...getAuthHeaders()
@@ -60,7 +59,7 @@ export async function listAdminUsers(): Promise<AdminUser[]> {
 }
 
 export async function createAdminUser(input: CreateAdminUserInput): Promise<AdminUser> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/users`, {
+  const response = await fetch(`${API_URL}/auth/users`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -74,7 +73,7 @@ export async function createAdminUser(input: CreateAdminUserInput): Promise<Admi
 }
 
 export async function updateAdminUser(id: string, input: UpdateAdminUserInput): Promise<AdminUser> {
-  const response = await fetch(`${API_BASE_URL}/api/auth/users/${id}`, {
+  const response = await fetch(`${API_URL}/auth/users/${id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

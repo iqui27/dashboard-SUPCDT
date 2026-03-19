@@ -67,10 +67,14 @@ const headerMap = {
     'data em que a osc apresentou a prestacao de contas': 'dataPrestacaoContasOSC',
     'prorrogacao da apresentacao da prestacao de contas, se necessario (+ 30 dias)': 'prorrogacaoPrestacaoContasMais30'
 };
+function stripControlCharacters(value) {
+    return Array.from(value)
+        .filter(char => char.charCodeAt(0) > 31)
+        .join('');
+}
 function normalizeHeader(header) {
-    return header
+    return stripControlCharacters(header)
         .normalize('NFD')
-        .replace(/[\u0000-\u001f]/g, '')
         .replace(/\s+/g, ' ')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()

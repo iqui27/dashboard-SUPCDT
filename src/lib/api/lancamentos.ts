@@ -1,6 +1,5 @@
 import { Lancamento } from '../../types/projeto';
-
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+import { API_URL } from './base';
 
 export async function fetchLancamentosDeProjeto(projetoId: string, token: string): Promise<Lancamento[]> {
     const response = await fetch(`${API_URL}/lancamentos/projeto/${projetoId}`, {

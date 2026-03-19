@@ -42,17 +42,18 @@ export async function getParlamentaresMap(): Promise<Map<string, string>> {
 /**
  * Popula dados do parlamentar em emendas via API
  */
-export async function popularEmendasComParlamentares<T extends { parlamentarId: string }>(
+export async function popularEmendasComParlamentares<T extends { parlamentarId?: string }>(
   emendas: T[]
 ): Promise<(T & { parlamentar?: ParlamentarAPI })[]> {
-  if (emendas.length === 0) return [];
+  const emendasValidas = emendas.filter((emenda): emenda is T & { parlamentarId: string } => Boolean(emenda.parlamentarId));
+  if (emendasValidas.length === 0) return [];
   
   const response = await fetch(`${PARLAMENTARES_API_BASE}/parlamentares/popular-emendas`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ emendas }),
+    body: JSON.stringify({ emendas: emendasValidas }),
   });
   
   if (!response.ok) {

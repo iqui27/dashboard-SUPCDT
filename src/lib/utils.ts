@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { Projeto, StatusProjeto } from '../types/projeto';
+import { Projeto, StatusProjeto, getProjetoNome, getProjetoOsc, getProjetoStatus, parseProjetoDate } from '../types/projeto';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -138,35 +138,33 @@ export function formatBRDateTime(date: Date | null): string {
   }).format(date);
 }
 export function getStatusBadgeVariant(status: StatusProjeto): 'default' | 'secondary' | 'destructive' | 'outline' {
-  switch (status) {
-    case 'Assinado':
-      return 'default';
-    case 'Em andamento':
-      return 'secondary';
-    case 'Reprovada':
-      return 'destructive';
-    case 'Encerrado':
-      return 'outline';
-    default:
-      return 'default';
-  }
+  const normalized = status.toLowerCase();
+  if (normalized.includes('ativo') || normalized.includes('assinado')) return 'default';
+  if (normalized.includes('andamento') || normalized.includes('planejamento') || normalized.includes('analise')) return 'secondary';
+  if (normalized.includes('reprov') || normalized.includes('atras') || normalized.includes('paralis')) return 'destructive';
+  if (normalized.includes('encerr') || normalized.includes('conclu')) return 'outline';
+  return 'secondary';
 }
 export function getStatusColor(status: StatusProjeto): string {
-  switch (status) {
-    case 'Assinado':
-      return '#22c55e';
-    case 'Em andamento':
-      return '#f59e0b';
-    case 'Reprovada':
-      return '#ef4444';
-    case 'Encerrado':
-      return '#000000';
-    default:
-      return '#6b7280';
-  }
+  const normalized = status.toLowerCase();
+  if (normalized.includes('ativo') || normalized.includes('assinado') || normalized.includes('andamento')) return '#0f766e';
+  if (normalized.includes('planejamento') || normalized.includes('analise')) return '#2563eb';
+  if (normalized.includes('reprov') || normalized.includes('atras') || normalized.includes('paralis')) return '#dc2626';
+  if (normalized.includes('encerr') || normalized.includes('conclu')) return '#475569';
+  return '#64748b';
 }
 export function getCategoriaColor(categoria: string): string {
   switch (categoria) {
+    case 'Inclusão Digital':
+      return '#0f766e';
+    case 'Infraestrutura':
+      return '#2563eb';
+    case 'Eventos':
+      return '#d97706';
+    case 'Popularização da Ciência':
+      return '#7c3aed';
+    case 'Sustentabilidade':
+      return '#16a34a';
     case 'Emenda':
       return '#8b5cf6';
     case 'INEX':
@@ -182,21 +180,14 @@ export function getCategoriaColor(categoria: string): string {
   }
 }
 export function calculateValorExecutado(fomento: Projeto): number {
-  let total = 0;
-  [fomento.financeiroParcela1, fomento.financeiroParcela2, fomento.financeiroParcela3, fomento.financeiroParcela4].forEach(parcela => {
-    if (typeof parcela === 'number') {
-      total += parcela;
-    } else if (typeof parcela === 'string') {
-      const value = parseBRLCurrency(parcela);
-      if (value > 0) total += value;
-    }
-  });
-  return total;
+  const percentualExecucao = Number(fomento.monitoramento?.percentualExecucao) || 0;
+  return fomento.valorTotal > 0 ? (fomento.valorTotal * percentualExecucao) / 100 : 0;
 }
-export function isProjectUrgent(vigenciaFinal: Date | null): boolean {
-  if (!vigenciaFinal) return false;
+export function isProjectUrgent(vigenciaFinal: Date | string | null): boolean {
+  const parsed = vigenciaFinal instanceof Date ? vigenciaFinal : parseProjetoDate(vigenciaFinal);
+  if (!parsed) return false;
   const today = new Date();
-  const daysUntilEnd = Math.ceil((vigenciaFinal.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const daysUntilEnd = Math.ceil((parsed.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
   return daysUntilEnd > 0 && daysUntilEnd <= 30;
 }
 export function calculatePercentageExecuted(fomento: Projeto): number {
@@ -205,22 +196,28 @@ export function calculatePercentageExecuted(fomento: Projeto): number {
   return Math.round(executado / fomento.valorTotal * 100);
 }
 export function buildAssinaturaDistribution(fomentos: Projeto[]): Record<StatusProjeto, number> {
-  const distribution = fomentos.reduce((acc, fomento) => {
-    acc[fomento.statusProjeto] = (acc[fomento.statusProjeto] || 0) + 1;
+  return fomentos.reduce((acc, fomento) => {
+    const status = getProjetoStatus(fomento);
+    acc[status] = (acc[status] || 0) + 1;
     return acc;
-  }, {} as Partial<Record<StatusProjeto, number>>);
-  
-  // Garante que todas as categorias existam
-  return {
-    'Reprovada': distribution['Reprovada'] ?? 0,
-    'Em andamento': distribution['Em andamento'] ?? 0,
-    'Assinado': distribution['Assinado'] ?? 0,
-    'Encerrado': distribution['Encerrado'] ?? 0
-  } as Record<StatusProjeto, number>;
+  }, {} as Record<StatusProjeto, number>);
 }
 export function exportToCSV(data: Projeto[], filename: string = 'fomentos.csv'): void {
-  const headers = ['Status', 'Número Termo', 'Processo SEI', 'Projeto', 'OSC', 'Parlamentar', 'Categoria', 'Região', 'Vigência Início', 'Vigência Final', 'Valor Total', 'Situação Pagamento', 'Prestação de Contas'];
-  const rows = data.map(f => [f.statusProjeto, f.numeroTermoFomento, f.processoSEI, f.projeto, f.osc, f.parlamentar, f.categoria, f.regiaoAdministrativa, formatBRDate(f.vigenciaInicio), formatBRDate(f.vigenciaFinal), formatBRL(f.valorTotal), f.tipoSituacaoPagamento, formatBRDate(f.dataPrestacaoContasOSC)]);
+  const headers = ['Status', 'Número Único', 'Número Termo', 'Processo SEI', 'Projeto', 'OSC', 'Categoria', 'Território', 'Início', 'Fim', 'Valor Total', 'Responsável'];
+  const rows = data.map(f => [
+    getProjetoStatus(f),
+    f.numeroUnico || '',
+    f.numeroTermo || '',
+    f.processoSEI || '',
+    getProjetoNome(f),
+    getProjetoOsc(f) || '',
+    f.categoria || '',
+    f.raPerigao || '',
+    formatBRDate(parseProjetoDate(f.dataInicio)),
+    formatBRDate(parseProjetoDate(f.dataFim)),
+    formatBRL(f.valorTotal),
+    f.responsavelSECTI || ''
+  ]);
   const csvContent = [headers.join(','), ...rows.map(row => row.map(cell => `"${cell}"`).join(','))].join('\n');
   const blob = new Blob([csvContent], {
     type: 'text/csv;charset=utf-8;'

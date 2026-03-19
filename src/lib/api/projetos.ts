@@ -1,6 +1,5 @@
-import { Projeto } from '../../types/projeto';
-
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+import { Projeto, ProjetoInput } from '../../types/projeto';
+import { API_URL } from './base';
 
 export async function fetchProjetos(token: string): Promise<Projeto[]> {
     const response = await fetch(`${API_URL}/projetos`, {
@@ -22,7 +21,7 @@ export async function fetchProjetoById(id: string, token: string): Promise<Proje
     return response.json();
 }
 
-export async function createProjeto(projetoData: Omit<Projeto, '_id' | 'id'>, token: string): Promise<Projeto> {
+export async function createProjeto(projetoData: ProjetoInput, token: string): Promise<Projeto> {
     const response = await fetch(`${API_URL}/projetos`, {
         method: 'POST',
         headers: {

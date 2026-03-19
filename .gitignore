@@ -1,7 +1,10 @@
 node_modules/
 .env
+.env.e2e.local
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 .vercel
+test-results/
+playwright-report/

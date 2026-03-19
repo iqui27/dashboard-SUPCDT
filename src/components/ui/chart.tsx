@@ -52,7 +52,7 @@ const ChartContainer = React.forwardRef<
         data-chart={chartId}
         ref={ref}
         className={cn(
-          'flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line[stroke=\'#ccc\']]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-dot[stroke=\'#fff\']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-polar-grid_[stroke=\'#ccc\']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line_[stroke=\'#ccc\']]:stroke-border [&_.recharts-sector[stroke=\'#fff\']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none',
+          'flex aspect-video justify-center text-xs [&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-layer]:outline-none [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none',
           className
         )}
         {...props}
@@ -68,15 +68,31 @@ ChartContainer.displayName = 'Chart';
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([, item]) => item.theme || item.color);
+  const scopedBaseStyles = `
+[data-chart='${id}'] .recharts-cartesian-grid line[stroke='#ccc'] {
+  stroke: hsl(var(--border) / 0.5);
+}
+
+[data-chart='${id}'] .recharts-dot[stroke='#fff'],
+[data-chart='${id}'] .recharts-sector[stroke='#fff'] {
+  stroke: transparent;
+}
+
+[data-chart='${id}'] .recharts-polar-grid [stroke='#ccc'],
+[data-chart='${id}'] .recharts-reference-line [stroke='#ccc'] {
+  stroke: hsl(var(--border));
+}
+`;
 
   if (!colorConfig.length) {
-    return null;
+    return <style dangerouslySetInnerHTML={{ __html: scopedBaseStyles }} />;
   }
 
   return (
     <style
       dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
+        __html: `${scopedBaseStyles}
+${Object.entries(THEMES)
           .map(([theme, prefix]) => `
 ${prefix} [data-chart='${id}'] {
 ${colorConfig
@@ -88,7 +104,7 @@ ${colorConfig
   .join('\n')}
 }
 `)
-          .join('\n')
+          .join('\n')}`
       }}
     />
   );

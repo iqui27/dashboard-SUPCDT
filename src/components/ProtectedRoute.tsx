@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { FullScreenStatus } from './FullScreenStatus';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -11,14 +12,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
-          <p className="text-muted-foreground">Verificando autenticação...</p>
-        </div>
-      </div>
-    );
+    return <FullScreenStatus title="Verificando autenticação" description="Validando sua sessão institucional." />;
   }
 
   if (!isAuthenticated) {
@@ -36,4 +30,3 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   return <>{children}</>;
 }
-

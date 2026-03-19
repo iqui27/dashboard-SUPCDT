@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Button } from '../ui/button';
-import { Projeto, Lancamento } from '../../types/projeto';
+import { Projeto, Lancamento, getProjetoNome } from '../../types/projeto';
 import { criarLancamento } from '../../lib/api/lancamentos';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
@@ -27,7 +27,7 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
         setValores(prev => ({ ...prev, [metaId]: isNaN(v) ? 0 : v }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!token) return;
 
@@ -51,7 +51,7 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
         setLoading(true);
         try {
             const payload: Partial<Lancamento> = {
-                projetoId: projeto.id?.toString(),
+                projetoId: projeto.id,
                 trimestre,
                 descricaoAtividade,
                 localAtendido,
@@ -74,7 +74,7 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
                 <div className="flex justify-between items-center p-6 border-b border-border">
                     <div>
                         <h2 className="text-xl font-bold font-sans">Novo Lançamento</h2>
-                        <p className="text-muted-foreground text-sm mt-1">{projeto.projeto}</p>
+                        <p className="text-muted-foreground text-sm mt-1">{getProjetoNome(projeto)}</p>
                     </div>
                     <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-white/10">
                         <X className="w-5 h-5 text-muted-foreground" />

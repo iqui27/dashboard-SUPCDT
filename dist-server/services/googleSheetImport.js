@@ -389,10 +389,14 @@ export function convertRowsToFomentos(values) {
     });
     return fomentos;
 }
+function stripControlCharacters(value) {
+    return Array.from(value)
+        .filter(char => char.charCodeAt(0) > 31)
+        .join('');
+}
 function normalizeHeader(header) {
-    return header
+    return stripControlCharacters(header)
         .normalize('NFD')
-        .replace(/[\u0000-\u001f]/g, '')
         .replace(/\s+/g, ' ')
         .replace(/[\u0300-\u036f]/g, '')
         .trim()
@@ -418,7 +422,7 @@ function parseBRDate(value) {
     const trimmed = value.trim();
     if (!trimmed)
         return null;
-    const numericMatch = trimmed.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+    const numericMatch = trimmed.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{2,4})$/);
     if (numericMatch) {
         const day = Number(numericMatch[1]);
         const month = Number(numericMatch[2]) - 1;
@@ -444,7 +448,7 @@ function parseRegioes(value) {
         .replace(/\b[a-zçãé]+\s+(?:locais?|local)\b:?/gi, '')
         .replace(/\b(?:locais?|local)\b:?/gi, '')
         .replace(/\b(?:e|ou)\b/gi, ',')
-        .replace(/[\/]+/g, ',')
+        .replace(/\//g, ',')
         .replace(/[–—]/g, '-')
         .trim();
     return normalized
@@ -457,7 +461,7 @@ function parseParlamentares(value) {
     if (!value)
         return [];
     const segments = value
-        .split(/[\/\n]+/)
+        .split(/[/\n]+/)
         .map(segment => segment.trim())
         .filter(segment => segment.length > 0);
     const result = [];
@@ -466,7 +470,7 @@ function parseParlamentares(value) {
         const valor = currencyMatch ? parseBRLCurrency(currencyMatch[0]) : undefined;
         const nome = segment
             .replace(/R\$\s?\d{1,3}(?:\.\d{3})*,\d{2}/gi, '')
-            .replace(/^[\-–]+/, '')
+            .replace(/^[-–]+/, '')
             .replace(/\s{2,}/g, ' ')
             .trim();
         if (nome) {

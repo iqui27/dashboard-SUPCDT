@@ -77,28 +77,23 @@ export async function createUser({ username, password, email, isAdmin, role, ful
     return sanitizeUser(user);
 }
 export async function updateUser(userId, updates) {
-    console.log('updateUser called with userId:', userId, 'updates:', updates);
     const db = await getDatabase();
     const current = await getUserById(userId);
     if (!current) {
         throw new Error('Usuário não encontrado');
     }
-    console.log('Current user:', current);
     const updateDoc = {};
     if (typeof updates.username !== 'undefined') {
         const trimmedUsername = updates.username.trim();
-        console.log('Processing username update:', trimmedUsername);
         if (!trimmedUsername) {
             throw new Error('Username não pode ser vazio');
         }
         if (trimmedUsername !== current.username) {
-            console.log('Username changed, checking for duplicates');
             const existingUsername = await getUserByUsername(trimmedUsername);
             if (existingUsername && existingUsername._id?.toString() !== userId) {
                 throw new Error('Username já está em uso');
             }
             updateDoc.username = trimmedUsername;
-            console.log('Username will be updated to:', trimmedUsername);
         }
     }
     if (typeof updates.email !== 'undefined') {
@@ -135,19 +130,14 @@ export async function updateUser(userId, updates) {
         updateDoc.department = updates.department;
     }
     if (Object.keys(updateDoc).length === 0) {
-        console.log('No updates to apply, returning current user');
         return sanitizeUser(current);
     }
-    console.log('Applying updates to database:', updateDoc);
     await db.collection(USERS_COLLECTION).updateOne({ _id: new ObjectId(userId) }, { $set: updateDoc });
     const updated = await getUserById(userId);
     if (!updated) {
         throw new Error('Usuário não encontrado');
     }
-    console.log('Updated user from database:', updated);
-    const sanitized = sanitizeUser(updated);
-    console.log('Returning sanitized user:', sanitized);
-    return sanitized;
+    return sanitizeUser(updated);
 }
 export async function updateLastLogin(userId) {
     const db = await getDatabase();
@@ -164,10 +154,19 @@ export async function listUsers() {
     return users.map(sanitizeUser);
 }
 export async function ensureAdminUser() {
-    const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminUsername = process.env.ADMIN_USERNAME?.trim() || 'admin';
+    const configuredAdminPassword = process.env.ADMIN_PASSWORD?.trim();
     const adminEmail = process.env.ADMIN_EMAIL;
     const db = await getDatabase();
+    const isProduction = process.env.NODE_ENV === 'production';
+    if (!configuredAdminPassword && isProduction) {
+        console.warn('ADMIN_PASSWORD não configurada. Pulando bootstrap automático do admin em produção.');
+        return;
+    }
+    const adminPassword = configuredAdminPassword || 'admin123';
+    if (!configuredAdminPassword) {
+        console.warn('ADMIN_PASSWORD não configurada. Usando senha padrão apenas para ambiente não produtivo.');
+    }
     try {
         const existing = await getUserByUsername(adminUsername);
         if (!existing) {
@@ -175,8 +174,8 @@ export async function ensureAdminUser() {
             await createUser({ username: adminUsername, password: adminPassword, email: adminEmail, isAdmin: true });
         }
         else if (!existing.isAdmin) {
-            await db.collection(USERS_COLLECTION).updateOne({ _id: existing._id }, { $set: { isAdmin: true } });
-            console.log('Existing admin user found but was not marked as admin. Flag updated.');
+            await db.collection(USERS_COLLECTION).updateOne({ _id: existing._id }, { $set: { isAdmin: true, role: 'admin' } });
+            console.log('Existing admin user found but was not marked as admin. Permissions updated.');
         }
     }
     catch (error) {

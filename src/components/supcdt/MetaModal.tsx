@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import { Button } from '../ui/button';
-import { Projeto, Meta } from '../../types/projeto';
+import { Projeto, Meta, getProjetoNome } from '../../types/projeto';
 import { updateProjeto } from '../../lib/api/projetos';
 import { useAuth } from '../../contexts/AuthContext';
 import { toast } from 'sonner';
@@ -34,7 +34,7 @@ export function MetaModal({ projeto, onClose, onSuccess }: MetaModalProps) {
         });
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!token || !projeto.id) return;
 
@@ -63,7 +63,7 @@ export function MetaModal({ projeto, onClose, onSuccess }: MetaModalProps) {
                 metas: [...projeto.metas, novaMeta]
             };
 
-            await updateProjeto(projeto.id.toString(), novoProjeto, token);
+            await updateProjeto(projeto.id, novoProjeto, token);
             toast.success('Meta adicionada com sucesso!');
             onSuccess();
         } catch (error) {
@@ -79,7 +79,7 @@ export function MetaModal({ projeto, onClose, onSuccess }: MetaModalProps) {
                 <div className="flex justify-between items-center p-6 border-b border-border">
                     <div>
                         <h2 className="text-xl font-bold font-sans">Nova Meta</h2>
-                        <p className="text-sm text-muted-foreground mt-1">Projeto: {projeto.projeto}</p>
+                        <p className="text-sm text-muted-foreground mt-1">Projeto: {getProjetoNome(projeto)}</p>
                     </div>
                     <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-white/10">
                         <X className="w-5 h-5 text-muted-foreground" />

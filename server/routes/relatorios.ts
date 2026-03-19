@@ -38,8 +38,8 @@ router.get('/csv', requireAuth, async (req, res) => {
 
                 dataForCsv.push({
                     DataRegistro: l.dataRegistro.toISOString().split('T')[0],
-                    Projeto: p.projeto,
-                    OSC: p.osc,
+                    Projeto: p.nome,
+                    OSC: p.nomeOSC || '',
                     TrimestreControle: l.trimestre,
                     CodMeta: metaInfo?.codigo || 'N/A',
                     DescricaoMeta: metaInfo?.descricao || 'Desconhecida',

@@ -11,6 +11,14 @@ export function getMongoClient() {
     }
     return clientPromise;
 }
+export async function closeMongoClient() {
+    if (!clientPromise) {
+        return;
+    }
+    const connectedClient = await clientPromise;
+    await connectedClient.close();
+    clientPromise = null;
+}
 export async function getDatabase(dbName = 'secti-dashboard') {
     const connectedClient = await getMongoClient();
     return connectedClient.db(dbName);

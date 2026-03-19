@@ -1,30 +1,30 @@
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { App } from "./App";
-import { Login } from "./components/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { ForgotPassword } from "./components/ForgotPassword";
-import { ResetPassword } from "./components/ResetPassword";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { FullScreenStatus } from "./components/FullScreenStatus";
+
+const App = lazy(() => import("./App").then((module) => ({ default: module.App })));
+const Login = lazy(() => import("./components/Login").then((module) => ({ default: module.Login })));
+const ForgotPassword = lazy(() => import("./components/ForgotPassword").then((module) => ({ default: module.ForgotPassword })));
+const ResetPassword = lazy(() => import("./components/ResetPassword").then((module) => ({ default: module.ResetPassword })));
 
 function LoginRedirect() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 animate-spin rounded-full border-b-2 border-primary"></div>
-          <p className="text-muted-foreground">Carregando...</p>
-        </div>
-      </div>
-    );
+    return <FullScreenStatus title="Carregando sessão" description="Verificando seu acesso institucional." />;
   }
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
 
-  return <Login />;
+  return (
+    <Suspense fallback={<FullScreenStatus title="Abrindo login" description="Preparando a autenticação institucional." />}>
+      <Login />
+    </Suspense>
+  );
 }
 
 export function AppRouter() {
@@ -33,13 +33,29 @@ export function AppRouter() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginRedirect />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route
+            path="/forgot-password"
+            element={
+              <Suspense fallback={<FullScreenStatus title="Carregando recuperação" description="Preparando o fluxo de redefinição de senha." />}>
+                <ForgotPassword />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/reset-password"
+            element={
+              <Suspense fallback={<FullScreenStatus title="Validando link" description="Preparando a redefinição da sua senha." />}>
+                <ResetPassword />
+              </Suspense>
+            }
+          />
           <Route
             path="/*"
             element={
               <ProtectedRoute>
-                <App />
+                <Suspense fallback={<FullScreenStatus title="Abrindo dashboard" description="Carregando o ambiente institucional." />}>
+                  <App />
+                </Suspense>
               </ProtectedRoute>
             }
           />

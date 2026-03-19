@@ -1,101 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 33% 98%;
+    --foreground: 218 35% 12%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 28% 95%;
+    --muted-foreground: 215 16% 43%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 218 35% 12%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 214 22% 88%;
+    --input: 214 22% 88%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 218 35% 12%;
 
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 201 89% 38%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 28% 95%;
+    --secondary-foreground: 218 35% 12%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 171 66% 34%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 52%;
+    --destructive-foreground: 0 0% 100%;
 
-    --ring: 221.2 83.2% 53.3%;
+    --ring: 201 89% 38%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --chart-1: oklch(0.646 0.222 41.116);
-    --chart-2: oklch(0.6 0.118 184.704);
-    --chart-3: oklch(0.398 0.07 227.392);
-    --chart-4: oklch(0.828 0.189 84.429);
-    --chart-5: oklch(0.769 0.188 70.08);
+    --chart-1: 199 89% 48%;
+    --chart-2: 35 92% 55%;
+    --chart-3: 0 76% 58%;
+    --chart-4: 171 66% 38%;
+    --chart-5: 224 76% 58%;
   }
 
   :root,
   :root[class~="dark"],
   .dark {
-    /* Premium Light Theme - Clean SaaS (Accent Blue) */
-    --background: 240 5% 98%;
-    /* zinc-50 */
-    --foreground: 240 10% 10%;
-    /* zinc-950 */
-
-    --muted: 240 5% 96%;
-    /* zinc-100 */
-    --muted-foreground: 240 5% 45%;
-    /* zinc-500 */
-
-    --accent: 221 83% 53%;
-    /* blue-600 */
+    --background: 210 33% 98%;
+    --foreground: 218 35% 12%;
+    --muted: 210 28% 95%;
+    --muted-foreground: 215 16% 43%;
+    --accent: 171 66% 34%;
     --accent-foreground: 0 0% 100%;
-
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 10%;
-
-    --border: 240 6% 90%;
-    /* zinc-200 */
-    --input: 240 6% 90%;
-
+    --popover-foreground: 218 35% 12%;
+    --border: 214 22% 88%;
+    --input: 214 22% 88%;
     --card: 0 0% 100%;
-    /* white */
-    --card-foreground: 240 10% 10%;
-
-    --primary: 221 83% 53%;
-    /* Accent Blue */
+    --card-foreground: 218 35% 12%;
+    --primary: 201 89% 38%;
     --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 5% 96%;
-    /* zinc-100 */
-    --secondary-foreground: 240 10% 10%;
-
-    --destructive: 0 84% 60%;
+    --secondary: 210 28% 95%;
+    --secondary-foreground: 218 35% 12%;
+    --destructive: 0 72% 52%;
     --destructive-foreground: 0 0% 100%;
-
-    --ring: 221 83% 53%;
-
-    --radius: 0.75rem;
-
-    --chart-1: 142 71% 45%;
-    /* Verde Em Dia */
-    --chart-2: 38 92% 50%;
-    /* Amarelo Atenção */
-    --chart-3: 346 87% 60%;
-    /* Vermelho Atraso */
-    --chart-4: 217 91% 60%;
-    /* Azul Padrão */
-    --chart-5: 250 89% 65%;
-    /* Roxo */
+    --ring: 201 89% 38%;
+    --radius: 1rem;
+    --chart-1: 199 89% 48%;
+    --chart-2: 35 92% 55%;
+    --chart-3: 0 76% 58%;
+    --chart-4: 171 66% 38%;
+    --chart-5: 224 76% 58%;
   }
 }
 
@@ -161,12 +137,18 @@
   body {
     background-color: hsl(var(--background));
     @apply text-foreground;
+    font-family: 'Manrope', system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     /* Previne zoom automático em inputs no iOS */
     -webkit-text-size-adjust: 100%;
     /* Melhora o scroll no iOS */
     -webkit-overflow-scrolling: touch;
     min-height: 100vh;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   /* Dark mode - muda cor do body para background escuro */
@@ -204,6 +186,17 @@
   div {
     word-wrap: break-word;
     overflow-wrap: break-word;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

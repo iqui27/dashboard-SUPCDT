@@ -28,14 +28,16 @@ export function FinancialChart({ fomentos }: FinancialChartProps) {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-  // Group by month/year of vigencia inicio
+  // Group by month/year of project start date
   const monthlyData = fomentos.reduce((acc, f) => {
-    if (!f.vigenciaInicio) return acc;
+    if (!f.dataInicio) return acc;
+    const startDate = new Date(f.dataInicio);
+    if (Number.isNaN(startDate.getTime())) return acc;
     const monthYear = new Intl.DateTimeFormat('pt-BR', {
       month: 'short',
       year: 'numeric',
       timeZone: 'America/Sao_Paulo'
-    }).format(f.vigenciaInicio);
+    }).format(startDate);
     if (!acc[monthYear]) {
       acc[monthYear] = {
         periodo: monthYear,
