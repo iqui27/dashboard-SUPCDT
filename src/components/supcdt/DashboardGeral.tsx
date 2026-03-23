@@ -1,15 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
-import { Activity, AlertTriangle, Link2, Radar, TrendingUp } from 'lucide-react';
-import {
-  Bar,
-  BarChart,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis
-} from 'recharts';
+import { Activity, AlertTriangle, Link2, Radar, TrendingUp, X } from 'lucide-react';
+import CountUp from 'react-countup';
 
 import { formatCurrency } from '../../lib/currencyUtils';
 import {
@@ -243,6 +235,80 @@ function getHealthTone(saudeEntrega: string) {
   return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
 }
 
+function CategoryBarList({ data }: { data: { name: string; value: number; fill: string }[] }) {
+  const total = data.reduce((s, d) => s + d.value, 0);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [count, setCount] = useState({ start: total, end: total });
+
+  const handleClick = (name: string, value: number) => {
+    setSelected(name);
+    setCount(prev => ({ start: prev.end, end: value }));
+  };
+
+  const clearSelected = () => {
+    setSelected(undefined);
+    setCount(prev => ({ start: prev.end, end: total }));
+  };
+
+  const visible = selected ? data.filter(d => d.name === selected) : data;
+  const maxVal = Math.max(...data.map(d => d.value), 1);
+
+  return (
+    <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-lg font-semibold text-slate-950">Distribuição por categoria</h3>
+          <p className="mt-1 text-[13px] text-slate-500">
+            <CountUp start={count.start} end={count.end} duration={0.4} /> projeto(s)
+            {selected ? ' na categoria selecionada' : ' no portfólio atual'}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {selected && (
+            <button
+              onClick={clearSelected}
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-700 transition hover:bg-slate-200"
+            >
+              {selected}
+              <X className="h-3 w-3 text-slate-500" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {data.length ? (
+        <div className="mt-5 space-y-2.5">
+          {visible.map((item) => (
+            <div
+              key={item.name}
+              onClick={() => !selected && handleClick(item.name, item.value)}
+              className={`group flex cursor-pointer items-center gap-3 rounded-xl px-2 py-1.5 transition ${!selected ? 'hover:bg-slate-50' : ''}`}
+            >
+              <span className="w-32 shrink-0 truncate text-right text-[13px] text-slate-600">{item.name}</span>
+              <div className="flex flex-1 items-center gap-2">
+                <div className="relative h-6 flex-1 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="absolute inset-y-0 left-0 rounded-full transition-all duration-500"
+                    style={{
+                      width: `${(item.value / maxVal) * 100}%`,
+                      backgroundColor: item.fill,
+                    }}
+                  />
+                </div>
+                <span className="w-6 text-right text-[13px] font-semibold text-slate-900">{item.value}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-5 flex h-40 items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 text-sm text-slate-500">
+          Ainda não há volume suficiente para leitura por categoria.
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function DashboardGeral({ projetos }: DashboardGeralProps) {
   const portfolio = useMemo(() => {
     const projetosAtivos = projetos.filter((projeto) => {
@@ -295,30 +361,21 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
     >
       <motion.div
         variants={itemVariants}
-        className="overflow-hidden rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.18),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.7))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]"
+        className="flex items-center justify-between gap-6 px-1 py-1"
       >
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">SUPCDT Monitoramento</p>
-            <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">
-              Leitura executiva do portfólio com base nos dados reais disponíveis.
-            </h2>
-            <p className="mt-2.5 max-w-2xl text-sm leading-6 text-slate-600">
-              O painel agora consolida investimento, risco, saúde da entrega, incidentes e necessidade de ação. A leitura ficou mais próxima da operação real e já prepara a governança do módulo Wi-Fi Social.
-            </p>
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">SUPCDT Monitoramento</p>
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-slate-900">Painel Executivo</h2>
+        </div>
+        <div className="flex items-center gap-5">
+          <div className="text-right">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">Portfólio</p>
+            <p className="text-base font-bold text-slate-900">{projetos.length} projetos</p>
           </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Base carregada</p>
-              <p className="mt-1 text-xl font-bold text-slate-950">{projetos.length}</p>
-              <p className="text-[13px] text-slate-500">projetos no portfólio atual</p>
-            </div>
-            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Integração</p>
-              <p className="mt-1 text-xl font-bold text-slate-950">{portfolio.chavesIntegracao}</p>
-              <p className="text-[13px] text-slate-500">chaves prontas para cruzar com outro dashboard</p>
-            </div>
+          <div className="h-7 w-px bg-slate-200" />
+          <div className="text-right">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-slate-400">Integração</p>
+            <p className="text-base font-bold text-slate-900">{portfolio.chavesIntegracao} chaves</p>
           </div>
         </div>
       </motion.div>
@@ -373,234 +430,153 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
       </motion.div>
 
       <motion.div variants={itemVariants} className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(340px,0.9fr)]">
-        <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold text-slate-950">Distribuição por categoria</h3>
-              <p className="mt-1 text-[13px] text-slate-500">Leitura rápida do tipo de iniciativa já registrada</p>
+        <CategoryBarList data={portfolio.chartData} />
+
+        <div className="space-y-5">
+          <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+            <div className="flex items-center justify-between">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-950">
+                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                Radar de atenção
+              </h3>
+              <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500">
+                {portfolio.alertas.length} itens
+              </span>
             </div>
-            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">
-              dados reais
-            </span>
+            <div className="mt-3 divide-y divide-slate-100">
+              {portfolio.alertas.length ? (
+                portfolio.alertas.slice(0, 5).map((alerta) => (
+                  <div key={alerta.projetoId} className="flex items-start gap-3 py-2.5">
+                    <span className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
+                      alerta.severidade === 'critico' ? 'bg-rose-500' : 'bg-amber-400'
+                    }`} />
+                    <div className="min-w-0">
+                      <p className="truncate text-[13px] font-semibold text-slate-900">{alerta.projetoNome}</p>
+                      <p className="mt-0.5 truncate text-xs text-slate-500">{alerta.motivo}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="flex items-center gap-2 py-3 text-xs text-emerald-700">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Nenhum alerta identificado
+                </div>
+              )}
+            </div>
           </div>
 
-          <div className="mt-5 h-[240px] w-full">
-            {portfolio.chartData.length ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={portfolio.chartData} layout="vertical" margin={{ top: 0, right: 24, left: 12, bottom: 0 }}>
-                  <XAxis type="number" hide />
-                  <YAxis
-                    dataKey="name"
-                    type="category"
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fill: 'rgb(71 85 105)', fontSize: 12 }}
-                    width={132}
-                  />
-                  <Tooltip
-                    cursor={{ fill: 'rgba(15,23,42,0.04)' }}
-                    contentStyle={{
-                      backgroundColor: 'rgba(255,255,255,0.96)',
-                      border: '1px solid rgba(148,163,184,0.2)',
-                      borderRadius: '16px',
-                      boxShadow: '0 20px 50px -30px rgba(15,23,42,0.45)'
-                    }}
-                    formatter={(value: number) => [`${value} projeto(s)`, 'Quantidade']}
-                  />
-                  <Bar dataKey="value" radius={[0, 8, 8, 0]} barSize={26}>
-                    {portfolio.chartData.map((entry, index) => (
-                      <Cell key={`${entry.name}-${index}`} fill={entry.fill} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+          <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
+            <div className="flex items-center justify-between">
+              <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-950">
+                <Link2 className="h-4 w-4 text-slate-400" />
+                Gaps de monitoramento
+              </h3>
+              <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500">
+                {portfolio.lacunas.length} gaps
+              </span>
+            </div>
+            {portfolio.lacunas.length ? (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {portfolio.lacunas.map((lacuna) => (
+                  <span key={lacuna} className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[12px] text-slate-600">
+                    {lacuna}
+                  </span>
+                ))}
+              </div>
             ) : (
-              <div className="flex h-full items-center justify-center rounded-3xl border border-dashed border-slate-200 bg-slate-50 text-sm text-slate-500">
-                Ainda não há volume suficiente para leitura por categoria.
+              <div className="mt-3 flex items-center gap-2 text-xs text-emerald-700">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                Cobertura mínima para monitoramento executivo atingida.
               </div>
             )}
           </div>
         </div>
-
-        <div className="space-y-5">
-          <div className="rounded-[1.45rem] border border-white/80 bg-white/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-            <h3 className="flex items-center gap-2 text-lg font-semibold text-slate-950">
-              <AlertTriangle className="h-5 w-5 text-amber-600" />
-              Radar de atenção
-            </h3>
-            <div className="mt-4 space-y-3">
-              {portfolio.alertas.length ? (
-                portfolio.alertas.slice(0, 5).map((alerta) => (
-                  <div
-                    key={alerta.projetoId}
-                    className={`rounded-2xl border px-4 py-3 ${
-                      alerta.severidade === 'critico'
-                        ? 'border-rose-200 bg-rose-50 text-rose-900'
-                        : 'border-amber-200 bg-amber-50 text-amber-900'
-                    }`}
-                  >
-                    <p className="font-semibold">{alerta.projetoNome}</p>
-                    <p className="mt-1 text-sm opacity-80">{alerta.motivo}</p>
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                  Nenhum alerta prioritário foi identificado com os critérios atuais.
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="rounded-[1.45rem] border border-slate-200 bg-slate-950 p-5 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
-            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-sky-200/80">
-              <Link2 className="h-4 w-4" />
-              Próxima camada
-            </div>
-            <h3 className="mt-3 text-lg font-semibold">Gaps já mapeados para monitoramento profissional</h3>
-            <div className="mt-4 grid gap-2">
-              {portfolio.lacunas.length ? (
-                portfolio.lacunas.map((lacuna) => (
-                  <div key={lacuna} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
-                    {lacuna}
-                  </div>
-                ))
-              ) : (
-                <div className="rounded-2xl border border-emerald-200/30 bg-emerald-400/10 px-4 py-3 text-sm text-emerald-100">
-                  O conjunto atual já cobre a camada mínima para monitoramento executivo.
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       </motion.div>
 
-      <motion.div variants={itemVariants} className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-xl font-bold tracking-tight text-slate-950">Portfólio monitorado</h3>
-            <p className="mt-1 text-[13px] text-slate-500">Cada card mostra risco, saúde, incidentes, progresso físico e a chave de integração disponível.</p>
-          </div>
+      <motion.div variants={itemVariants} className="space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h3 className="text-sm font-semibold text-slate-950">Portfólio monitorado</h3>
+          <span className="text-[11px] uppercase tracking-[0.16em] text-slate-400">{projetos.length} projetos</span>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
-          {projetos.map((projeto) => {
-            const status = getProjetoStatus(projeto);
-            const statusOperacional = getProjetoStatusOperacional(projeto);
-            const nivelRisco = getProjetoNivelRisco(projeto);
-            const saudeEntrega = getProjetoSaudeEntrega(projeto);
-            const precisaAcao = getProjetoPrecisaAcao(projeto);
-            const incidentesAbertos = getProjetoIncidentesAbertos(projeto);
-            const tone = getStatusTone(status);
-            const alerta = buildProjetoAlerta(projeto);
-            const progresso = getProjetoPercentualExecucao(projeto);
-            const monitoramento = getProjetoMonitoramento(projeto);
-            const operacional = getProjetoMonitoramentoOperacional(projeto);
-            const territorio = getProjetoTerritorio(projeto) ?? 'Cobertura ainda não detalhada';
-            const responsavel = getProjetoResponsavel(projeto) ?? 'Responsável ainda não informado';
-            const manutencaoStatus = operacional.manutencaoStatus || 'Sem rotina';
+        <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <ul role="list" className="divide-y divide-slate-100">
+            {projetos.map((projeto) => {
+              const status = getProjetoStatus(projeto);
+              const nivelRisco = getProjetoNivelRisco(projeto);
+              const saudeEntrega = getProjetoSaudeEntrega(projeto);
+              const precisaAcao = getProjetoPrecisaAcao(projeto);
+              const incidentesAbertos = getProjetoIncidentesAbertos(projeto);
+              const tone = getStatusTone(status);
+              const alerta = buildProjetoAlerta(projeto);
+              const progresso = getProjetoPercentualExecucao(projeto);
+              const territorio = getProjetoTerritorio(projeto) ?? '—';
+              const responsavel = getProjetoResponsavel(projeto) ?? '—';
 
-            return (
-              <div
-                key={projeto.id}
-                className={`rounded-[1.45rem] border p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 ${tone.surface}`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${tone.badge}`}>
-                      {status}
-                    </span>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <span className="inline-flex rounded-full bg-slate-950/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-700 ring-1 ring-slate-200">
-                        {statusOperacional}
+              return (
+                <li key={projeto.id} className="px-4 py-3.5 hover:bg-slate-50/70 transition-colors">
+                  {/* Top row: dot + name + status badges */}
+                  <div className="flex items-center gap-2.5">
+                    <div className={`h-2 w-2 shrink-0 rounded-full ${tone.progress}`} />
+                    <p className="text-sm font-semibold text-slate-900 truncate">{getProjetoNome(projeto)}</p>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${tone.badge}`}>{status}</span>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getRiskTone(nivelRisco)}`}>Risco {nivelRisco}</span>
+                    <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getHealthTone(saudeEntrega)}`}>{saudeEntrega}</span>
+                    {precisaAcao && <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">Prioritária</span>}
+                  </div>
+
+                  {/* Metadata lines */}
+                  <div className="mt-2 ml-4 space-y-1.5 text-[11px]">
+                    {/* OSC */}
+                    <p className="text-slate-500">{getProjetoOsc(projeto) || '—'}</p>
+
+                    {/* Territory + Responsible */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-0.5">
+                      <span className="flex items-center gap-1">
+                        <span className="uppercase tracking-[0.12em] text-slate-400">Território</span>
+                        <span className="font-medium text-slate-700">{territorio}</span>
                       </span>
-                      <span className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${getRiskTone(nivelRisco)}`}>
-                        Risco {nivelRisco}
-                      </span>
-                      <span className={`inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] ${getHealthTone(saudeEntrega)}`}>
-                        {saudeEntrega}
+                      <span className="flex items-center gap-1">
+                        <span className="uppercase tracking-[0.12em] text-slate-400">Responsável</span>
+                        <span className="font-medium text-slate-700">{responsavel}</span>
                       </span>
                     </div>
-                    <h4 className="mt-4 text-xl font-bold text-slate-950">{getProjetoNome(projeto)}</h4>
-                    <p className="mt-1 text-sm text-slate-600">{getProjetoOsc(projeto) || 'OSC ainda não informada'}</p>
-                  </div>
-                  <span className="rounded-full bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">
-                    {projeto.categoria || 'Sem categoria'}
-                  </span>
-                </div>
 
-                <div className="mt-5 space-y-4">
-                  <div>
-                    <div className="mb-2 flex items-center justify-between text-sm text-slate-600">
-                      <span>Progresso físico</span>
-                      <span className="font-semibold text-slate-900">{progresso.toFixed(0)}%</span>
+                    {/* Value + Incidents + Progress */}
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5">
+                      <span className="flex items-center gap-1">
+                        <span className="uppercase tracking-[0.12em] text-slate-400">Valor</span>
+                        <span className="font-semibold text-slate-800">{formatCurrency(projeto.valorTotal)}</span>
+                      </span>
+                      {incidentesAbertos > 0 && (
+                        <span className="flex items-center gap-1">
+                          <span className="uppercase tracking-[0.12em] text-slate-400">Incidentes</span>
+                          <span className="font-semibold text-rose-700">{incidentesAbertos}</span>
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1.5 ml-auto">
+                        <div className="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
+                          <div className={`h-1.5 rounded-full ${tone.progress}`} style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
+                        </div>
+                        <span className="font-medium text-slate-600">{progresso.toFixed(0)}%</span>
+                      </span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/70">
-                      <div
-                        className={`h-2 rounded-full ${tone.progress}`}
-                        style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }}
-                      />
-                    </div>
-                  </div>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl bg-white/70 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Território</p>
-                      <p className="mt-1 text-sm font-medium text-slate-900">{territorio}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white/70 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Responsável</p>
-                      <p className="mt-1 text-sm font-medium text-slate-900">{responsavel}</p>
-                    </div>
+                    {/* Alert */}
+                    {alerta && (
+                      <span className={`flex items-center gap-1 ${alerta.severidade === 'critico' ? 'text-rose-600' : 'text-amber-600'}`}>
+                        <AlertTriangle className="h-3 w-3 shrink-0" />{alerta.motivo}
+                      </span>
+                    )}
                   </div>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl bg-white/70 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Incidentes</p>
-                      <p className="mt-1 text-lg font-semibold text-slate-950">{incidentesAbertos}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white/70 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Manutenção</p>
-                      <p className="mt-1 text-sm font-semibold text-slate-950">{manutencaoStatus}</p>
-                    </div>
-                    <div className="rounded-2xl bg-white/70 px-4 py-3">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Ação</p>
-                      <p className="mt-1 text-sm font-semibold text-slate-950">{precisaAcao ? 'Prioritária' : 'Rotina'}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between rounded-2xl bg-white/80 px-4 py-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Valor total</p>
-                      <p className="mt-1 text-lg font-semibold text-slate-950">{formatCurrency(projeto.valorTotal)}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Metas</p>
-                      <p className="mt-1 text-lg font-semibold text-slate-950">{monitoramento.totalMetas}</p>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200/70 bg-white/60 px-4 py-3">
-                    <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Chave de integração</p>
-                    <p className="mt-1 truncate font-mono text-sm text-slate-900">{projeto.chaveIntegracao}</p>
-                  </div>
-
-                  {alerta ? (
-                    <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-                      {alerta.motivo}
-                    </div>
-                  ) : (
-                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                      Sem pendência prioritária com os dados atuais.
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         {projetos.length === 0 && (
-          <div className="rounded-[1.75rem] border border-dashed border-slate-200 bg-white/70 py-12 text-center text-slate-500">
+          <div className="rounded-[1.45rem] border border-dashed border-slate-200 bg-white/70 py-10 text-center text-sm text-slate-400">
             Nenhum projeto cadastrado no portfólio.
           </div>
         )}

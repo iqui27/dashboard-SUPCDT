@@ -301,25 +301,22 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             aria-modal="true"
             aria-label={point ? 'Editar ponto Wi-Fi' : 'Novo ponto Wi-Fi'}
           >
-        <div className="sticky top-0 z-10 flex shrink-0 items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] px-6 py-5 backdrop-blur-sm">
-          <div>
-            <div className="flex items-center gap-2">
-              <Wifi className="h-5 w-5 text-sky-700" />
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-sky-700/80">Wi‑Fi Social</p>
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
+          <div className="flex items-center gap-2.5">
+            <Wifi className="h-4 w-4 text-sky-600" />
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Wi‑Fi Social</p>
+              <h2 className="text-sm font-bold text-slate-900 leading-tight">
+                {point ? 'Editar ponto' : 'Novo ponto de cobertura'}
+              </h2>
             </div>
-            <h2 className="mt-2 text-2xl font-bold text-slate-950">
-              {point ? 'Editar ponto' : 'Novo ponto de cobertura'}
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Cadastre a localização, status, raio de cobertura, manutenção e necessidade de ação do ponto.
-            </p>
           </div>
-          <Button type="button" variant="ghost" size="icon" onClick={onClose} className="rounded-full">
-            <X className="h-5 w-5 text-slate-500" />
+          <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
+            <X className="h-4 w-4 text-slate-400" />
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-6 overscroll-contain">
+        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 pt-6 pb-0 overscroll-contain">
           <div className="grid gap-4 md:grid-cols-2">
             {initialPosition && !point && (
               <div className="rounded-[1.5rem] border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 md:col-span-2">

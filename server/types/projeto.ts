@@ -8,6 +8,7 @@ export interface DBMeta {
   codigo: string;
   descricao: string;
   unidade: string;
+  ano?: number | null;
   totalPrevisto: number;
   previstoPorTrimestre: number[];
   realizadoTotal?: number;

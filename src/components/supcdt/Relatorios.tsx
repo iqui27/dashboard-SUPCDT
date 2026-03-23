@@ -33,71 +33,68 @@ export function Relatorios({ projetos }: RelatoriosProps) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">Relatórios e exportações</p>
-        <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">Saída honesta do que já está pronto</h2>
-        <p className="mt-2.5 max-w-3xl text-sm leading-6 text-slate-600">
-          Nesta fase, apenas as exportações lastreadas pela base real permanecem disponíveis. O que ainda depende de template, evidências ou novas entidades aparece como indisponível, não como promessa vaga.
-        </p>
+      {/* Hero */}
+      <div className="flex items-center justify-between gap-4 px-1 py-1">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Relatórios e exportações</p>
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-slate-900">Saída honesta do que já está pronto</h2>
+        </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
-        <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-          <CardHeader>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <CardTitle className="text-lg text-slate-950">Exportação operacional Saiweb</CardTitle>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Gera um CSV com os lançamentos trimestrais registrados na base atual. É a exportação que já possui backend funcional e corresponde ao estado real do produto.
-                </p>
-              </div>
-              <div className="rounded-2xl bg-emerald-100 p-3 text-emerald-700">
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-              Disponível agora para exportação a partir dos lançamentos existentes.
-            </div>
-            <Button onClick={handleDownloadSaiweb} disabled={isDownloading} className="h-10 rounded-full bg-slate-950 text-white hover:bg-slate-800">
-              <Download className="mr-2 h-4 w-4" />
-              {isDownloading ? 'Gerando CSV...' : 'Baixar CSV do Saiweb'}
-            </Button>
-          </CardContent>
-        </Card>
+      {/* Report cards */}
+      <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+        <ul role="list" className="divide-y divide-slate-100">
 
-        <Card className="rounded-[1.45rem] border-white/80 bg-white/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-          <CardHeader>
+          {/* Saiweb */}
+          <li className="px-5 py-4">
             <div className="flex items-start justify-between gap-4">
-              <div>
-                <CardTitle className="text-lg text-slate-950">Relatório institucional por projeto</CardTitle>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  O resumo executivo em PDF foi removido do fluxo ativo até que o modelo suporte anexos, evidências, regras de homologação e saída institucional padronizada.
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+                  <p className="text-sm font-semibold text-slate-900">Exportação operacional Saiweb</p>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">Disponível</span>
+                </div>
+                <p className="mt-1 ml-6 text-[11px] text-slate-500">
+                  Gera um CSV com os lançamentos trimestrais registrados na base atual.
                 </p>
               </div>
-              <div className="rounded-2xl bg-amber-100 p-3 text-amber-700">
-                <ShieldAlert className="h-5 w-5" />
-              </div>
+              <Button onClick={handleDownloadSaiweb} disabled={isDownloading} className="h-8 shrink-0 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
+                <Download className="mr-1.5 h-3 w-3" />
+                {isDownloading ? 'Gerando...' : 'Baixar CSV'}
+              </Button>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">O que falta para liberar</p>
-              <div className="mt-3 grid gap-2">
-                {lacunas.map((lacuna) => (
-                  <div key={lacuna} className="rounded-2xl bg-white px-4 py-3 text-sm text-slate-700 shadow-sm">
-                    {lacuna}
+          </li>
+
+          {/* PDF institucional */}
+          <li className="px-5 py-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <ShieldAlert className="h-4 w-4 shrink-0 text-amber-500" />
+                  <p className="text-sm font-semibold text-slate-900">Relatório institucional por projeto</p>
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">Indisponível</span>
+                </div>
+                <p className="mt-1 ml-6 text-[11px] text-slate-500">
+                  Aguardando suporte a anexos, evidências e saída institucional padronizada.
+                </p>
+                {lacunas.length > 0 && (
+                  <div className="mt-2 ml-6 flex flex-wrap gap-1.5">
+                    {lacunas.map((lacuna) => (
+                      <span key={lacuna} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] text-slate-600">
+                        {lacuna}
+                      </span>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
+              <Button disabled variant="outline" className="h-8 shrink-0 rounded-full border-slate-200 px-3 text-xs text-slate-400">
+                <FileSpreadsheet className="mr-1.5 h-3 w-3" />
+                PDF indisponível
+              </Button>
             </div>
-            <Button disabled variant="outline" className="h-10 rounded-full border-slate-200 bg-white text-slate-500">
-              <FileSpreadsheet className="mr-2 h-4 w-4" />
-              PDF institucional indisponível nesta fase
-            </Button>
-          </CardContent>
-        </Card>
+          </li>
+
+        </ul>
       </div>
     </div>
   );
