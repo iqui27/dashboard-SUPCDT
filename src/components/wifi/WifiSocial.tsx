@@ -184,36 +184,28 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
 
   return (
     <div className="space-y-5 pb-12">
-      <div className="rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.16),transparent_26%),linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">Wi‑Fi Social DF</p>
-            <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">
-              Operação territorial da rede com mapa, cobertura e status por ponto.
-            </h2>
-            <p className="mt-2.5 text-sm leading-6 text-slate-600">
-              Esta vertical já nasce integrada ao dashboard principal e transforma o projeto Wi‑Fi Social em uma operação cartográfica real, com cadastro por ponto, leitura de cobertura e pendências operacionais.
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Projeto vinculado</p>
-              <p className="mt-1 text-base font-semibold text-slate-950">{linkedProject ? getProjetoNome(linkedProject) : 'Wi‑Fi Social'}</p>
-              <p className="text-[13px] text-slate-500">{linkedProject ? getProjetoStatus(linkedProject) : 'Sem vínculo explícito no cadastro'}</p>
-            </div>
-            <div className="rounded-[1.35rem] border border-slate-200/80 bg-white/80 px-4 py-3 shadow-sm">
-              <p className="text-xs uppercase tracking-[0.18em] text-slate-500">Pontos carregados</p>
-              <p className="mt-1 text-xl font-bold text-slate-950">{stats.totalPontos}</p>
-              <p className="text-[13px] text-slate-500">pontos na coleção operacional</p>
-            </div>
-          </div>
+      {/* Hero */}
+      <div className="flex items-center justify-between gap-4 px-1 py-1">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Wi‑Fi Social DF</p>
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-slate-900">Operação territorial</h2>
+        </div>
+        <div className="flex items-center gap-4 text-[11px] text-slate-500">
+          <span className="flex items-center gap-1">
+            <span className="uppercase tracking-[0.14em] text-slate-400">Projeto</span>
+            <span className="font-medium text-slate-700">{linkedProject ? getProjetoNome(linkedProject) : 'Wi‑Fi Social'}</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <span className="uppercase tracking-[0.14em] text-slate-400">Pontos</span>
+            <span className="font-semibold text-slate-900">{stats.totalPontos}</span>
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-[1.45rem] border border-white/80 bg-white/85 p-4 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
-        <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex flex-wrap gap-2">
+      {/* Controls */}
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-1.5">
             {[
               { id: 'mapa', label: 'Mapa', icon: MapPinned },
               { id: 'painel', label: 'Painel', icon: LayoutGrid },
@@ -223,13 +215,13 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
                 key={tab.id}
                 type="button"
                 onClick={() => setView(tab.id as WifiView)}
-                className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[13px] font-semibold transition ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-medium transition-colors ${
                   view === tab.id
-                    ? 'bg-slate-950 text-white shadow-[0_18px_40px_-28px_rgba(15,23,42,0.8)]'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                    ? 'bg-slate-950 text-white'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
                 }`}
               >
-                <tab.icon className="h-4 w-4" />
+                <tab.icon className="h-3.5 w-3.5" />
                 {tab.label}
               </button>
             ))}
@@ -238,26 +230,26 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           <Button
             onClick={() => openCreateModal()}
             disabled={apiStatus === 'unavailable'}
-            className="h-10 rounded-full bg-slate-950 px-4 text-white hover:bg-slate-800 disabled:bg-slate-300"
+            className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800 disabled:bg-slate-300"
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="mr-1.5 h-3 w-3" />
             Novo ponto
           </Button>
         </div>
 
-        <div className="grid gap-3 lg:grid-cols-[minmax(0,1.3fr)_220px_240px]">
+        <div className="grid gap-2 lg:grid-cols-[minmax(0,1.3fr)_200px_220px]">
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
             <Input
               placeholder="Buscar por ponto, CEP, endereço, RA ou responsável..."
-              className="h-11 rounded-full border-slate-200 bg-slate-50 pl-11 text-slate-900"
+              className="h-9 rounded-full border-slate-200 bg-slate-50 pl-10 text-sm text-slate-900"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-11 rounded-full bg-slate-50"><SelectValue placeholder="Status" /></SelectTrigger>
+            <SelectTrigger className="h-9 rounded-full bg-slate-50 text-sm"><SelectValue placeholder="Status" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="todos">Todos os status</SelectItem>
               {WIFI_POINT_STATUSES.map((status) => (
@@ -267,7 +259,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           </Select>
 
           <Select value={regionFilter} onValueChange={setRegionFilter}>
-            <SelectTrigger className="h-11 rounded-full bg-slate-50"><SelectValue placeholder="RA" /></SelectTrigger>
+            <SelectTrigger className="h-9 rounded-full bg-slate-50 text-sm"><SelectValue placeholder="RA" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="todas">Todas as RAs</SelectItem>
               {REGIOES_ADMINISTRATIVAS_DF.map((region) => (
@@ -277,26 +269,12 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           </Select>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 text-sm text-slate-500">
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-700">
-            {points.length} ponto(s) filtrado(s)
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 font-medium text-rose-700">
-            <ShieldAlert className="h-4 w-4" />
-            {stats.pontosCriticos} ponto(s) críticos
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 font-medium text-amber-700">
-            <ShieldAlert className="h-4 w-4" />
-            {stats.precisaAcao} ponto(s) exigem ação prioritária
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-700">
-            <RadioTower className="h-4 w-4" />
-            {stats.incidentesAbertos} incidente(s) abertos
-          </span>
-          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 font-medium text-emerald-700">
-            <RadioTower className="h-4 w-4" />
-            {stats.regioesAtendidas} RA(s) com cobertura cadastrada
-          </span>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+          <span className="font-medium text-slate-700">{points.length} ponto(s) filtrado(s)</span>
+          <span className="flex items-center gap-1 text-rose-600"><ShieldAlert className="h-3 w-3" />{stats.pontosCriticos} críticos</span>
+          <span className="flex items-center gap-1 text-amber-600"><ShieldAlert className="h-3 w-3" />{stats.precisaAcao} exigem ação</span>
+          <span className="flex items-center gap-1"><RadioTower className="h-3 w-3" />{stats.incidentesAbertos} incidentes</span>
+          <span className="flex items-center gap-1 text-emerald-600"><RadioTower className="h-3 w-3" />{stats.regioesAtendidas} RAs cobertas</span>
         </div>
       </div>
 

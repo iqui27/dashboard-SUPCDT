@@ -54,17 +54,13 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-col gap-4 rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.72))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)] lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-3xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-700/80">Base operacional</p>
-          <h2 className="mt-2.5 text-3xl font-extrabold tracking-tight text-slate-950 lg:text-[2.15rem]">Projetos monitorados</h2>
-          <p className="mt-2.5 text-sm leading-6 text-slate-600">
-            A listagem abaixo já usa os campos reais do banco, destaca a chave de integração e evita expor placeholders como se fossem dados confiáveis.
-          </p>
+      <div className="flex items-center justify-between gap-4 px-1 py-1">
+        <div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Base operacional</p>
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-slate-900">Projetos monitorados</h2>
         </div>
-
-        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-10 rounded-full bg-slate-950 px-4 text-white hover:bg-slate-800">
-          <Plus className="mr-2 h-4 w-4" />
+        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
+          <Plus className="mr-1.5 h-3 w-3" />
           Novo projeto
         </Button>
       </div>

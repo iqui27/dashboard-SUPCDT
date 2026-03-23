@@ -74,6 +74,7 @@ export interface Meta {
   codigo: string;
   descricao: string;
   unidade: string;
+  ano?: number | null;
   totalPrevisto: number;
   previstoPorTrimestre: number[];
   realizadoTotal: number;
@@ -173,6 +174,7 @@ export interface Lancamento {
   id: string;
   projetoId: string;
   trimestre: number;
+  dataAtividade?: string | null;
   dataRegistro: Date;
   registradoPor: string;
   valores: LancamentoValor[];
