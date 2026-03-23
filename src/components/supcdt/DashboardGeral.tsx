@@ -8,8 +8,6 @@ import {
   Projeto,
   getProjetoIncidentesAbertos,
   getProjetoLacunasMonitoramento,
-  getProjetoMonitoramento,
-  getProjetoMonitoramentoOperacional,
   getProjetoNivelRisco,
   getProjetoNome,
   getProjetoOsc,
