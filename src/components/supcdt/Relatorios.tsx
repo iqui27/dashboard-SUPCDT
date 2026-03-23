@@ -6,7 +6,6 @@ import { Projeto, getProjetoLacunasMonitoramento } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { downloadRelatorioSaiweb } from '../../lib/api/lancamentos';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 
 interface RelatoriosProps {
   projetos: Projeto[];
