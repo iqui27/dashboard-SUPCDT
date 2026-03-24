@@ -7,7 +7,6 @@ import {
   DBEntregavel,
   DBRubricaOrcamentaria,
   DBAditivoRubrica,
-  DBModulosAtivos,
   DBProjeto
 } from '../types/projeto.js';
 import { randomUUID } from 'crypto';
@@ -72,17 +71,17 @@ router.post('/:id/etapas', requireAuth, async (req: Request, res: Response) => {
     };
 
     // Atualizar projeto
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $push: { etapas: novaEtapa } },
       { returnDocument: 'after' }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Falha ao atualizar projeto' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao criar etapa:', error);
     return res.status(500).json({ error: 'Falha ao criar etapa' });
@@ -112,7 +111,7 @@ router.put('/:id/etapas/:etapaId', requireAuth, async (req: Request, res: Respon
       return res.status(400).json({ error: 'Nenhum campo para atualizar' });
     }
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $set: setObj },
       {
@@ -121,11 +120,11 @@ router.put('/:id/etapas/:etapaId', requireAuth, async (req: Request, res: Respon
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Etapa não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao atualizar etapa:', error);
     return res.status(500).json({ error: 'Falha ao atualizar etapa' });
@@ -145,17 +144,17 @@ router.delete('/:id/etapas/:etapaId', requireAuth, async (req: Request, res: Res
 
     const { col, oid } = result;
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $pull: { etapas: { id: etapaId } } },
       { returnDocument: 'after' }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Etapa não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao remover etapa:', error);
     return res.status(500).json({ error: 'Falha ao remover etapa' });
@@ -181,7 +180,7 @@ router.patch('/:id/etapas/:etapaId/entregaveis/:entId', requireAuth, async (req:
 
     const { col, oid } = result;
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $set: { 'etapas.$[etapa].entregaveis.$[ent].concluido': concluido } },
       {
@@ -193,11 +192,11 @@ router.patch('/:id/etapas/:etapaId/entregaveis/:entId', requireAuth, async (req:
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Entregável não encontrado' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao atualizar entregável:', error);
     return res.status(500).json({ error: 'Falha ao atualizar entregável' });
@@ -230,7 +229,7 @@ router.post('/:id/etapas/:etapaId/entregaveis', requireAuth, async (req: Request
       concluido: false
     };
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $push: { 'etapas.$[etapa].entregaveis': novoEntregavel } },
       {
@@ -239,11 +238,11 @@ router.post('/:id/etapas/:etapaId/entregaveis', requireAuth, async (req: Request
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Etapa não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao adicionar entregável:', error);
     return res.status(500).json({ error: 'Falha ao adicionar entregável' });
@@ -263,7 +262,7 @@ router.delete('/:id/etapas/:etapaId/entregaveis/:entId', requireAuth, async (req
 
     const { col, oid } = result;
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $pull: { 'etapas.$[etapa].entregaveis': { id: entId } } },
       {
@@ -272,11 +271,11 @@ router.delete('/:id/etapas/:etapaId/entregaveis/:entId', requireAuth, async (req
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Entregável não encontrado' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao remover entregável:', error);
     return res.status(500).json({ error: 'Falha ao remover entregável' });
@@ -313,17 +312,17 @@ router.post('/:id/rubricas', requireAuth, async (req: Request, res: Response) =>
       aditivos: []
     };
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $push: { rubricas: novaRubrica } },
       { returnDocument: 'after' }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Falha ao atualizar projeto' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao criar rubrica:', error);
     return res.status(500).json({ error: 'Falha ao criar rubrica' });
@@ -354,7 +353,7 @@ router.put('/:id/rubricas/:rubricaId', requireAuth, async (req: Request, res: Re
       return res.status(400).json({ error: 'Nenhum campo para atualizar' });
     }
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $set: setObj },
       {
@@ -363,11 +362,11 @@ router.put('/:id/rubricas/:rubricaId', requireAuth, async (req: Request, res: Re
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Rubrica não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao atualizar rubrica:', error);
     return res.status(500).json({ error: 'Falha ao atualizar rubrica' });
@@ -404,7 +403,7 @@ router.post('/:id/rubricas/:rubricaId/aditivos', requireAuth, async (req: Reques
       data: data ? new Date(data) : null
     };
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $push: { 'rubricas.$[elem].aditivos': novoAditivo } },
       {
@@ -413,11 +412,11 @@ router.post('/:id/rubricas/:rubricaId/aditivos', requireAuth, async (req: Reques
       }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Rubrica não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao adicionar aditivo:', error);
     return res.status(500).json({ error: 'Falha ao adicionar aditivo' });
@@ -437,17 +436,17 @@ router.delete('/:id/rubricas/:rubricaId', requireAuth, async (req: Request, res:
 
     const { col, oid } = result;
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $pull: { rubricas: { id: rubricaId } } },
       { returnDocument: 'after' }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Rubrica não encontrada' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao remover rubrica:', error);
     return res.status(500).json({ error: 'Falha ao remover rubrica' });
@@ -486,17 +485,17 @@ router.patch('/:id/modulos', requireAuth, async (req: Request, res: Response) =>
       }
     }
 
-    const updateResult = await col.findOneAndUpdate(
+    const updatedProjeto = await col.findOneAndUpdate(
       { _id: oid },
       { $set: setObj },
       { returnDocument: 'after' }
     );
 
-    if (!updateResult.value) {
+    if (!updatedProjeto) {
       return res.status(404).json({ error: 'Falha ao atualizar projeto' });
     }
 
-    return res.json(updateResult.value);
+    return res.json(updatedProjeto);
   } catch (error) {
     console.error('Erro ao atualizar módulos:', error);
     return res.status(500).json({ error: 'Falha ao atualizar módulos' });

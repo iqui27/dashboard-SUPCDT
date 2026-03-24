@@ -203,13 +203,13 @@ router.post('/:id/riscos', requireAuth, async (req: Request, res: Response) => {
     const validImpactos: DBImpactoRisco[] = ['Baixo', 'Médio', 'Alto'];
     const validStatus: DBStatusRisco[] = ['Aberto', 'Mitigado', 'Encerrado'];
 
-    if (!validProbabilidades.includes(probabilidade)) {
+    if (!validProbabilidades.includes(probabilidade as DBProbabilidadeRisco)) {
       return res.status(400).json({ error: `Probabilidade inválida. Válidas: ${validProbabilidades.join(', ')}` });
     }
-    if (!validImpactos.includes(impacto)) {
+    if (!validImpactos.includes(impacto as DBImpactoRisco)) {
       return res.status(400).json({ error: `Impacto inválido. Válidos: ${validImpactos.join(', ')}` });
     }
-    if (status && !validStatus.includes(status)) {
+    if (status && !validStatus.includes(status as DBStatusRisco)) {
       return res.status(400).json({ error: `Status inválido. Válidos: ${validStatus.join(', ')}` });
     }
 
@@ -222,8 +222,8 @@ router.post('/:id/riscos', requireAuth, async (req: Request, res: Response) => {
     const novoRisco: DBRisco = {
       id: randomUUID(),
       descricao: descricao.trim(),
-      probabilidade,
-      impacto,
+      probabilidade: probabilidade as DBProbabilidadeRisco,
+      impacto: impacto as DBImpactoRisco,
       mitigacao: mitigacao ?? null,
       status: (status as DBStatusRisco) ?? 'Aberto'
     };
