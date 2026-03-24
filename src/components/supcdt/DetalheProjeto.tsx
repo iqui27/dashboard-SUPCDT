@@ -9,6 +9,8 @@ import { formatCurrency } from '../../lib/currencyUtils';
 import { formatBRDate } from '../../lib/utils';
 import { Button } from '../ui/button';
 
+import { EtapasSection } from './EtapasSection';
+import { OrcamentoSection } from './OrcamentoSection';
 import { LancamentoModal } from './LancamentoModal';
 import { MetaModal } from './MetaModal';
 import { ProjetoMonitoramentoModal } from './ProjetoMonitoramentoModal';
@@ -252,6 +254,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               )}
             </div>
           </div>
+
+          {/* Etapas */}
+          <EtapasSection projeto={projeto} onUpdate={onUpdate} />
+
+          {/* Orçamento */}
+          <OrcamentoSection projeto={projeto} onUpdate={onUpdate} />
 
           {/* Lançamentos */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
