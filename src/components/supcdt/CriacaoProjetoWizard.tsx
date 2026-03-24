@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, Save, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FolderPlus, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { createProjeto } from '../../lib/api/projetos';
 import { Categoria, ProjetoInput, StatusProjeto } from '../../types/projeto';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardFooter } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
@@ -80,17 +80,18 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
       <Card className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)]">
-        <CardHeader className="flex flex-row items-start justify-between border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84))] pb-5">
-          <div>
-            <CardTitle className="text-2xl text-slate-950">Novo projeto SUPCDT</CardTitle>
-            <CardDescription className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Cadastro baseado no contrato real da base. O número único já fica disponível para integração com outros dashboards quando houver esse identificador.
-            </CardDescription>
+        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-3.5">
+          <div className="flex items-center gap-2.5">
+            <FolderPlus className="h-4 w-4 text-sky-600" />
+            <div>
+              <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.22em] text-sky-700/70">SUPCDT</p>
+              <h2 className="text-sm font-bold leading-tight text-slate-900">Novo projeto</h2>
+            </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full">
-            <X className="h-5 w-5 text-slate-500" />
+          <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
+            <X className="h-4 w-4 text-slate-400" />
           </Button>
-        </CardHeader>
+        </div>
 
         <CardContent className="flex min-h-0 flex-1 flex-col p-0 md:flex-row">
           <div className="w-full border-b border-slate-100 bg-slate-50/80 p-5 md:w-72 md:border-b-0 md:border-r">
