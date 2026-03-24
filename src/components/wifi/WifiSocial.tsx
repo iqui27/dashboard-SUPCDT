@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { ApiRequestError, createWifiPoint, deleteWifiPoint, fetchWifiPoints, fetchWifiStats, updateWifiPoint } from '../../lib/api/wifi';
-import { Projeto, getProjetoNome, getProjetoStatus } from '../../types/projeto';
+import { Projeto, getProjetoNome } from '../../types/projeto';
 import { REGIOES_ADMINISTRATIVAS_DF, WIFI_POINT_STATUSES, WifiPoint, WifiPointInput, WifiStats, buildWifiStatsFromPoints, getWifiStatusLabel } from '../../types/wifi';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
