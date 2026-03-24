@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { getDatabase } from '../db/client.js';
 import { DBProjeto, DBProjetoMonitoramento, ProjetoApi, ProjetoInput } from '../types/projeto.js';
 
-const COLLECTION_NAME = 'projetos_supcdt';
+const COLLECTION_NAME = 'custom_projects';
 
 type ResolvedMonitoramentoOperacional = {
   statusOperacional: string;
