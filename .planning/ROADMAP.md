@@ -115,11 +115,11 @@ Plans:
 **Depends on**: Phase 5
 **Requirements**: ETAP-01, ETAP-02, ETAP-03, ETAP-04, ETAP-05, ORÇA-01, ORÇA-02, ORÇA-03, ORÇA-04, PARC-01, PARC-02, PARC-03, RISC-01, RISC-02, RISC-03, GOVN-01, GOVN-02, INDC-01, INDC-02, INDC-03, MODU-01
 **Success Criteria** (what must be TRUE):
-  1. `POST /api/projects/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200
-  2. `PATCH /api/projects/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB
+  1. `POST /api/projetos/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200
+  2. `PATCH /api/projetos/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB
   3. Todos os endpoints de CRUD retornam 401 sem token de autenticação
-  4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `custom_projects`
-  5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projects`
+  4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `projetos_supcdt`
+  5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projetos`
 **Plans:** 2 plans
 
 Plans:
