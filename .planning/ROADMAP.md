@@ -105,7 +105,10 @@ Plans:
   2. Um projeto existente carregado do MongoDB sem campo `modulosAtivos` não gera erro de runtime
   3. Os tipos estão espelhados em `src/types/projeto.ts` e `server/types/projeto.ts`
   4. O campo `modulosAtivos` no tipo `Projeto` tem todos os flags com default implícito false (usando `boolean | undefined`)
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 05-01-PLAN.md — Tipos dos 6 módulos + ModulosAtivos em src/types/projeto.ts e server/types/projeto.ts
 
 ### Phase 6: API Backend
 **Goal**: Gestor consegue criar, editar e excluir itens de qualquer módulo via API REST, e configurar quais módulos estão ativos no projeto
@@ -174,7 +177,7 @@ Plans:
 | 2. Monitoring Model & Operational Readiness | 2/2 | Complete | 2026-03-19 |
 | 3. Wi-Fi Social Operations Module | 3/3 | Complete | 2026-03-19 |
 | 4. Full Product Polish & Production UX | 2/2 | Complete | 2026-03-19 |
-| 5. Modelo de Dados | 0/? | Not started | - |
+| 5. Modelo de Dados | 0/1 | Not started | - |
 | 6. API Backend | 0/? | Not started | - |
 | 7. Wizard — Passo 5 | 0/? | Not started | - |
 | 8. UI Etapas + Orçamento | 0/? | Not started | - |
