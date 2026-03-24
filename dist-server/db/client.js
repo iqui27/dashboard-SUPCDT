@@ -19,7 +19,7 @@ export async function closeMongoClient() {
     await connectedClient.close();
     clientPromise = null;
 }
-export async function getDatabase(dbName = 'secti-dashboard') {
+export async function getDatabase(dbName = 'dashboard_supcdt') {
     const connectedClient = await getMongoClient();
     return connectedClient.db(dbName);
 }
