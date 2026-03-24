@@ -146,7 +146,11 @@ Plans:
   3. Entregáveis aparecem como checklist; marcar um como concluído persiste o estado imediatamente
   4. A seção "Orçamento" exibe total previsto, executado e saldo no cabeçalho, com variação por rubrica em verde (≤100%) ou vermelho (>100%)
   5. Aditivos de uma rubrica são visíveis em sublista colapsável
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — API layer para etapas/orcamento + componente EtapasSection
+- [ ] 08-02-PLAN.md — Componente OrcamentoSection + integracao no DetalheProjeto
 
 ### Phase 9: UI Parceiros, Riscos, Governança, Indicadores
 **Goal**: Gestor consegue gerenciar parceiros, riscos, decisões e indicadores de pesquisa diretamente no DetalheProjeto
@@ -184,7 +188,7 @@ Plans:
 | 5. Modelo de Dados | 1/1 | Complete   | 2026-03-24 |
 | 6. API Backend | 2/2 | Complete | 2026-03-24 |
 | 7. Wizard — Passo 5 | 0/1 | Not started | - |
-| 8. UI Etapas + Orçamento | 0/? | Not started | - |
+| 8. UI Etapas + Orçamento | 0/2 | Not started | - |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 0/? | Not started | - |
 | 10. Painel de Configuração | 0/? | Not started | - |
 
