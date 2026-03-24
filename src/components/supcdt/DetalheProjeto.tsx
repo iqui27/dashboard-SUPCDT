@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { CalendarDays, Download, Link2, MapPin, Pencil, PencilLine, Plus, Radar, ShieldAlert, UserRound } from 'lucide-react';
+import { CalendarDays, Download, Link2, MapPin, Pencil, PencilLine, Plus, Radar, Settings, ShieldAlert, UserRound } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Projeto, Lancamento, Meta, getProjetoIncidentesAbertos, getProjetoLacunasMonitoramento, getProjetoMonitoramento, getProjetoMonitoramentoOperacional, getProjetoNivelRisco, getProjetoNome, getProjetoNumeroTermo, getProjetoNumeroUnico, getProjetoOsc, getProjetoParceiro, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoSaudeEntrega, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio, parseProjetoDate } from '../../types/projeto';
@@ -8,6 +8,7 @@ import { fetchLancamentosDeProjeto } from '../../lib/api/lancamentos';
 import { formatCurrency } from '../../lib/currencyUtils';
 import { formatBRDate } from '../../lib/utils';
 import { Button } from '../ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 import { EtapasSection } from './EtapasSection';
 import { OrcamentoSection } from './OrcamentoSection';
@@ -17,6 +18,7 @@ import { GovernancaSection } from './GovernancaSection';
 import { IndicadoresSection } from './IndicadoresSection';
 import { LancamentoModal } from './LancamentoModal';
 import { MetaModal } from './MetaModal';
+import { ModulosConfigPanel } from './ModulosConfigPanel';
 import { ProjetoMonitoramentoModal } from './ProjetoMonitoramentoModal';
 
 interface DetalheProjetoProps {
@@ -94,6 +96,17 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           </div>
 
           <div className="flex shrink-0 flex-wrap gap-2">
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="h-8 w-8 rounded-full border-slate-200 p-0 text-slate-500 hover:bg-slate-50 hover:text-slate-700">
+                  <Settings className="h-3.5 w-3.5" />
+                  <span className="sr-only">Configurar módulos</span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-0" align="end">
+                <ModulosConfigPanel projeto={projeto} onUpdate={onUpdate} />
+              </PopoverContent>
+            </Popover>
             <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
               <PencilLine className="mr-1.5 h-3 w-3" />
               Monitoramento
