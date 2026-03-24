@@ -88,7 +88,7 @@ Plans:
 ## Phases
 
 - [x] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes (completed 2026-03-24)
-- 🚧 **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (06-01 completed 2026-03-24)
+- 🚧 **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (06-01, 06-02 completed 2026-03-24; 06-03 pending)
 - [ ] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação
 - [ ] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto
 - [ ] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto
@@ -113,14 +113,15 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. `POST /api/projetos/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200 ✓ (06-01)
   2. `PATCH /api/projetos/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB ✓ (06-01)
-  3. Todos os endpoints de CRUD retornam 401 sem token de autenticação ✓ (06-01 para Etapas/Orçamento/Módulos)
+  3. Todos os endpoints de CRUD retornam 401 sem token de autenticação ✓ (06-01, 06-02)
   4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `projetos_supcdt` ✓ (06-01 para Etapas/Orçamento/Módulos, 06-02 para Parceiros/Riscos/Governança/Indicadores)
   5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projetos` ✓
-**Plans:** 2/2 plans (1/2 complete)
+**Plans:** 3 plans (2/3 complete)
 
 Plans:
 - [x] 06-01-PLAN.md — Endpoints CRUD para Etapas, Orçamento e configuração de ModulosAtivos (COMPLETE 2026-03-24)
-- [ ] 06-02-PLAN.md — Endpoints CRUD para Parceiros, Riscos, Governança e Indicadores
+- [x] 06-02-PLAN.md — Endpoints CRUD para Parceiros, Riscos, Governança e Indicadores (COMPLETE 2026-03-24)
+- [ ] 06-03-PLAN.md — (Pendente — Possível: Migrations, Utilities, ou API refinements)
 
 ### Phase 7: Wizard — Passo 5
 **Goal**: Gestor consegue ativar módulos no momento de criação de um projeto via passo dedicado no wizard
@@ -178,7 +179,7 @@ Plans:
 | 3. Wi-Fi Social Operations Module | 3/3 | Complete | 2026-03-19 |
 | 4. Full Product Polish & Production UX | 2/2 | Complete | 2026-03-19 |
 | 5. Modelo de Dados | 1/1 | Complete   | 2026-03-24 |
-| 6. API Backend | 0/? | Not started | - |
+| 6. API Backend | 2/3 | In progress | 2026-03-24 (06-01, 06-02) |
 | 7. Wizard — Passo 5 | 0/? | Not started | - |
 | 8. UI Etapas + Orçamento | 0/? | Not started | - |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 0/? | Not started | - |
