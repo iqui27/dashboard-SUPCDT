@@ -5,12 +5,13 @@ import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { createProjeto } from '../../lib/api/projetos';
-import { Categoria, ProjetoInput, StatusProjeto } from '../../types/projeto';
+import { Categoria, ModulosAtivos, ProjetoInput, StatusProjeto } from '../../types/projeto';
 import { Button } from '../ui/button';
 import { Card, CardContent, CardFooter } from '../ui/card';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
 
 interface CriacaoProjetoWizardProps {
   onClose: () => void;
@@ -21,7 +22,17 @@ const steps = [
   { id: 'identificacao', label: '1. Identificação' },
   { id: 'governanca', label: '2. Governança & território' },
   { id: 'escopo', label: '3. Escopo & valor' },
-  { id: 'cronograma', label: '4. Cronograma' }
+  { id: 'cronograma', label: '4. Cronograma' },
+  { id: 'modulos', label: '5. Módulos' }
+];
+
+const MODULOS_CONFIG: { key: keyof ModulosAtivos; nome: string; descricao: string }[] = [
+  { key: 'etapas', nome: 'Etapas', descricao: 'Fases do projeto com percentual de conclusão e entregáveis' },
+  { key: 'orcamento', nome: 'Orçamento', descricao: 'Rubricas orçamentárias com valores previstos, executados e aditivos' },
+  { key: 'parceiros', nome: 'Parceiros', descricao: 'Organizações e pessoas envolvidas com papel e status' },
+  { key: 'riscos', nome: 'Riscos', descricao: 'Registro de riscos com probabilidade, impacto e mitigação' },
+  { key: 'governanca', nome: 'Governança', descricao: 'Decisões estratégicas com data, responsável e contexto' },
+  { key: 'indicadores', nome: 'Indicadores de Pesquisa', descricao: 'Métricas e séries de dados para acompanhamento de resultados' },
 ];
 
 export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizardProps) {
@@ -45,7 +56,8 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
     descricao: '',
     objetivos: '',
     metas: [],
-    cronograma: { totalTrimestres: 4 }
+    cronograma: { totalTrimestres: 4 },
+    modulosAtivos: {}
   });
 
   const updateData = <K extends keyof ProjetoInput>(field: K, value: ProjetoInput[K]) => {
@@ -237,6 +249,39 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
                     onChange={(e) => updateData('cronograma', { totalTrimestres: Number(e.target.value) || 1 })}
                     className="h-11 w-40 rounded-2xl"
                   />
+                </div>
+              </div>
+            )}
+
+            {activeStep === 4 && (
+              <div className="space-y-5">
+                <h3 className="text-lg font-semibold text-slate-950">Módulos</h3>
+                <p className="text-sm text-slate-500">
+                  Ative os módulos de monitoramento que este projeto utilizará. Você poderá alterar essa configuração depois.
+                </p>
+                <div className="divide-y divide-slate-100 rounded-[1.35rem] border border-slate-200 bg-white">
+                  {MODULOS_CONFIG.map((mod) => (
+                    <label
+                      key={mod.key}
+                      htmlFor={`modulo-${mod.key}`}
+                      className="flex cursor-pointer items-center justify-between px-5 py-4 transition hover:bg-slate-50"
+                    >
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-semibold text-slate-900">{mod.nome}</p>
+                        <p className="text-xs text-slate-500">{mod.descricao}</p>
+                      </div>
+                      <Switch
+                        id={`modulo-${mod.key}`}
+                        checked={!!formData.modulosAtivos?.[mod.key]}
+                        onCheckedChange={(checked) =>
+                          updateData('modulosAtivos', {
+                            ...formData.modulosAtivos,
+                            [mod.key]: checked,
+                          })
+                        }
+                      />
+                    </label>
+                  ))}
                 </div>
               </div>
             )}
