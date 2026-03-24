@@ -143,27 +143,68 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01..10 | Phase 1 | Pending |
-| ETAP-01..05 | Phase 2 | Pending |
-| ORÇA-01..04 | Phase 2 | Pending |
-| PARC-01..03 | Phase 2 | Pending |
-| RISC-01..03 | Phase 2 | Pending |
-| GOVN-01..02 | Phase 2 | Pending |
-| INDC-01..03 | Phase 2 | Pending |
-| MODU-01 | Phase 2 | Pending |
-| WIZD-01..03 | Phase 3 | Pending |
-| UIET-01..05 | Phase 4 | Pending |
-| UIOB-01..05 | Phase 4 | Pending |
-| UIPA-01..03 | Phase 5 | Pending |
-| UIRC-01..03 | Phase 5 | Pending |
-| UIGN-01..02 | Phase 5 | Pending |
-| UIIN-01..02 | Phase 5 | Pending |
-| UIMD-01..03 | Phase 6 | Pending |
+| DATA-01 | Phase 5 | Pending |
+| DATA-02 | Phase 5 | Pending |
+| DATA-03 | Phase 5 | Pending |
+| DATA-04 | Phase 5 | Pending |
+| DATA-05 | Phase 5 | Pending |
+| DATA-06 | Phase 5 | Pending |
+| DATA-07 | Phase 5 | Pending |
+| DATA-08 | Phase 5 | Pending |
+| DATA-09 | Phase 5 | Pending |
+| DATA-10 | Phase 5 | Pending |
+| ETAP-01 | Phase 6 | Pending |
+| ETAP-02 | Phase 6 | Pending |
+| ETAP-03 | Phase 6 | Pending |
+| ETAP-04 | Phase 6 | Pending |
+| ETAP-05 | Phase 6 | Pending |
+| ORÇA-01 | Phase 6 | Pending |
+| ORÇA-02 | Phase 6 | Pending |
+| ORÇA-03 | Phase 6 | Pending |
+| ORÇA-04 | Phase 6 | Pending |
+| PARC-01 | Phase 6 | Pending |
+| PARC-02 | Phase 6 | Pending |
+| PARC-03 | Phase 6 | Pending |
+| RISC-01 | Phase 6 | Pending |
+| RISC-02 | Phase 6 | Pending |
+| RISC-03 | Phase 6 | Pending |
+| GOVN-01 | Phase 6 | Pending |
+| GOVN-02 | Phase 6 | Pending |
+| INDC-01 | Phase 6 | Pending |
+| INDC-02 | Phase 6 | Pending |
+| INDC-03 | Phase 6 | Pending |
+| MODU-01 | Phase 6 | Pending |
+| WIZD-01 | Phase 7 | Pending |
+| WIZD-02 | Phase 7 | Pending |
+| WIZD-03 | Phase 7 | Pending |
+| UIET-01 | Phase 8 | Pending |
+| UIET-02 | Phase 8 | Pending |
+| UIET-03 | Phase 8 | Pending |
+| UIET-04 | Phase 8 | Pending |
+| UIET-05 | Phase 8 | Pending |
+| UIOB-01 | Phase 8 | Pending |
+| UIOB-02 | Phase 8 | Pending |
+| UIOB-03 | Phase 8 | Pending |
+| UIOB-04 | Phase 8 | Pending |
+| UIOB-05 | Phase 8 | Pending |
+| UIPA-01 | Phase 9 | Pending |
+| UIPA-02 | Phase 9 | Pending |
+| UIPA-03 | Phase 9 | Pending |
+| UIRC-01 | Phase 9 | Pending |
+| UIRC-02 | Phase 9 | Pending |
+| UIRC-03 | Phase 9 | Pending |
+| UIGN-01 | Phase 9 | Pending |
+| UIGN-02 | Phase 9 | Pending |
+| UIIN-01 | Phase 9 | Pending |
+| UIIN-02 | Phase 9 | Pending |
+| UIMD-01 | Phase 10 | Pending |
+| UIMD-02 | Phase 10 | Pending |
+| UIMD-03 | Phase 10 | Pending |
 
 **Coverage:**
 - v1 requirements: 56 total
 - Mapped to phases: 56
-- Unmapped: 0 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-24*
