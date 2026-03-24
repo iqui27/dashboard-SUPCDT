@@ -1,41 +1,169 @@
-# Dashboard SUPCDT — Requirements
+# Requirements: Dashboard SUPCDT — Módulos de Monitoramento
 
-## Product Intent
-Transformar o dashboard em uma ferramenta institucional pronta para uso real, com autenticação obrigatória, interface proprietária, monitoramento confiável de projetos e um módulo operacional dedicado ao projeto Wi-Fi Social.
+**Definido:** 2026-03-24
+**Core Value:** Cada projeto pode ser monitorado com o nível de detalhe que seu contrato exige — sem configuração técnica
 
-## Locked Decisions
-- A autenticação continua obrigatória em todo o produto.
-- A tela de login deve ser personalizada para o SUPCDT e não pode reaproveitar a identidade visual do outro dashboard.
-- A opção de "entrar sem login" deve ser removida.
-- O plano deve partir do estado real do banco `dashboard_supcdt`, não de mocks do frontend.
-- O módulo Wi-Fi Social será construído dentro do dashboard existente.
-- A direção visual será `minimalismo institucional contemporâneo`: limpa, precisa, responsiva e com UX profissional.
+## v1 Requirements
 
-## Requirements
+### Modelo de Dados
 
-| ID | Descrição |
-|----|-----------|
-| AUTH-01 | Login personalizado com identidade visual própria do SUPCDT |
-| AUTH-02 | Remover qualquer atalho de acesso sem autenticação |
-| BRAND-01 | Shell visual coerente entre login, header e dashboard |
-| UX-01 | Componentes principais devem ficar responsivos e com UX profissional |
-| DATA-01 | Verificar todos os componentes para garantir funcionamento real, sem hardcodes críticos |
-| DATA-02 | Alinhar contrato de dados entre Mongo, backend e frontend |
-| MON-01 | Extrair indicadores reais de monitoramento com base nos dados atuais de projetos e metas |
-| MON-02 | Identificar gaps de monitoramento e preparar modelo de expansão de dados |
-| WIFI-01 | Criar módulo do projeto Wi-Fi Social com interface dedicada |
-| WIFI-02 | Mapa do DF com cadastro e visualização de pontos, status e cobertura |
-| WIFI-03 | Permitir acompanhamento operacional: funcionando, cobertura, necessidade de ação, manutenção |
-| QUAL-01 | Revisão ampla dos componentes atuais para acabamento visual e consistência de interação |
+- [ ] **DATA-01**: Sistema suporta tipo `Etapa` com id, nome, percentual (0-100) e lista de entregáveis
+- [ ] **DATA-02**: Sistema suporta tipo `Entregavel` com id, nome e flag `concluido`
+- [ ] **DATA-03**: Sistema suporta tipo `RubricaOrcamentaria` com nome, previsto, executado e lista de aditivos
+- [ ] **DATA-04**: Sistema suporta tipo `AditivoRubrica` com descrição, valor e data
+- [ ] **DATA-05**: Sistema suporta tipo `Parceiro` com nome, papel e status (Ativo/Apoiador/Consultor/Inativo)
+- [ ] **DATA-06**: Sistema suporta tipo `Risco` com descrição, probabilidade, impacto, mitigação e status
+- [ ] **DATA-07**: Sistema suporta tipo `DecisaoGovernanca` com título, data, descrição e responsável
+- [ ] **DATA-08**: Sistema suporta tipo `IndicadorPesquisa` com nome, categoria e série `{label, valor}[]`
+- [ ] **DATA-09**: Tipo `Projeto` inclui campo `modulosAtivos` com flags boolean para cada módulo
+- [ ] **DATA-10**: Projetos existentes sem `modulosAtivos` continuam funcionando (retrocompatibilidade)
 
-## Current Data Reality
-- Banco ativo de projetos: `dashboard_supcdt`
-- Collection principal: `projetos_supcdt`
-- Volume atual observado: `5` projetos
-- Collection `lancamentos`: `0` documentos
-- O projeto `Wi-Fi Social` já existe como registro inicial, mas ainda sem operação real
+### API — Etapas
 
-## Real Schema Findings
-- Os documentos atuais usam principalmente: `nome`, `nomeOSC`, `status`, `responsavelSECTI`, `raPerigao`, `descricao`, `objetivos`, `valorTotal`, `cronograma`, `metas`
-- O frontend ainda assume um shape mais amplo e diferente em vários pontos
-- Isso torna obrigatório um passo de alinhamento de contrato antes de evoluir o monitoramento
+- [ ] **ETAP-01**: Gestor pode criar etapa via `POST /api/projects/:id/etapas` (requer auth)
+- [ ] **ETAP-02**: Gestor pode atualizar percentual e nome via `PUT /api/projects/:id/etapas/:etapaId`
+- [ ] **ETAP-03**: Gestor pode excluir etapa via `DELETE /api/projects/:id/etapas/:etapaId`
+- [ ] **ETAP-04**: Gestor pode marcar entregável como concluído via `PATCH /api/projects/:id/etapas/:etapaId/entregaveis/:entId`
+- [ ] **ETAP-05**: Gestor pode adicionar/remover entregáveis de uma etapa
+
+### API — Orçamento
+
+- [ ] **ORÇA-01**: Gestor pode criar rubrica via `POST /api/projects/:id/rubricas`
+- [ ] **ORÇA-02**: Gestor pode atualizar previsto/executado por rubrica via `PUT /api/projects/:id/rubricas/:rubricaId`
+- [ ] **ORÇA-03**: Gestor pode adicionar aditivo a uma rubrica
+- [ ] **ORÇA-04**: Gestor pode excluir rubrica
+
+### API — Parceiros
+
+- [ ] **PARC-01**: Gestor pode criar parceiro via `POST /api/projects/:id/parceiros`
+- [ ] **PARC-02**: Gestor pode atualizar parceiro (nome, papel, status)
+- [ ] **PARC-03**: Gestor pode excluir parceiro
+
+### API — Riscos
+
+- [ ] **RISC-01**: Gestor pode criar risco via `POST /api/projects/:id/riscos`
+- [ ] **RISC-02**: Gestor pode atualizar risco (probabilidade, impacto, mitigação, status)
+- [ ] **RISC-03**: Gestor pode fechar/reabrir risco via status
+
+### API — Governança
+
+- [ ] **GOVN-01**: Gestor pode criar decisão via `POST /api/projects/:id/decisoes`
+- [ ] **GOVN-02**: Gestor pode editar e excluir decisão
+
+### API — Indicadores
+
+- [ ] **INDC-01**: Gestor pode criar indicador com nome, categoria e dados iniciais
+- [ ] **INDC-02**: Gestor pode editar dados do indicador (adicionar/remover séries)
+- [ ] **INDC-03**: Gestor pode excluir indicador
+
+### API — Configuração de Módulos
+
+- [ ] **MODU-01**: Gestor pode ativar/desativar módulos via `PATCH /api/projects/:id/modulos`
+
+### UI — Wizard (Passo 5)
+
+- [ ] **WIZD-01**: CriacaoProjetoWizard exibe passo "5. Módulos" com toggles para cada módulo
+- [ ] **WIZD-02**: Cada toggle exibe nome e descrição de uma linha do módulo
+- [ ] **WIZD-03**: Estado dos módulos é salvo junto com o projeto na criação
+
+### UI — DetalheProjeto: Etapas
+
+- [ ] **UIET-01**: Seção "Etapas" aparece no DetalheProjeto quando módulo ativo
+- [ ] **UIET-02**: Cada etapa exibe nome, barra de progresso e % editável inline (click-to-edit)
+- [ ] **UIET-03**: Entregáveis exibidos como checklist abaixo de cada etapa
+- [ ] **UIET-04**: Botão "Nova etapa" abre modal compacto com nome + percentual inicial
+- [ ] **UIET-05**: Botão "Adicionar entregável" inline em cada etapa
+
+### UI — DetalheProjeto: Orçamento
+
+- [ ] **UIOB-01**: Seção "Orçamento" exibe total previsto, total executado e saldo em header compacto
+- [ ] **UIOB-02**: Lista divide-y com uma linha por rubrica: nome | barra proporcional | previsto | executado | saldo
+- [ ] **UIOB-03**: Variação percentual exibida com cor (verde ≤100%, vermelho >100%)
+- [ ] **UIOB-04**: Aditivos exibidos como sublista colapsável por rubrica
+- [ ] **UIOB-05**: Botão "Nova rubrica" e "Adicionar aditivo" acessíveis inline
+
+### UI — DetalheProjeto: Parceiros
+
+- [ ] **UIPA-01**: Seção "Parceiros" exibe lista divide-y com nome, papel e badge de status
+- [ ] **UIPA-02**: Botão "Adicionar parceiro" abre modal compacto
+- [ ] **UIPA-03**: Inline edit de status por parceiro (click no badge)
+
+### UI — DetalheProjeto: Riscos
+
+- [ ] **UIRC-01**: Seção "Riscos" exibe lista com indicador visual de severidade (cor por probabilidade × impacto)
+- [ ] **UIRC-02**: Riscos encerrados aparecem separados (opacidade reduzida)
+- [ ] **UIRC-03**: Botão "Novo risco" e modal de edição
+
+### UI — DetalheProjeto: Governança
+
+- [ ] **UIGN-01**: Seção "Decisões" exibe lista cronológica com data, título e responsável
+- [ ] **UIGN-02**: Botão "Nova decisão" abre modal compacto
+
+### UI — DetalheProjeto: Indicadores de Pesquisa
+
+- [ ] **UIIN-01**: Seção "Indicadores" exibe cada indicador com nome, categoria e barras horizontais por série
+- [ ] **UIIN-02**: Botão "Novo indicador" abre modal com campos nome, categoria e editor de série
+
+### UI — Configuração de Módulos
+
+- [ ] **UIMD-01**: Ícone de engrenagem no header do DetalheProjeto abre painel de módulos
+- [ ] **UIMD-02**: Painel exibe toggles para ativar/desativar módulos após criação
+- [ ] **UIMD-03**: Módulos desativados ocultam suas seções sem deletar os dados
+
+## v2 Requirements
+
+### Exportação e Relatórios
+
+- **EXP-01**: Exportar seção de etapas em PDF institucional
+- **EXP-02**: Exportar orçamento por rubrica em CSV
+- **EXP-03**: Relatório consolidado de riscos
+
+### Histórico e Auditoria
+
+- **HIST-01**: Histórico de alterações de % de etapa com data e autor
+- **HIST-02**: Histórico de mudanças de status de risco
+
+### Visualizações Avançadas
+
+- **VIZ-01**: Gráfico de Gantt das etapas
+- **VIZ-02**: Dashboard comparativo de orçamento entre projetos
+- **VIZ-03**: Mapa de calor de riscos (matriz probabilidade × impacto)
+
+## Out of Scope
+
+| Feature | Reason |
+|---------|--------|
+| Coleções MongoDB separadas por módulo | Complexidade desnecessária; dados embutidos são suficientes |
+| Permissões granulares por módulo | Controle de acesso é por projeto; granularidade por campo é v3+ |
+| Notificações de prazo de etapa | Requer scheduler; fora do escopo desta iteração |
+| Integração com Google Sheets por módulo | Módulos são dados nativos; Sheets é para projetos legados |
+| App mobile | Web-first; mobile é milestone separado |
+
+## Traceability
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| DATA-01..10 | Phase 1 | Pending |
+| ETAP-01..05 | Phase 2 | Pending |
+| ORÇA-01..04 | Phase 2 | Pending |
+| PARC-01..03 | Phase 2 | Pending |
+| RISC-01..03 | Phase 2 | Pending |
+| GOVN-01..02 | Phase 2 | Pending |
+| INDC-01..03 | Phase 2 | Pending |
+| MODU-01 | Phase 2 | Pending |
+| WIZD-01..03 | Phase 3 | Pending |
+| UIET-01..05 | Phase 4 | Pending |
+| UIOB-01..05 | Phase 4 | Pending |
+| UIPA-01..03 | Phase 5 | Pending |
+| UIRC-01..03 | Phase 5 | Pending |
+| UIGN-01..02 | Phase 5 | Pending |
+| UIIN-01..02 | Phase 5 | Pending |
+| UIMD-01..03 | Phase 6 | Pending |
+
+**Coverage:**
+- v1 requirements: 56 total
+- Mapped to phases: 56
+- Unmapped: 0 ✓
+
+---
+*Requirements defined: 2026-03-24*
