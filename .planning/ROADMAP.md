@@ -131,7 +131,10 @@ Plans:
   1. O wizard exibe 5 abas de navegação e o passo "5. Módulos" é alcançável após os 4 passos existentes
   2. Cada toggle no passo 5 exibe nome e descrição de uma linha do módulo correspondente
   3. Ao concluir a criação, o projeto salvo no banco contém `modulosAtivos` refletindo os toggles selecionados
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 07-01-PLAN.md — Switch component + Step 5 "Modulos" com toggles no CriacaoProjetoWizard
 
 ### Phase 8: UI Etapas + Orçamento
 **Goal**: Gestor consegue ver, criar e editar etapas com entregáveis e rubricas orçamentárias diretamente no DetalheProjeto
@@ -179,8 +182,8 @@ Plans:
 | 3. Wi-Fi Social Operations Module | 3/3 | Complete | 2026-03-19 |
 | 4. Full Product Polish & Production UX | 2/2 | Complete | 2026-03-19 |
 | 5. Modelo de Dados | 1/1 | Complete   | 2026-03-24 |
-| 6. API Backend | 2/3 | In progress | 2026-03-24 (06-01, 06-02) |
-| 7. Wizard — Passo 5 | 0/? | Not started | - |
+| 6. API Backend | 2/2 | Complete | 2026-03-24 |
+| 7. Wizard — Passo 5 | 0/1 | Not started | - |
 | 8. UI Etapas + Orçamento | 0/? | Not started | - |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 0/? | Not started | - |
 | 10. Painel de Configuração | 0/? | Not started | - |
