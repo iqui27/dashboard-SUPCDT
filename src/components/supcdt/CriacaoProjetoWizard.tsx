@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { ArrowLeft, ArrowRight, FolderPlus, Save, X } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -77,8 +78,8 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
+  return createPortal(
+    <div className="fixed inset-0 z-[160] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
       <Card className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)]">
         <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-3.5">
           <div className="flex items-center gap-2.5">
@@ -261,6 +262,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
           )}
         </CardFooter>
       </Card>
-    </div>
+    </div>,
+    document.body
   );
 }
