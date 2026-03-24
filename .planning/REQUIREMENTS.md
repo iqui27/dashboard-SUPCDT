@@ -62,25 +62,25 @@
 
 ### UI — Wizard (Passo 5)
 
-- [ ] **WIZD-01**: CriacaoProjetoWizard exibe passo "5. Módulos" com toggles para cada módulo
-- [ ] **WIZD-02**: Cada toggle exibe nome e descrição de uma linha do módulo
-- [ ] **WIZD-03**: Estado dos módulos é salvo junto com o projeto na criação
+- [x] **WIZD-01**: CriacaoProjetoWizard exibe passo "5. Módulos" com toggles para cada módulo
+- [x] **WIZD-02**: Cada toggle exibe nome e descrição de uma linha do módulo
+- [x] **WIZD-03**: Estado dos módulos é salvo junto com o projeto na criação
 
 ### UI — DetalheProjeto: Etapas
 
-- [ ] **UIET-01**: Seção "Etapas" aparece no DetalheProjeto quando módulo ativo
-- [ ] **UIET-02**: Cada etapa exibe nome, barra de progresso e % editável inline (click-to-edit)
-- [ ] **UIET-03**: Entregáveis exibidos como checklist abaixo de cada etapa
-- [ ] **UIET-04**: Botão "Nova etapa" abre modal compacto com nome + percentual inicial
-- [ ] **UIET-05**: Botão "Adicionar entregável" inline em cada etapa
+- [x] **UIET-01**: Seção "Etapas" aparece no DetalheProjeto quando módulo ativo
+- [x] **UIET-02**: Cada etapa exibe nome, barra de progresso e % editável inline (click-to-edit)
+- [x] **UIET-03**: Entregáveis exibidos como checklist abaixo de cada etapa
+- [x] **UIET-04**: Botão "Nova etapa" abre modal compacto com nome + percentual inicial
+- [x] **UIET-05**: Botão "Adicionar entregável" inline em cada etapa
 
 ### UI — DetalheProjeto: Orçamento
 
-- [ ] **UIOB-01**: Seção "Orçamento" exibe total previsto, total executado e saldo em header compacto
-- [ ] **UIOB-02**: Lista divide-y com uma linha por rubrica: nome | barra proporcional | previsto | executado | saldo
-- [ ] **UIOB-03**: Variação percentual exibida com cor (verde ≤100%, vermelho >100%)
-- [ ] **UIOB-04**: Aditivos exibidos como sublista colapsável por rubrica
-- [ ] **UIOB-05**: Botão "Nova rubrica" e "Adicionar aditivo" acessíveis inline
+- [x] **UIOB-01**: Seção "Orçamento" exibe total previsto, total executado e saldo em header compacto
+- [x] **UIOB-02**: Lista divide-y com uma linha por rubrica: nome | barra proporcional | previsto | executado | saldo
+- [x] **UIOB-03**: Variação percentual exibida com cor (verde ≤100%, vermelho >100%)
+- [x] **UIOB-04**: Aditivos exibidos como sublista colapsável por rubrica
+- [x] **UIOB-05**: Botão "Nova rubrica" e "Adicionar aditivo" acessíveis inline
 
 ### UI — DetalheProjeto: Parceiros
 
@@ -174,19 +174,19 @@
 | INDC-02 | Phase 6 | Pending |
 | INDC-03 | Phase 6 | Pending |
 | MODU-01 | Phase 6 | Pending |
-| WIZD-01 | Phase 7 | Pending |
-| WIZD-02 | Phase 7 | Pending |
-| WIZD-03 | Phase 7 | Pending |
-| UIET-01 | Phase 8 | Pending |
-| UIET-02 | Phase 8 | Pending |
-| UIET-03 | Phase 8 | Pending |
-| UIET-04 | Phase 8 | Pending |
-| UIET-05 | Phase 8 | Pending |
-| UIOB-01 | Phase 8 | Pending |
-| UIOB-02 | Phase 8 | Pending |
-| UIOB-03 | Phase 8 | Pending |
-| UIOB-04 | Phase 8 | Pending |
-| UIOB-05 | Phase 8 | Pending |
+| WIZD-01 | Phase 7 | Complete |
+| WIZD-02 | Phase 7 | Complete |
+| WIZD-03 | Phase 7 | Complete |
+| UIET-01 | Phase 8 | Complete |
+| UIET-02 | Phase 8 | Complete |
+| UIET-03 | Phase 8 | Complete |
+| UIET-04 | Phase 8 | Complete |
+| UIET-05 | Phase 8 | Complete |
+| UIOB-01 | Phase 8 | Complete |
+| UIOB-02 | Phase 8 | Complete |
+| UIOB-03 | Phase 8 | Complete |
+| UIOB-04 | Phase 8 | Complete |
+| UIOB-05 | Phase 8 | Complete |
 | UIPA-01 | Phase 9 | Pending |
 | UIPA-02 | Phase 9 | Pending |
 | UIPA-03 | Phase 9 | Pending |

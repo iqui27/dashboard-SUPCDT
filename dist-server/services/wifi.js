@@ -103,6 +103,7 @@ export function mapWifiPointToApi(point) {
         id: point._id?.toString() ?? '',
         nome: point.nome,
         endereco: point.endereco,
+        cep: sanitizeText(point.cep),
         regiaoAdministrativa: point.regiaoAdministrativa,
         latitude: point.latitude,
         longitude: point.longitude,
@@ -127,6 +128,7 @@ export function normalizeWifiPointInput(input) {
     return {
         nome: sanitizeText(input.nome) ?? 'Ponto sem nome',
         endereco: sanitizeText(input.endereco) ?? 'Endereço não informado',
+        cep: sanitizeText(input.cep),
         regiaoAdministrativa: sanitizeText(input.regiaoAdministrativa) ?? 'Não informado',
         latitude: normalizeCoordinate(input.latitude, -15.7942),
         longitude: normalizeCoordinate(input.longitude, -47.8822),
@@ -167,6 +169,7 @@ export async function getWifiPoints(filters) {
         query.$or = [
             { nome: { $regex: filters.search, $options: 'i' } },
             { endereco: { $regex: filters.search, $options: 'i' } },
+            { cep: { $regex: filters.search, $options: 'i' } },
             { regiaoAdministrativa: { $regex: filters.search, $options: 'i' } },
             { responsavelOperacional: { $regex: filters.search, $options: 'i' } }
         ];
