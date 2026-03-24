@@ -87,7 +87,7 @@ Plans:
 
 ## Phases
 
-- [ ] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes
+- [x] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes (completed 2026-03-24)
 - [ ] **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos
 - [ ] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação
 - [ ] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto
@@ -105,7 +105,7 @@ Plans:
   2. Um projeto existente carregado do MongoDB sem campo `modulosAtivos` não gera erro de runtime
   3. Os tipos estão espelhados em `src/types/projeto.ts` e `server/types/projeto.ts`
   4. O campo `modulosAtivos` no tipo `Projeto` tem todos os flags com default implícito false (usando `boolean | undefined`)
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Tipos dos 6 módulos + ModulosAtivos em src/types/projeto.ts e server/types/projeto.ts
@@ -177,7 +177,7 @@ Plans:
 | 2. Monitoring Model & Operational Readiness | 2/2 | Complete | 2026-03-19 |
 | 3. Wi-Fi Social Operations Module | 3/3 | Complete | 2026-03-19 |
 | 4. Full Product Polish & Production UX | 2/2 | Complete | 2026-03-19 |
-| 5. Modelo de Dados | 0/1 | Not started | - |
+| 5. Modelo de Dados | 1/1 | Complete   | 2026-03-24 |
 | 6. API Backend | 0/? | Not started | - |
 | 7. Wizard — Passo 5 | 0/? | Not started | - |
 | 8. UI Etapas + Orçamento | 0/? | Not started | - |

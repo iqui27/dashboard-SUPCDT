@@ -7,16 +7,16 @@
 
 ### Modelo de Dados
 
-- [ ] **DATA-01**: Sistema suporta tipo `Etapa` com id, nome, percentual (0-100) e lista de entregáveis
-- [ ] **DATA-02**: Sistema suporta tipo `Entregavel` com id, nome e flag `concluido`
-- [ ] **DATA-03**: Sistema suporta tipo `RubricaOrcamentaria` com nome, previsto, executado e lista de aditivos
-- [ ] **DATA-04**: Sistema suporta tipo `AditivoRubrica` com descrição, valor e data
-- [ ] **DATA-05**: Sistema suporta tipo `Parceiro` com nome, papel e status (Ativo/Apoiador/Consultor/Inativo)
-- [ ] **DATA-06**: Sistema suporta tipo `Risco` com descrição, probabilidade, impacto, mitigação e status
-- [ ] **DATA-07**: Sistema suporta tipo `DecisaoGovernanca` com título, data, descrição e responsável
-- [ ] **DATA-08**: Sistema suporta tipo `IndicadorPesquisa` com nome, categoria e série `{label, valor}[]`
-- [ ] **DATA-09**: Tipo `Projeto` inclui campo `modulosAtivos` com flags boolean para cada módulo
-- [ ] **DATA-10**: Projetos existentes sem `modulosAtivos` continuam funcionando (retrocompatibilidade)
+- [x] **DATA-01**: Sistema suporta tipo `Etapa` com id, nome, percentual (0-100) e lista de entregáveis
+- [x] **DATA-02**: Sistema suporta tipo `Entregavel` com id, nome e flag `concluido`
+- [x] **DATA-03**: Sistema suporta tipo `RubricaOrcamentaria` com nome, previsto, executado e lista de aditivos
+- [x] **DATA-04**: Sistema suporta tipo `AditivoRubrica` com descrição, valor e data
+- [x] **DATA-05**: Sistema suporta tipo `Parceiro` com nome, papel e status (Ativo/Apoiador/Consultor/Inativo)
+- [x] **DATA-06**: Sistema suporta tipo `Risco` com descrição, probabilidade, impacto, mitigação e status
+- [x] **DATA-07**: Sistema suporta tipo `DecisaoGovernanca` com título, data, descrição e responsável
+- [x] **DATA-08**: Sistema suporta tipo `IndicadorPesquisa` com nome, categoria e série `{label, valor}[]`
+- [x] **DATA-09**: Tipo `Projeto` inclui campo `modulosAtivos` com flags boolean para cada módulo
+- [x] **DATA-10**: Projetos existentes sem `modulosAtivos` continuam funcionando (retrocompatibilidade)
 
 ### API — Etapas
 
@@ -143,16 +143,16 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DATA-01 | Phase 5 | Pending |
-| DATA-02 | Phase 5 | Pending |
-| DATA-03 | Phase 5 | Pending |
-| DATA-04 | Phase 5 | Pending |
-| DATA-05 | Phase 5 | Pending |
-| DATA-06 | Phase 5 | Pending |
-| DATA-07 | Phase 5 | Pending |
-| DATA-08 | Phase 5 | Pending |
-| DATA-09 | Phase 5 | Pending |
-| DATA-10 | Phase 5 | Pending |
+| DATA-01 | Phase 5 | Complete |
+| DATA-02 | Phase 5 | Complete |
+| DATA-03 | Phase 5 | Complete |
+| DATA-04 | Phase 5 | Complete |
+| DATA-05 | Phase 5 | Complete |
+| DATA-06 | Phase 5 | Complete |
+| DATA-07 | Phase 5 | Complete |
+| DATA-08 | Phase 5 | Complete |
+| DATA-09 | Phase 5 | Complete |
+| DATA-10 | Phase 5 | Complete |
 | ETAP-01 | Phase 6 | Pending |
 | ETAP-02 | Phase 6 | Pending |
 | ETAP-03 | Phase 6 | Pending |

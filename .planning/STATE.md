@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 5 of 10 (Modelo de Dados)
-Plan: 0 of ? in current phase
-Status: Ready to plan
-Last activity: 2026-03-24 — Roadmap v1.1 criado (phases 5-10 para módulos configuráveis)
+Plan: 1 of ? in current phase
+Status: In progress
+Last activity: 2026-03-24 — Plan 05-01 completo: tipos de módulos TypeScript definidos (frontend + backend)
 
 Progress: [████░░░░░░] 40% (phases 1-4 completas, 6 novas iniciando)
 
@@ -31,7 +31,7 @@ Progress: [████░░░░░░] 40% (phases 1-4 completas, 6 novas in
 | 2. Monitoring Model | 2/2 | Complete |
 | 3. Wi-Fi Social | 3/3 | Complete |
 | 4. Product Polish | 2/2 | Complete |
-| 5-10. Módulos v1.1 | 0/? | Not started |
+| 5-10. Módulos v1.1 | 1/? | In progress |
 
 ## Accumulated Context
 
@@ -41,6 +41,8 @@ Progress: [████░░░░░░] 40% (phases 1-4 completas, 6 novas in
 - Módulos são opcionais via flags `modulosAtivos` com default false — projetos existentes não quebram
 - UI segue padrão estabelecido no PR #3 (divide-y, rounded-[1.35rem], botões h-8 rounded-full)
 - Passo 5 no wizard para configurar módulos na criação; painel de engrenagem para edição pós-criação
+- DB* prefix usado no backend para distinguir tipos com Date nativo de tipos API com string ISO
+- parceirosModulo usado no array de módulo para evitar conflito com campo legado parceiro?: string | null
 
 ### Pending Todos
 
@@ -54,5 +56,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-03-24
-Stopped at: Roadmap v1.1 criado e aprovado — pronto para planejar Phase 5
+Stopped at: Completed 05-01-PLAN.md — tipos de módulos TypeScript (frontend + backend) definidos
 Resume file: None
