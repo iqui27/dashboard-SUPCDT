@@ -90,7 +90,7 @@ Plans:
 - [x] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes (completed 2026-03-24)
 - [x] **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (completed 2026-03-24)
 - [x] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação (completed 2026-03-24)
-- [ ] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto
+- [x] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto (completed 2026-03-24)
 - [ ] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto
 - [ ] **Phase 10: Painel de Configuração** - Ícone de engrenagem para ativar/desativar módulos pós-criação
 
@@ -127,21 +127,16 @@ Plans:
 Plans:
 - [x] 07-01-PLAN.md — Switch component + Step 5 "Modulos" com toggles no CriacaoProjetoWizard (COMPLETE 2026-03-24)
 
-### Phase 8: UI Etapas + Orçamento
+### Phase 8: UI Etapas + Orçamento ✅
 **Goal**: Gestor consegue ver, criar e editar etapas com entregáveis e rubricas orçamentárias diretamente no DetalheProjeto
-**Depends on**: Phase 6
+**Depends on**: Phase 6 ✅
 **Requirements**: UIET-01, UIET-02, UIET-03, UIET-04, UIET-05, UIOB-01, UIOB-02, UIOB-03, UIOB-04, UIOB-05
-**Success Criteria** (what must be TRUE):
-  1. A seção "Etapas" aparece no DetalheProjeto apenas quando `modulosAtivos.etapas` é true, e fica oculta caso contrário
-  2. Gestor clica no percentual de uma etapa, edita inline e o valor é salvo via API sem recarregar a página
-  3. Entregáveis aparecem como checklist; marcar um como concluído persiste o estado imediatamente
-  4. A seção "Orçamento" exibe total previsto, executado e saldo no cabeçalho, com variação por rubrica em verde (≤100%) ou vermelho (>100%)
-  5. Aditivos de uma rubrica são visíveis em sublista colapsável
-**Plans:** 2 plans
+**Status**: COMPLETE (2026-03-24)
+**Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 08-01-PLAN.md — API layer para etapas/orcamento + componente EtapasSection
-- [ ] 08-02-PLAN.md — Componente OrcamentoSection + integracao no DetalheProjeto
+- [x] 08-01-PLAN.md — API layer para etapas/orcamento + componente EtapasSection (COMPLETE 2026-03-24)
+- [x] 08-02-PLAN.md — Componente OrcamentoSection + integracao no DetalheProjeto (COMPLETE 2026-03-24)
 
 ### Phase 9: UI Parceiros, Riscos, Governança, Indicadores
 **Goal**: Gestor consegue gerenciar parceiros, riscos, decisões e indicadores de pesquisa diretamente no DetalheProjeto
@@ -186,7 +181,7 @@ Plans:
 | 5. Modelo de Dados | 1/1 | Complete | 2026-03-24 |
 | 6. API Backend | 2/2 | Complete | 2026-03-24 |
 | 7. Wizard — Passo 5 | 1/1 | Complete | 2026-03-24 |
-| 8. UI Etapas + Orçamento | 0/2 | Not started | - |
+| 8. UI Etapas + Orçamento | 2/2 | Complete | 2026-03-24 |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 0/2 | Not started | - |
 | 10. Painel de Configuração | 0/1 | Not started | - |
 
