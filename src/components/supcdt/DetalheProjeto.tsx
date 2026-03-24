@@ -11,6 +11,10 @@ import { Button } from '../ui/button';
 
 import { EtapasSection } from './EtapasSection';
 import { OrcamentoSection } from './OrcamentoSection';
+import { ParceirosSection } from './ParceirosSection';
+import { RiscosSection } from './RiscosSection';
+import { GovernancaSection } from './GovernancaSection';
+import { IndicadoresSection } from './IndicadoresSection';
 import { LancamentoModal } from './LancamentoModal';
 import { MetaModal } from './MetaModal';
 import { ProjetoMonitoramentoModal } from './ProjetoMonitoramentoModal';
@@ -260,6 +264,18 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
 
           {/* Orçamento */}
           <OrcamentoSection projeto={projeto} onUpdate={onUpdate} />
+
+          {/* Parceiros */}
+          <ParceirosSection projeto={projeto} onUpdate={onUpdate} />
+
+          {/* Riscos */}
+          <RiscosSection projeto={projeto} onUpdate={onUpdate} />
+
+          {/* Governança */}
+          <GovernancaSection projeto={projeto} onUpdate={onUpdate} />
+
+          {/* Indicadores */}
+          <IndicadoresSection projeto={projeto} onUpdate={onUpdate} />
 
           {/* Lançamentos */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
