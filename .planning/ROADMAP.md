@@ -88,8 +88,8 @@ Plans:
 ## Phases
 
 - [x] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes (completed 2026-03-24)
-- 🚧 **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (06-01, 06-02 completed 2026-03-24; 06-03 pending)
-- [ ] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação
+- [x] **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (completed 2026-03-24)
+- [x] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação (completed 2026-03-24)
 - [ ] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto
 - [ ] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto
 - [ ] **Phase 10: Painel de Configuração** - Ícone de engrenagem para ativar/desativar módulos pós-criação
@@ -106,35 +106,26 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Tipos dos 6 módulos + ModulosAtivos em src/types/projeto.ts e server/types/projeto.ts
 
-### Phase 6: API Backend 🚧
+### Phase 6: API Backend ✅
 **Goal**: Gestor consegue criar, editar e excluir itens de qualquer módulo via API REST, e configurar quais módulos estão ativos no projeto
 **Depends on**: Phase 5 ✅
 **Requirements**: ETAP-01, ETAP-02, ETAP-03, ETAP-04, ETAP-05, ORÇA-01, ORÇA-02, ORÇA-03, ORÇA-04, PARC-01, PARC-02, PARC-03, RISC-01, RISC-02, RISC-03, GOVN-01, GOVN-02, INDC-01, INDC-02, INDC-03, MODU-01
-**Success Criteria** (what must be TRUE):
-  1. `POST /api/projetos/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200 ✓ (06-01)
-  2. `PATCH /api/projetos/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB ✓ (06-01)
-  3. Todos os endpoints de CRUD retornam 401 sem token de autenticação ✓ (06-01, 06-02)
-  4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `projetos_supcdt` ✓ (06-01 para Etapas/Orçamento/Módulos, 06-02 para Parceiros/Riscos/Governança/Indicadores)
-  5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projetos` ✓
-**Plans:** 3 plans (2/3 complete)
+**Status**: COMPLETE (2026-03-24)
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 06-01-PLAN.md — Endpoints CRUD para Etapas, Orçamento e configuração de ModulosAtivos (COMPLETE 2026-03-24)
 - [x] 06-02-PLAN.md — Endpoints CRUD para Parceiros, Riscos, Governança e Indicadores (COMPLETE 2026-03-24)
-- [ ] 06-03-PLAN.md — (Pendente — Possível: Migrations, Utilities, ou API refinements)
 
-### Phase 7: Wizard — Passo 5
+### Phase 7: Wizard — Passo 5 ✅
 **Goal**: Gestor consegue ativar módulos no momento de criação de um projeto via passo dedicado no wizard
-**Depends on**: Phase 6
+**Depends on**: Phase 6 ✅
 **Requirements**: WIZD-01, WIZD-02, WIZD-03
-**Success Criteria** (what must be TRUE):
-  1. O wizard exibe 5 abas de navegação e o passo "5. Módulos" é alcançável após os 4 passos existentes
-  2. Cada toggle no passo 5 exibe nome e descrição de uma linha do módulo correspondente
-  3. Ao concluir a criação, o projeto salvo no banco contém `modulosAtivos` refletindo os toggles selecionados
-**Plans:** 1 plan
+**Status**: COMPLETE (2026-03-24)
+**Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 07-01-PLAN.md — Switch component + Step 5 "Modulos" com toggles no CriacaoProjetoWizard
+- [x] 07-01-PLAN.md — Switch component + Step 5 "Modulos" com toggles no CriacaoProjetoWizard (COMPLETE 2026-03-24)
 
 ### Phase 8: UI Etapas + Orçamento
 **Goal**: Gestor consegue ver, criar e editar etapas com entregáveis e rubricas orçamentárias diretamente no DetalheProjeto
@@ -192,9 +183,9 @@ Plans:
 | 2. Monitoring Model & Operational Readiness | 2/2 | Complete | 2026-03-19 |
 | 3. Wi-Fi Social Operations Module | 3/3 | Complete | 2026-03-19 |
 | 4. Full Product Polish & Production UX | 2/2 | Complete | 2026-03-19 |
-| 5. Modelo de Dados | 1/1 | Complete   | 2026-03-24 |
+| 5. Modelo de Dados | 1/1 | Complete | 2026-03-24 |
 | 6. API Backend | 2/2 | Complete | 2026-03-24 |
-| 7. Wizard — Passo 5 | 0/1 | Not started | - |
+| 7. Wizard — Passo 5 | 1/1 | Complete | 2026-03-24 |
 | 8. UI Etapas + Orçamento | 0/2 | Not started | - |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 0/2 | Not started | - |
 | 10. Painel de Configuração | 0/1 | Not started | - |
