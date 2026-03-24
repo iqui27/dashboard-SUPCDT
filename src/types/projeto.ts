@@ -44,6 +44,99 @@ export interface MovimentacaoHistorico {
   notas?: string;
 }
 
+// ─── Módulo: Etapas ──────────────────────────────────────────────────────────
+
+export interface Entregavel {
+  id: string;
+  nome: string;
+  concluido: boolean;
+}
+
+export interface Etapa {
+  id: string;
+  nome: string;
+  percentual: number; // 0-100
+  entregaveis: Entregavel[];
+}
+
+// ─── Módulo: Orçamento ───────────────────────────────────────────────────────
+
+export interface AditivoRubrica {
+  id: string;
+  descricao: string;
+  valor: number;
+  data?: string | null; // ISO date string
+}
+
+export interface RubricaOrcamentaria {
+  id: string;
+  nome: string;
+  previsto: number;
+  executado: number;
+  aditivos: AditivoRubrica[];
+}
+
+// ─── Módulo: Parceiros ───────────────────────────────────────────────────────
+
+export type StatusParceiro = 'Ativo' | 'Apoiador' | 'Consultor' | 'Inativo';
+
+export interface Parceiro {
+  id: string;
+  nome: string;
+  papel: string;
+  status: StatusParceiro;
+}
+
+// ─── Módulo: Riscos ──────────────────────────────────────────────────────────
+
+export type ProbabilidadeRisco = 'Baixa' | 'Média' | 'Alta';
+export type ImpactoRisco = 'Baixo' | 'Médio' | 'Alto';
+export type StatusRisco = 'Aberto' | 'Mitigado' | 'Encerrado';
+
+export interface Risco {
+  id: string;
+  descricao: string;
+  probabilidade: ProbabilidadeRisco;
+  impacto: ImpactoRisco;
+  mitigacao?: string | null;
+  status: StatusRisco;
+}
+
+// ─── Módulo: Governança ──────────────────────────────────────────────────────
+
+export interface DecisaoGovernanca {
+  id: string;
+  titulo: string;
+  data: string; // ISO date string
+  descricao?: string | null;
+  responsavel?: string | null;
+}
+
+// ─── Módulo: Indicadores de Pesquisa ────────────────────────────────────────
+
+export interface SerieDados {
+  label: string;
+  valor: number;
+}
+
+export interface IndicadorPesquisa {
+  id: string;
+  nome: string;
+  categoria: string;
+  serie: SerieDados[];
+}
+
+// ─── Configuração de Módulos ─────────────────────────────────────────────────
+
+export interface ModulosAtivos {
+  etapas?: boolean | undefined;
+  orcamento?: boolean | undefined;
+  parceiros?: boolean | undefined;
+  riscos?: boolean | undefined;
+  governanca?: boolean | undefined;
+  indicadores?: boolean | undefined;
+}
+
 export interface ProjetoCronograma {
   totalTrimestres: number;
 }
@@ -122,6 +215,15 @@ export interface Projeto {
   overrideNeedsSync?: boolean;
   overrideLastUpdatedAt?: Date | null;
   overrideLastSyncedAt?: Date | null;
+
+  // ─── Módulos de Monitoramento Avançado (opcionais — retrocompatível) ──────
+  modulosAtivos?: ModulosAtivos;
+  etapas?: Etapa[];
+  rubricas?: RubricaOrcamentaria[];
+  parceirosModulo?: Parceiro[];
+  riscos?: Risco[];
+  decisoes?: DecisaoGovernanca[];
+  indicadores?: IndicadorPesquisa[];
 }
 
 export interface ProjetoInput {
@@ -143,6 +245,13 @@ export interface ProjetoInput {
   metas: Meta[];
   cronograma: ProjetoCronograma;
   monitoramento?: Partial<MonitoramentoOperacional>;
+  modulosAtivos?: ModulosAtivos;
+  etapas?: Etapa[];
+  rubricas?: RubricaOrcamentaria[];
+  parceirosModulo?: Parceiro[];
+  riscos?: Risco[];
+  decisoes?: DecisaoGovernanca[];
+  indicadores?: IndicadorPesquisa[];
 }
 
 export type Fomento = Projeto;
