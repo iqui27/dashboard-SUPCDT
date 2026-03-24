@@ -162,7 +162,11 @@ Plans:
   3. Seção "Decisões" exibe lista cronológica; botão "Nova decisão" abre modal compacto e salva via API
   4. Seção "Indicadores" exibe barras horizontais por série de dados de cada indicador
   5. Todas as quatro seções aparecem somente quando os respectivos módulos estão ativos
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — API modules + ParceirosSection + RiscosSection
+- [ ] 09-02-PLAN.md — GovernancaSection + IndicadoresSection + wiring no DetalheProjeto
 
 ### Phase 10: Painel de Configuração
 **Goal**: Gestor consegue ativar ou desativar módulos em projetos já criados sem perder os dados do módulo
@@ -172,7 +176,10 @@ Plans:
   1. Ícone de engrenagem no header do DetalheProjeto abre painel com toggles de módulos
   2. Desativar um módulo oculta sua seção no DetalheProjeto mas os dados permanecem no banco
   3. Reativar o mesmo módulo restaura a seção com todos os dados anteriores intactos
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 10-01-PLAN.md — Popover com gear icon + toggles de módulos no DetalheProjeto
 
 ## Progress
 
@@ -189,8 +196,8 @@ Plans:
 | 6. API Backend | 2/2 | Complete | 2026-03-24 |
 | 7. Wizard — Passo 5 | 0/1 | Not started | - |
 | 8. UI Etapas + Orçamento | 0/2 | Not started | - |
-| 9. UI Parceiros, Riscos, Governança, Indicadores | 0/? | Not started | - |
-| 10. Painel de Configuração | 0/? | Not started | - |
+| 9. UI Parceiros, Riscos, Governança, Indicadores | 0/2 | Not started | - |
+| 10. Painel de Configuração | 0/1 | Not started | - |
 
 ---
 
