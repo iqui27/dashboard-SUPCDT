@@ -5,6 +5,8 @@ import projetosRouter from './routes/projetos.js';
 import lancamentosRouter from './routes/lancamentos.js';
 import relatoriosRouter from './routes/relatorios.js';
 import wifiRouter from './routes/wifi.js';
+import { modulosEtapasOrcamentoRouter } from './routes/modulosEtapasOrcamento.js';
+import { modulosParceirosRiscosGovIndRouter } from './routes/modulosParceirosRiscosGovInd.js';
 import { startScheduledJobs } from './services/scheduledJobs.js';
 import { authRouter } from './routes/auth.js';
 import { ensureAdminUser } from './services/users.js';
@@ -92,6 +94,8 @@ app.use(express.json());
 
 app.use('/api/auth', authRouter);
 app.use('/api/projetos', projetosRouter);
+app.use('/api/projetos', modulosEtapasOrcamentoRouter);
+app.use('/api/projetos', modulosParceirosRiscosGovIndRouter);
 app.use('/api/lancamentos', lancamentosRouter);
 app.use('/api/relatorios', relatoriosRouter);
 app.use('/api/wifi', wifiRouter);
