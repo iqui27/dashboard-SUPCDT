@@ -88,7 +88,7 @@ Plans:
 ## Phases
 
 - [x] **Phase 5: Modelo de Dados** - Tipos TypeScript para os 6 módulos + retrocompatibilidade com projetos existentes (completed 2026-03-24)
-- [ ] **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos
+- 🚧 **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (06-01 completed 2026-03-24)
 - [ ] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação
 - [ ] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto
 - [ ] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto
@@ -96,34 +96,30 @@ Plans:
 
 ## Phase Details
 
-### Phase 5: Modelo de Dados
+### Phase 5: Modelo de Dados ✅
 **Goal**: Todos os tipos TypeScript para os 6 módulos estão definidos no frontend e no backend, e projetos existentes continuam funcionando sem alteração
 **Depends on**: Phase 4 (concluída)
 **Requirements**: DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06, DATA-07, DATA-08, DATA-09, DATA-10
-**Success Criteria** (what must be TRUE):
-  1. O TypeScript compila sem erros após adicionar os tipos `Etapa`, `Entregavel`, `RubricaOrcamentaria`, `AditivoRubrica`, `Parceiro`, `Risco`, `DecisaoGovernanca`, `IndicadorPesquisa` e `ModulosAtivos`
-  2. Um projeto existente carregado do MongoDB sem campo `modulosAtivos` não gera erro de runtime
-  3. Os tipos estão espelhados em `src/types/projeto.ts` e `server/types/projeto.ts`
-  4. O campo `modulosAtivos` no tipo `Projeto` tem todos os flags com default implícito false (usando `boolean | undefined`)
+**Status**: COMPLETE (2026-03-24)
 **Plans:** 1/1 plans complete
 
 Plans:
-- [ ] 05-01-PLAN.md — Tipos dos 6 módulos + ModulosAtivos em src/types/projeto.ts e server/types/projeto.ts
+- [x] 05-01-PLAN.md — Tipos dos 6 módulos + ModulosAtivos em src/types/projeto.ts e server/types/projeto.ts
 
-### Phase 6: API Backend
+### Phase 6: API Backend 🚧
 **Goal**: Gestor consegue criar, editar e excluir itens de qualquer módulo via API REST, e configurar quais módulos estão ativos no projeto
-**Depends on**: Phase 5
+**Depends on**: Phase 5 ✅
 **Requirements**: ETAP-01, ETAP-02, ETAP-03, ETAP-04, ETAP-05, ORÇA-01, ORÇA-02, ORÇA-03, ORÇA-04, PARC-01, PARC-02, PARC-03, RISC-01, RISC-02, RISC-03, GOVN-01, GOVN-02, INDC-01, INDC-02, INDC-03, MODU-01
 **Success Criteria** (what must be TRUE):
-  1. `POST /api/projetos/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200
-  2. `PATCH /api/projetos/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB
-  3. Todos os endpoints de CRUD retornam 401 sem token de autenticação
-  4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `projetos_supcdt`
-  5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projetos`
-**Plans:** 2 plans
+  1. `POST /api/projetos/:id/etapas` cria uma etapa e retorna o projeto atualizado com status 200 ✓ (06-01)
+  2. `PATCH /api/projetos/:id/modulos` altera os flags de módulos ativos e persiste no MongoDB ✓ (06-01)
+  3. Todos os endpoints de CRUD retornam 401 sem token de autenticação ✓ (06-01 para Etapas/Orçamento/Módulos)
+  4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `projetos_supcdt` ✓ (06-01 para Etapas/Orçamento/Módulos, 06-02 para Parceiros/Riscos/Governança/Indicadores)
+  5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projetos` ✓
+**Plans:** 2/2 plans (1/2 complete)
 
 Plans:
-- [ ] 06-01-PLAN.md — Endpoints CRUD para Etapas, Orçamento e configuração de ModulosAtivos
+- [x] 06-01-PLAN.md — Endpoints CRUD para Etapas, Orçamento e configuração de ModulosAtivos (COMPLETE 2026-03-24)
 - [ ] 06-02-PLAN.md — Endpoints CRUD para Parceiros, Riscos, Governança e Indicadores
 
 ### Phase 7: Wizard — Passo 5
