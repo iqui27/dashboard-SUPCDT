@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 Fundação + Monitoramento + Wi-Fi Social** - Phases 1-4 (concluído)
-- 🚧 **v1.1 Módulos de Monitoramento Avançado** - Phases 5-10 (em andamento)
+- ✅ **v1.1 Módulos de Monitoramento Avançado** - Phases 5-10 (concluído)
 
 ---
 
@@ -81,7 +81,7 @@ Plans:
 
 ---
 
-## 🚧 v1.1 Módulos de Monitoramento Avançado (Em andamento)
+## 🚧 v1.1 Módulos de Monitoramento Avançado (CONCLUÍDO)
 
 **Milestone Goal:** Cada projeto pode ser monitorado com o nível de detalhe que seu contrato exige — ativando apenas os módulos necessários (etapas, orçamento, parceiros, riscos, governança, indicadores) sem configuração técnica.
 
@@ -91,8 +91,8 @@ Plans:
 - [x] **Phase 6: API Backend** - Endpoints REST CRUD para todos os 6 módulos + configuração de módulos ativos (completed 2026-03-24)
 - [x] **Phase 7: Wizard — Passo 5** - Aba "Módulos" no CriacaoProjetoWizard para ativar módulos na criação (completed 2026-03-24)
 - [x] **Phase 8: UI Etapas + Orçamento** - Seções interativas de Etapas e Orçamento no DetalheProjeto (completed 2026-03-24)
-- [ ] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto
-- [ ] **Phase 10: Painel de Configuração** - Ícone de engrenagem para ativar/desativar módulos pós-criação
+- [x] **Phase 9: UI Parceiros, Riscos, Governança, Indicadores** - Quatro seções restantes no DetalheProjeto (completed 2026-03-24)
+- [x] **Phase 10: Painel de Configuração** - Ícone de engrenagem para ativar/desativar módulos pós-criação (completed 2026-03-24)
 
 ## Phase Details
 
@@ -151,8 +151,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — API modules + ParceirosSection + RiscosSection
-- [ ] 09-02-PLAN.md — GovernancaSection + IndicadoresSection + wiring no DetalheProjeto
+- [x] 09-01-PLAN.md — API modules + ParceirosSection + RiscosSection
+- [x] 09-02-PLAN.md — GovernancaSection + IndicadoresSection + wiring no DetalheProjeto
 
 ### Phase 10: Painel de Configuração
 **Goal**: Gestor consegue ativar ou desativar módulos em projetos já criados sem perder os dados do módulo
@@ -165,7 +165,7 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 10-01-PLAN.md — Popover com gear icon + toggles de módulos no DetalheProjeto
+- [x] 10-01-PLAN.md — Popover com gear icon + toggles de módulos no DetalheProjeto
 
 ## Progress
 
@@ -182,8 +182,8 @@ Plans:
 | 6. API Backend | 2/2 | Complete | 2026-03-24 |
 | 7. Wizard — Passo 5 | 1/1 | Complete | 2026-03-24 |
 | 8. UI Etapas + Orçamento | 2/2 | Complete | 2026-03-24 |
-| 9. UI Parceiros, Riscos, Governança, Indicadores | 0/2 | Not started | - |
-| 10. Painel de Configuração | 0/1 | Not started | - |
+| 9. UI Parceiros, Riscos, Governança, Indicadores | 2/2 | Complete | 2026-03-24 |
+| 10. Painel de Configuração | 1/1 | Complete | 2026-03-24 |
 
 ---
 
