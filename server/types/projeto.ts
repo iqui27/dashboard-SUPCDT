@@ -36,6 +36,99 @@ export interface DBProjetoMonitoramento {
   ultimaAtualizacao?: Date | null;
 }
 
+// ─── Módulo: Etapas ──────────────────────────────────────────────────────────
+
+export interface DBEntregavel {
+  id: string;
+  nome: string;
+  concluido: boolean;
+}
+
+export interface DBEtapa {
+  id: string;
+  nome: string;
+  percentual: number; // 0-100
+  entregaveis: DBEntregavel[];
+}
+
+// ─── Módulo: Orçamento ───────────────────────────────────────────────────────
+
+export interface DBAditivoRubrica {
+  id: string;
+  descricao: string;
+  valor: number;
+  data?: Date | null;
+}
+
+export interface DBRubricaOrcamentaria {
+  id: string;
+  nome: string;
+  previsto: number;
+  executado: number;
+  aditivos: DBAditivoRubrica[];
+}
+
+// ─── Módulo: Parceiros ───────────────────────────────────────────────────────
+
+export type DBStatusParceiro = 'Ativo' | 'Apoiador' | 'Consultor' | 'Inativo';
+
+export interface DBParceiro {
+  id: string;
+  nome: string;
+  papel: string;
+  status: DBStatusParceiro;
+}
+
+// ─── Módulo: Riscos ──────────────────────────────────────────────────────────
+
+export type DBProbabilidadeRisco = 'Baixa' | 'Média' | 'Alta';
+export type DBImpactoRisco = 'Baixo' | 'Médio' | 'Alto';
+export type DBStatusRisco = 'Aberto' | 'Mitigado' | 'Encerrado';
+
+export interface DBRisco {
+  id: string;
+  descricao: string;
+  probabilidade: DBProbabilidadeRisco;
+  impacto: DBImpactoRisco;
+  mitigacao?: string | null;
+  status: DBStatusRisco;
+}
+
+// ─── Módulo: Governança ──────────────────────────────────────────────────────
+
+export interface DBDecisaoGovernanca {
+  id: string;
+  titulo: string;
+  data: Date;
+  descricao?: string | null;
+  responsavel?: string | null;
+}
+
+// ─── Módulo: Indicadores de Pesquisa ────────────────────────────────────────
+
+export interface DBSerieDados {
+  label: string;
+  valor: number;
+}
+
+export interface DBIndicadorPesquisa {
+  id: string;
+  nome: string;
+  categoria: string;
+  serie: DBSerieDados[];
+}
+
+// ─── Configuração de Módulos ─────────────────────────────────────────────────
+
+export interface DBModulosAtivos {
+  etapas?: boolean | undefined;
+  orcamento?: boolean | undefined;
+  parceiros?: boolean | undefined;
+  riscos?: boolean | undefined;
+  governanca?: boolean | undefined;
+  indicadores?: boolean | undefined;
+}
+
 export interface DBProjeto {
   _id?: ObjectId;
   numeroUnico?: string | null;
@@ -60,6 +153,15 @@ export interface DBProjeto {
   monitoramento?: DBProjetoMonitoramento;
   createdAt?: Date;
   updatedAt?: Date;
+
+  // ─── Módulos de Monitoramento Avançado (opcionais — retrocompatível) ──────
+  modulosAtivos?: DBModulosAtivos;
+  etapas?: DBEtapa[];
+  rubricas?: DBRubricaOrcamentaria[];
+  parceirosModulo?: DBParceiro[];
+  riscos?: DBRisco[];
+  decisoes?: DBDecisaoGovernanca[];
+  indicadores?: DBIndicadorPesquisa[];
 }
 
 export interface ProjetoMonitoramento {
@@ -120,6 +222,15 @@ export interface ProjetoApi {
   monitoramento: ProjetoMonitoramento;
   createdAt?: string | null;
   updatedAt?: string | null;
+
+  // ─── Módulos de Monitoramento Avançado (opcionais — retrocompatível) ──────
+  modulosAtivos?: DBModulosAtivos;
+  etapas?: DBEtapa[];
+  rubricas?: DBRubricaOrcamentaria[];
+  parceirosModulo?: DBParceiro[];
+  riscos?: DBRisco[];
+  decisoes?: DBDecisaoGovernanca[];
+  indicadores?: DBIndicadorPesquisa[];
 }
 
 export interface ProjetoInput {
@@ -156,6 +267,14 @@ export interface ProjetoInput {
   vigenciaInicio?: string | Date | null;
   vigenciaFinal?: string | Date | null;
   responsavelPlanilha?: string | null;
+
+  modulosAtivos?: DBModulosAtivos;
+  etapas?: DBEtapa[];
+  rubricas?: DBRubricaOrcamentaria[];
+  parceirosModulo?: DBParceiro[];
+  riscos?: DBRisco[];
+  decisoes?: DBDecisaoGovernanca[];
+  indicadores?: DBIndicadorPesquisa[];
 }
 
 export interface DBLancamento {
