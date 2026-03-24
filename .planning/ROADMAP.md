@@ -120,7 +120,11 @@ Plans:
   3. Todos os endpoints de CRUD retornam 401 sem token de autenticação
   4. Operações de escrita nos 6 módulos refletem imediatamente no documento do projeto em `custom_projects`
   5. Projetos sem campo `modulosAtivos` continuam sendo retornados corretamente pelo `GET /api/projects`
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Endpoints CRUD para Etapas, Orçamento e configuração de ModulosAtivos
+- [ ] 06-02-PLAN.md — Endpoints CRUD para Parceiros, Riscos, Governança e Indicadores
 
 ### Phase 7: Wizard — Passo 5
 **Goal**: Gestor consegue ativar módulos no momento de criação de um projeto via passo dedicado no wizard
