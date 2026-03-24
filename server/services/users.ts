@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { CreateUserInput, UpdateUserInput, User, UserRole, UserWithoutPassword, sanitizeUser } from '../types/user.js';
 import { hashPassword } from './auth.js';
 
@@ -27,19 +27,19 @@ function resolveRole(payload: { role?: UserRole; isAdmin?: boolean }): { role: U
 }
 
 export async function getUserByUsername(username: string): Promise<User | null> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const user = await db.collection<User>(USERS_COLLECTION).findOne({ username });
   return user;
 }
 
 export async function getUserByEmail(email: string): Promise<User | null> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const user = await db.collection<User>(USERS_COLLECTION).findOne({ email: { $regex: `^${email}$`, $options: 'i' } });
   return user;
 }
 
 export async function getUserByIdentifier(identifier: string): Promise<User | null> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const user = await db.collection<User>(USERS_COLLECTION).findOne({
     $or: [
       { username: identifier },
@@ -50,13 +50,13 @@ export async function getUserByIdentifier(identifier: string): Promise<User | nu
 }
 
 export async function getUserById(userId: string): Promise<User | null> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const user = await db.collection<User>(USERS_COLLECTION).findOne({ _id: new ObjectId(userId) });
   return user;
 }
 
 export async function createUser({ username, password, email, isAdmin, role, fullName, department }: CreateUserInput): Promise<UserWithoutPassword> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
 
   const existing = await getUserByUsername(username);
   if (existing) {
@@ -92,7 +92,7 @@ export async function createUser({ username, password, email, isAdmin, role, ful
 }
 
 export async function updateUser(userId: string, updates: UpdateUserInput): Promise<UserWithoutPassword> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const current = await getUserById(userId);
   if (!current) {
     throw new Error('Usuário não encontrado');
@@ -175,7 +175,7 @@ export async function updateUser(userId: string, updates: UpdateUserInput): Prom
 }
 
 export async function updateLastLogin(userId: string): Promise<void> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   await db.collection<User>(USERS_COLLECTION).updateOne(
     { _id: new ObjectId(userId) },
     { $set: { lastLogin: new Date() } }
@@ -183,7 +183,7 @@ export async function updateLastLogin(userId: string): Promise<void> {
 }
 
 export async function changePassword(userId: string, newPassword: string): Promise<void> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const passwordHash = await hashPassword(newPassword);
 
   await db.collection<User>(USERS_COLLECTION).updateOne(
@@ -193,13 +193,13 @@ export async function changePassword(userId: string, newPassword: string): Promi
 }
 
 export async function listUsers(): Promise<UserWithoutPassword[]> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const users = await db.collection<User>(USERS_COLLECTION).find().sort({ createdAt: -1 }).toArray();
   return users.map(sanitizeUser);
 }
 
 export async function listAssignableUsers(): Promise<UserWithoutPassword[]> {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const users = await db.collection<User>(USERS_COLLECTION)
     .find({ isActive: true })
     .sort({ fullName: 1, username: 1 })
@@ -212,7 +212,7 @@ export async function ensureAdminUser(): Promise<void> {
   const adminUsername = process.env.ADMIN_USERNAME?.trim() || 'admin';
   const configuredAdminPassword = process.env.ADMIN_PASSWORD?.trim();
   const adminEmail = process.env.ADMIN_EMAIL;
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   const isProduction = process.env.NODE_ENV === 'production';
 
   if (!configuredAdminPassword && isProduction) {
