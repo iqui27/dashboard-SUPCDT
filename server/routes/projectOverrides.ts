@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { requireAuth } from '../middleware/auth.js';
 
 const COLLECTION_NAME = 'project_overrides';
@@ -120,7 +120,7 @@ export const projectOverridesRouter = Router();
 projectOverridesRouter.get('/', async (req: Request, res: Response) => {
   try {
     const { projectId } = req.query as { projectId?: string };
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
 
     const filter = projectId ? { projectId } : {};
@@ -154,7 +154,7 @@ projectOverridesRouter.put('/:projectId', requireAuth, async (req: Request, res:
 
     const overrides = normalizeOverrides(normalizedPayload);
 
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
 
     const existing = await collection.findOne({ projectId });
@@ -203,7 +203,7 @@ projectOverridesRouter.post('/:projectId/sync', requireAuth, async (req: Request
       return res.status(400).json({ error: 'Project id is required' });
     }
 
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
     const overrideDoc = await collection.findOne({ projectId });
 

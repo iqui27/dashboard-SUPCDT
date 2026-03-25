@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 const RAW_RESPONSIBLES = [
     ['AILTON LIMA SANTOS OLIVEIRA', 'SUBSECRETARIA DE INOVACAO, CAPACITACAO E INCLUSAO DIGITAL'],
     ['ALINE ROQUE MAGALHAES', 'DIRETORIA DE DIFUSAO CIENTIFICA E CIDADES INTELIGENTES'],
@@ -94,7 +94,7 @@ let seedPromise = null;
 async function ensureSeeded() {
     if (!seedPromise) {
         seedPromise = (async () => {
-            const db = await getDatabase();
+            const db = await getUsersDatabase();
             const collection = db.collection('status_responsibles');
             const now = new Date();
             await Promise.all(RAW_RESPONSIBLES.map(([name, department, username]) => collection.updateOne({ name }, {
@@ -129,7 +129,7 @@ export const statusResponsiblesRouter = Router();
 statusResponsiblesRouter.get('/', async (_req, res) => {
     try {
         await ensureSeeded();
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection('status_responsibles');
         const responsibles = await collection.find({ active: { $ne: false } }).sort({ name: 1 }).toArray();
         res.json(responsibles.map(serialize));

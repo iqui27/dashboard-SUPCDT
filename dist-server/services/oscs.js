@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 const COLLECTION_NAME = 'oscs';
 function parseCurrency(value) {
     if (typeof value === 'number' && Number.isFinite(value)) {
@@ -138,7 +138,7 @@ function applyUpdates(existing, input, now) {
     return updated;
 }
 export async function getOscCollection() {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     return db.collection(COLLECTION_NAME);
 }
 export async function listOscs(search) {

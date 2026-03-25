@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { randomUUID } from 'crypto';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { importSheetUsingServiceAccount, previewSheetUsingServiceAccount } from '../services/googleSheetImport.js';
 const COLLECTION_NAME = 'planilha_datasets';
 const REMOTE_SOURCE_ID = 'remote-default';
@@ -142,7 +142,7 @@ dataSourcesRouter.post('/import', async (req, res) => {
         const datasetName = name?.trim() || importResult.title || 'Planilha importada';
         const datasetDescription = description ?? `Importado da planilha "${importResult.title}"`;
         const serializedFomentos = importResult.fomentos.map(serializeFomentoForStorage);
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         await collection.insertOne({
             _id: datasetId,
@@ -183,7 +183,7 @@ dataSourcesRouter.post('/import', async (req, res) => {
 });
 dataSourcesRouter.get('/', async (_req, res) => {
     try {
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const datasets = await collection
             .find({}, { projection: { fomentos: 0 } })
@@ -209,7 +209,7 @@ dataSourcesRouter.get('/', async (_req, res) => {
 dataSourcesRouter.get('/local/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const dataset = await collection.findOne({ _id: id });
         if (!dataset) {
@@ -247,7 +247,7 @@ dataSourcesRouter.put('/local/:id', async (req, res) => {
         }
         const normalizedFomentos = fomentos.map(item => serializeFomentoForStorage(deserializeFomentoFromStorage(item)));
         const now = new Date();
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         await collection.updateOne({ _id: id }, {
             $set: {
@@ -272,7 +272,7 @@ dataSourcesRouter.put('/local/:id', async (req, res) => {
 dataSourcesRouter.delete('/local/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const result = await collection.deleteOne({ _id: id });
         if (result.deletedCount === 0) {

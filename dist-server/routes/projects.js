@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { extractProjectFromPdf } from '../services/geminiImport.js';
 import { requireAuth } from '../middleware/auth.js';
 const COLLECTION_NAME = 'custom_projects';
@@ -142,7 +142,7 @@ projectsRouter.post('/import', requireAuth, upload.single('file'), async (req, r
 });
 projectsRouter.get('/', async (_req, res) => {
     try {
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const projects = await collection.find({}).toArray();
         // Process each project to ensure valorTotal is properly parsed
@@ -163,7 +163,7 @@ projectsRouter.get('/:id', async (req, res) => {
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid project id' });
         }
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const project = await collection.findOne({ _id: new ObjectId(id) });
         if (!project) {
@@ -197,7 +197,7 @@ projectsRouter.post('/', requireAuth, async (req, res) => {
             createdAt: new Date(),
             updatedAt: new Date()
         });
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const result = await collection.insertOne(doc);
         const insertedId = result.insertedId;
@@ -235,7 +235,7 @@ projectsRouter.put('/:id', requireAuth, async (req, res) => {
             updatedAt: new Date()
         });
         doc.id = id;
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const filters = [];
         if (ObjectId.isValid(id)) {
@@ -320,7 +320,7 @@ projectsRouter.delete('/:id', requireAuth, async (req, res) => {
         if (!ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid project id' });
         }
-        const db = await getDatabase();
+        const db = await getUsersDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const result = await collection.deleteOne({ _id: new ObjectId(id) });
         if (result.deletedCount === 0) {

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { ObjectId, WithId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { requireAuth } from '../middleware/auth.js';
 import { getUserById } from '../services/users.js';
 
@@ -20,7 +20,7 @@ export const statusUpdatesRouter = Router();
 statusUpdatesRouter.get('/', async (req: Request, res: Response) => {
   try {
     const { projectId } = req.query as { projectId?: string };
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const collection = db.collection<StatusUpdate>(COLLECTION_NAME);
 
     const filter = projectId ? { projectId } : {};
@@ -61,7 +61,7 @@ statusUpdatesRouter.post('/', requireAuth, async (req: Request, res: Response) =
   };
 
   try {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const collection = db.collection<StatusUpdate>(COLLECTION_NAME);
     const insertResult = await collection.insertOne(update);
 

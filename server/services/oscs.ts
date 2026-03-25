@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import type { OSC, OSCInput } from '../types/osc.js';
 
 const COLLECTION_NAME = 'oscs';
@@ -177,7 +177,7 @@ function applyUpdates(existing: OscDocument, input: OSCInput, now: Date): OscDoc
 }
 
 export async function getOscCollection() {
-  const db = await getDatabase();
+  const db = await getUsersDatabase();
   return db.collection<OscDocument>(COLLECTION_NAME);
 }
 
