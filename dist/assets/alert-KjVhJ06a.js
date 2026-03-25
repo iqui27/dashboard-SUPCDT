@@ -1,6 +1,0 @@
-import{c as i,b as r,d as l}from"./button-BuilR__U.js";import{r as s,j as d}from"./index-4vYopi52.js";/**
- * @license lucide-react v0.522.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const c=[["path",{d:"M21 12a9 9 0 1 1-6.219-8.56",key:"13zald"}]],m=i("loader-circle",c),n=l("relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",{variants:{variant:{default:"bg-background text-foreground",destructive:"border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive"}},defaultVariants:{variant:"default"}}),v=s.forwardRef(({className:e,variant:t,...a},o)=>d.jsx("div",{ref:o,role:"alert",className:r(n({variant:t}),e),...a}));v.displayName="Alert";const u=s.forwardRef(({className:e,...t},a)=>d.jsx("h5",{ref:a,className:r("mb-1 font-medium leading-none tracking-tight",e),...t}));u.displayName="AlertTitle";const f=s.forwardRef(({className:e,...t},a)=>d.jsx("div",{ref:a,className:r("text-sm [&_p]:leading-relaxed",e),...t}));f.displayName="AlertDescription";export{v as A,m as L,u as a,f as b};

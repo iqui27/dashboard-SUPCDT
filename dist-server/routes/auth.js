@@ -6,6 +6,20 @@ import { requireAdmin, requireAuth } from '../middleware/auth.js';
 import { createPasswordResetToken, consumePasswordResetToken } from '../services/passwordReset.js';
 import { sendPasswordResetEmail } from '../services/email.js';
 const router = express.Router();
+function resolvePasswordResetBaseUrl(req) {
+    const fallback = process.env.APP_BASE_URL || 'https://dashboard-supcdt.vercel.app';
+    const requestOrigin = req.headers.origin?.trim();
+    if (!requestOrigin) {
+        return fallback;
+    }
+    const allowedOrigins = new Set([
+        process.env.FRONTEND_URL,
+        fallback,
+        'https://dashboard-supcdt.vercel.app',
+        'https://dashboard-supcdt-iqui27s-projects.vercel.app'
+    ].filter((value) => typeof value === 'string' && value.length > 0));
+    return allowedOrigins.has(requestOrigin) ? requestOrigin : fallback;
+}
 // POST /api/auth/login
 router.post('/login', async (req, res) => {
     try {
@@ -184,7 +198,7 @@ router.post('/forgot-password', async (req, res) => {
             return res.json({ message: 'Se o e-mail institucional existir no sistema, enviaremos um link para o e-mail pessoal informado.' });
         }
         const { token, expiresAt } = await createPasswordResetToken(dbUser._id.toString());
-        const resetLink = `${process.env.APP_BASE_URL || 'https://dashboard-secti-2025.vercel.app'}/reset-password?token=${token}`;
+        const resetLink = `${resolvePasswordResetBaseUrl(req)}/reset-password?token=${token}`;
         await sendPasswordResetEmail({
             to: personalEmail,
             username: dbUser.username,

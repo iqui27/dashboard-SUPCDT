@@ -275,6 +275,7 @@ export function mapProjetoToApi(projeto: DBProjeto): ProjetoApi {
         ultimaAtualizacao: toIsoDate(operacional.ultimaAtualizacao)
       }
     },
+    modulosAtivos: projeto.modulosAtivos ?? undefined,
     createdAt: toIsoDate(projeto.createdAt),
     updatedAt: toIsoDate(projeto.updatedAt)
   };
