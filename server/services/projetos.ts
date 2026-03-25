@@ -276,6 +276,12 @@ export function mapProjetoToApi(projeto: DBProjeto): ProjetoApi {
       }
     },
     modulosAtivos: projeto.modulosAtivos ?? undefined,
+    etapas: projeto.etapas ?? undefined,
+    rubricas: projeto.rubricas ?? undefined,
+    parceirosModulo: projeto.parceirosModulo ?? undefined,
+    riscos: projeto.riscos ?? undefined,
+    decisoes: projeto.decisoes ?? undefined,
+    indicadores: projeto.indicadores ?? undefined,
     createdAt: toIsoDate(projeto.createdAt),
     updatedAt: toIsoDate(projeto.updatedAt)
   };
