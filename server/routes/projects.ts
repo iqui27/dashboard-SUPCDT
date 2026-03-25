@@ -6,7 +6,7 @@ import { getDatabase } from '../db/client.js';
 import { extractProjectFromPdf } from '../services/geminiImport.js';
 import { requireAuth } from '../middleware/auth.js';
 
-const COLLECTION_NAME = 'projetos_supcdt';
+const COLLECTION_NAME = 'custom_projects';
 
 interface CustomProjectDoc {
   _id?: ObjectId | string;
