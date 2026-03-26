@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 Fundação + Monitoramento + Wi-Fi Social** - Phases 1-4 (concluído)
 - ✅ **v1.1 Módulos de Monitoramento Avançado** - Phases 5-10 (concluído)
+- 🚧 **v1.2 UX Polish, Formulários & PDF Export** - Phase 11 (em andamento)
 
 ---
 
@@ -81,7 +82,10 @@ Plans:
 
 ---
 
-## 🚧 v1.1 Módulos de Monitoramento Avançado (CONCLUÍDO)
+<details>
+<summary>✅ v1.1 Módulos de Monitoramento Avançado (Phases 5-10) — CONCLUÍDO</summary>
+
+## ~~🚧~~ v1.1 Módulos de Monitoramento Avançado (CONCLUÍDO)
 
 **Milestone Goal:** Cada projeto pode ser monitorado com o nível de detalhe que seu contrato exige — ativando apenas os módulos necessários (etapas, orçamento, parceiros, riscos, governança, indicadores) sem configuração técnica.
 
@@ -184,6 +188,72 @@ Plans:
 | 8. UI Etapas + Orçamento | 2/2 | Complete | 2026-03-24 |
 | 9. UI Parceiros, Riscos, Governança, Indicadores | 2/2 | Complete | 2026-03-24 |
 | 10. Painel de Configuração | 1/1 | Complete | 2026-03-24 |
+
+</details>
+
+---
+
+## 🚧 v1.2 UX Polish, Formulários & PDF Export
+
+**Milestone Goal:** Gestor consegue editar dados de projetos e lançamentos com facilidade, visualizar indicadores com semáforos coloridos e gráficos temporais, e exportar relatórios institucionais em PDF — tudo sem instalar bibliotecas pesadas.
+
+## Phases
+
+- [ ] **Phase 11: UX Polish, Formulários & PDF Export** — CRUD completo de lançamentos, edição de projetos, semáforos visuais, gráficos Recharts, exportação PDF via window.print()
+
+## Phase Details
+
+### Phase 11: UX Polish, Formulários & PDF Export
+**Goal**: Gestor consegue editar projetos e lançamentos sem recriar, visualizar saúde do projeto com semáforos e gráficos temporais, e gerar relatório PDF institucional
+**Depends on**: Phase 10 ✅
+**Requirements**: EDIT-01, EDIT-02, EDIT-03, EDIT-04, META-01, VIS-01, VIS-02, VIS-03, VIS-04, PDF-01, PDF-02, MON-FLOW-01
+**Status**: PLANNING
+**Plans:** 4 plans
+
+Plans:
+- [ ] 11-01-PLAN.md — Backend PUT/DELETE lançamentos + EditarProjetoModal
+- [ ] 11-02-PLAN.md — Refatorar LancamentoModal (edição/exclusão/data) + Fix MetaModal (previsto)
+- [ ] 11-03-PLAN.md — Semáforos na stats bar + Meta Superada + Gráfico Recharts + Timestamp
+- [ ] 11-04-PLAN.md — PDF Export via window.print() + Reorganizar ProjetoMonitoramentoModal
+
+**Success Criteria** (what must be TRUE):
+  1. PUT e DELETE de lançamentos funcionam via API; metas recalculadas automaticamente
+  2. Modal de edição de projeto permite alterar nome, OSC, status, valor, datas
+  3. LancamentoModal funciona em modo criação e edição com data customizada e exclusão
+  4. MetaModal preserva previsto por trimestre na edição sem zerar realizado
+  5. Stats bar mostra semáforos verde/amarelo/vermelho para cada indicador
+  6. Metas superadas têm badge e barra verde
+  7. Gráfico Recharts de barras Previsto vs Realizado por trimestre em cada meta
+  8. Exportar PDF gera relatório institucional via window.print()
+  9. ProjetoMonitoramentoModal reorganizado em seções visuais claras
+
+## Progress
+
+**Execution Order:**
+11-01 (Wave 1) → 11-02 (Wave 2) → 11-03 (Wave 2) → 11-04 (Wave 3)
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 11. UX Polish, Formulários & PDF Export | 0/4 | Planning | — |
+
+---
+
+## Requirement IDs (v1.2)
+
+| ID | Descrição |
+|----|-----------|
+| EDIT-01 | Modal para editar dados básicos do projeto (nome, OSC, status, valor, datas) |
+| EDIT-02 | Editar lançamentos existentes (alterar valores, descrição, trimestre) |
+| EDIT-03 | Backend PUT/DELETE endpoints para lançamentos com recálculo automático de metas |
+| EDIT-04 | Campo data de atividade customizada em lançamentos (criação e edição) |
+| META-01 | Edição de previsto por trimestre na MetaModal funciona corretamente sem perder dados |
+| VIS-01 | Semáforos coloridos (verde/amarelo/vermelho) na stats bar do DetalheProjeto |
+| VIS-02 | Badge "Meta superada" em metas com realizado > previsto |
+| VIS-03 | Gráfico de barras Recharts Previsto vs Realizado por trimestre em cada meta |
+| VIS-04 | Timestamp de última atualização no painel operacional |
+| PDF-01 | Exportar PDF institucional via window.print() com layout A4 |
+| PDF-02 | Botões PDF habilitados no DetalheProjeto e página Relatórios |
+| MON-FLOW-01 | ProjetoMonitoramentoModal reorganizado em seções visuais com títulos e ícones |
 
 ---
 

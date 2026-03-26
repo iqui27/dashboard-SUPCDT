@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Cada projeto pode ser monitorado com o nível de detalhe que seu contrato exige — sem configuração técnica
-**Current focus:** Phase 10 — Configuration (COMPLETE)
+**Current focus:** Phase 11 — UX Polish, Formulários & PDF Export (PLANNING)
 
 ## Current Position
 
-Phase: 10 of 10 (Painel de Configuração) — COMPLETE
-Plans: 1/1 complete (10-01: Gear icon + ModulosConfigPanel + Popover)
-Status: Complete — Gear icon opens popover with 6 module toggles in DetalheProjeto
-Last activity: 2026-03-24 — Phase 10 complete, module config panel wired
+Phase: 11 of 11 (UX Polish, Formulários & PDF Export) — PLANNING
+Plans: 0/4 complete (11-01, 11-02, 11-03, 11-04 written, awaiting execution)
+Status: Planning complete — 4 plans written, validated, ready for execution
+Last activity: 2026-03-26 — Phase 11 planning complete
 
-Progress: [██████████] 100% (ALL PHASES COMPLETE)
+Progress: [░░░░░░░░░░] 0% (Phase 11)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 18 (phases 1-4 + 05-01 + 06-01 + 06-02 + 07-01 + 08-01 + 08-02 + 09-01 + 09-02 + 10-01)
+- Total plans completed: 18 (phases 1-10)
 - Average duration: ~3 minutes per plan
 - Total execution time: ~3.4 hours cumulative
 
@@ -37,6 +37,7 @@ Progress: [██████████] 100% (ALL PHASES COMPLETE)
 | 8. UI Etapas + Orçamento | 2/2 | Complete |
 | 9. UI Parceiros, Riscos, Gov, Ind | 2/2 | Complete |
 | 10. Config | 1/1 | Complete |
+| 11. UX Polish, Formulários & PDF | 0/4 | Planning |
 
 ## Accumulated Context
 
@@ -54,6 +55,9 @@ Progress: [██████████] 100% (ALL PHASES COMPLETE)
 - StatusParceiro cores: Ativo=green (emerald), Apoiador=blue (sky), Consultor=amber, Inativo=slate
 - Risco severity usa matriz 4 cores: critical (red), high (amber), moderate (yellow), low (green) baseado em probabilidade × impacto
 - Riscos encerrados mostrados separadamente com opacity-50
+- **Phase 11:** PDF export usa window.print() + CSS @media print — sem bibliotecas externas de PDF
+- **Phase 11:** Semáforos usam dot colorido (h-2 w-2 rounded-full) com 3 cores: emerald (bom), amber (atenção), rose (crítico)
+- **Phase 11:** MetaModal envia apenas `{ metas: novasMetas }` no update (não o projeto inteiro) para evitar sobrescrever dados de módulos
 
 ### Pending Todos
 
@@ -61,12 +65,12 @@ Progress: [██████████] 100% (ALL PHASES COMPLETE)
 
 ### Blockers/Concerns
 
-- Phase 9 pode ser executada após Phase 8
 - TypeScript espelhado em dois lugares (`src/types/projeto.ts` e `server/types/projeto.ts`) — qualquer alteração nos tipos precisa ser feita em ambos
+- Endpoints do outro dashboard (English routes) NÃO podem ser modificados — produção em https://dashboard-secti-2025.vercel.app
 
 ## Session Continuity
 
-Last session: 2026-03-24
-Stopped at: Completed 10-01-PLAN.md — Gear icon + module config panel implemented
-Next planned: ALL PHASES COMPLETE
-Resume file: None
+Last session: 2026-03-26
+Stopped at: Phase 11 planning complete — 4 plans written and validated
+Next planned: Execute Phase 11 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
+Resume file: .planning/phases/11-polish-ux-formularios-pdf/
