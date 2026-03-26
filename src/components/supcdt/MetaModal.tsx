@@ -3,7 +3,7 @@ import { Target, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { ObjectId } from 'bson';
 
-import { Projeto, Meta, getProjetoNome, parseProjetoDate } from '../../types/projeto';
+import { Projeto, Meta, getProjetoNome, getTrimestreLabel } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProjeto } from '../../lib/api/projetos';
 import { Button } from '../ui/button';
@@ -13,22 +13,6 @@ interface MetaModalProps {
   meta?: Meta; // se fornecido, modo de edição
   onClose: () => void;
   onSuccess: () => void;
-}
-
-function getTrimesterLabel(index: number, projeto: Projeto): string {
-  const base = parseProjetoDate(projeto.dataInicio);
-  if (!base) return `T${index + 1}`;
-
-  const start = new Date(base);
-  start.setMonth(start.getMonth() + index * 3);
-  const end = new Date(start);
-  end.setMonth(end.getMonth() + 3);
-  end.setDate(end.getDate() - 1);
-
-  const fmt = (d: Date) =>
-    d.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '');
-
-  return `T${index + 1} · ${fmt(start)} – ${fmt(end)}`;
 }
 
 export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps) {
@@ -198,7 +182,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
                 <ul role="list" className="divide-y divide-slate-100">
                   {Array.from({ length: totalTrimesters }).map((_, idx) => (
                     <li key={idx} className="flex items-center justify-between gap-4 px-4 py-3">
-                      <p className="text-sm text-slate-600">{getTrimesterLabel(idx, projeto)}</p>
+                      <p className="text-sm text-slate-600">{getTrimestreLabel(idx, projeto.dataInicio)}</p>
                       <input
                         type="number"
                         min="0"

@@ -417,6 +417,42 @@ export function parseProjetoDate(value?: string | null): Date | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed;
 }
 
+/**
+ * Gera label formatado para trimestre com ano e datas
+ * Ex: "1º Trim 2025 · 01/01 – 31/03"
+ */
+export function getTrimestreLabel(index: number, dataInicio?: string | null): string {
+  const base = parseProjetoDate(dataInicio);
+  if (!base) return `${index + 1}º Trim`;
+
+  const start = new Date(base);
+  start.setMonth(start.getMonth() + index * 3);
+  const end = new Date(start);
+  end.setMonth(end.getMonth() + 3);
+  end.setDate(end.getDate() - 1);
+
+  const year = start.getFullYear();
+  const fmtDate = (d: Date) =>
+    d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+
+  return `${index + 1}º Trim ${year} · ${fmtDate(start)} – ${fmtDate(end)}`;
+}
+
+/**
+ * Gera label curto para trimestre (usado em espaços pequenos como badges)
+ * Ex: "1º Trim 2025"
+ */
+export function getTrimestreLabelShort(index: number, dataInicio?: string | null): string {
+  const base = parseProjetoDate(dataInicio);
+  if (!base) return `${index + 1}º Trim`;
+
+  const start = new Date(base);
+  start.setMonth(start.getMonth() + index * 3);
+  const year = start.getFullYear();
+
+  return `${index + 1}º Trim ${year}`;
+}
+
 export function getProjetoPercentualExecucao(projeto: Projeto): number {
   const percentualExecucao = Number(getProjetoMonitoramento(projeto).percentualExecucao);
   return Number.isFinite(percentualExecucao)

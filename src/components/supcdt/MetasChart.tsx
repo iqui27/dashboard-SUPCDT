@@ -9,7 +9,7 @@ interface MetasChartProps {
 
 export function MetasChart({ meta, totalTrimestres }: MetasChartProps) {
   const data = Array.from({ length: totalTrimestres }, (_, idx) => ({
-    name: `T${idx + 1}`,
+    name: `${idx + 1}º Trim`,
     previsto: meta.previstoPorTrimestre[idx] || 0,
     realizado: meta.realizadoPorTrimestre[idx] || 0,
   }));

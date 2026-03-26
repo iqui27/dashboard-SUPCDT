@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { ClipboardList, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Projeto, Lancamento, getProjetoNome, parseProjetoDate } from '../../types/projeto';
+import { Projeto, Lancamento, getProjetoNome, getTrimestreLabel } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { criarLancamento, updateLancamento, deleteLancamento } from '../../lib/api/lancamentos';
 import { Button } from '../ui/button';
@@ -12,22 +12,6 @@ interface LancamentoModalProps {
   lancamento?: Lancamento; // se presente = modo edição
   onClose: () => void;
   onSuccess: () => void;
-}
-
-function getTrimesterLabel(index: number, projeto: Projeto): string {
-  const base = parseProjetoDate(projeto.dataInicio);
-  if (!base) return `Trimestre ${index + 1}`;
-
-  const start = new Date(base);
-  start.setMonth(start.getMonth() + index * 3);
-  const end = new Date(start);
-  end.setMonth(end.getMonth() + 3);
-  end.setDate(end.getDate() - 1);
-
-  const fmt = (d: Date) =>
-    d.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '');
-
-  return `T${index + 1} · ${fmt(start)} – ${fmt(end)}`;
 }
 
 function getTodayISO(): string {
@@ -162,7 +146,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                 >
                   {Array.from({ length: totalTrimestres }).map((_, idx) => (
                     <option key={idx} value={idx + 1}>
-                      {getTrimesterLabel(idx, projeto)}
+                      {getTrimestreLabel(idx, projeto.dataInicio)}
                     </option>
                   ))}
                 </select>
