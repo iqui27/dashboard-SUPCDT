@@ -1,14 +1,15 @@
 import { useState, type FormEvent } from 'react';
-import { ClipboardList, X } from 'lucide-react';
+import { ClipboardList, Trash2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Projeto, Lancamento, getProjetoNome, parseProjetoDate } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
-import { criarLancamento } from '../../lib/api/lancamentos';
+import { criarLancamento, updateLancamento, deleteLancamento } from '../../lib/api/lancamentos';
 import { Button } from '../ui/button';
 
 interface LancamentoModalProps {
   projeto: Projeto;
+  lancamento?: Lancamento; // se presente = modo edição
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -29,17 +30,50 @@ function getTrimesterLabel(index: number, projeto: Projeto): string {
   return `T${index + 1} · ${fmt(start)} – ${fmt(end)}`;
 }
 
-export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModalProps) {
+function getTodayISO(): string {
+  return new Date().toISOString().split('T')[0];
+}
+
+export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: LancamentoModalProps) {
   const { token } = useAuth();
+  const isEditing = !!lancamento;
   const [loading, setLoading] = useState(false);
-  const [trimestre, setTrimestre] = useState(1);
-  const [descricaoAtividade, setDescricaoAtividade] = useState('');
-  const [localAtendido, setLocalAtendido] = useState('');
-  const [valores, setValores] = useState<Record<string, number>>({});
+  const [trimestre, setTrimestre] = useState(lancamento?.trimestre ?? 1);
+  const [descricaoAtividade, setDescricaoAtividade] = useState(lancamento?.descricaoAtividade ?? '');
+  const [localAtendido, setLocalAtendido] = useState(lancamento?.localAtendido ?? '');
+  const [dataAtividade, setDataAtividade] = useState<string>(
+    lancamento?.dataAtividade ?? getTodayISO()
+  );
+
+  // Inicializar valores a partir do lançamento existente (modo edição)
+  const initialValores: Record<string, number> = {};
+  if (lancamento) {
+    for (const v of lancamento.valores) {
+      initialValores[v.metaId] = v.valorRealizado;
+    }
+  }
+  const [valores, setValores] = useState<Record<string, number>>(initialValores);
 
   const handleMudarValor = (metaId: string, valStr: string) => {
     const v = parseInt(valStr, 10);
     setValores((prev) => ({ ...prev, [metaId]: isNaN(v) ? 0 : v }));
+  };
+
+  const handleDelete = async () => {
+    if (!token || !lancamento) return;
+    const confirmed = window.confirm('Tem certeza que deseja excluir este lançamento?');
+    if (!confirmed) return;
+
+    setLoading(true);
+    try {
+      await deleteLancamento(lancamento.id, token);
+      toast.success('Lançamento excluído com sucesso!');
+      onSuccess();
+    } catch {
+      toast.error('Erro ao excluir lançamento.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -63,18 +97,23 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
     setLoading(true);
     try {
       const payload: Partial<Lancamento> = {
-        projetoId: projeto.id,
         trimestre,
         descricaoAtividade,
         localAtendido,
-        dataRegistro: new Date(),
         valores: valuesArray,
+        ...(dataAtividade ? { dataAtividade } : {}),
       };
-      await criarLancamento(payload, token);
-      toast.success('Lançamento registrado com sucesso!');
+
+      if (isEditing) {
+        await updateLancamento(lancamento.id, payload, token);
+        toast.success('Lançamento atualizado com sucesso!');
+      } else {
+        await criarLancamento({ ...payload, projetoId: projeto.id, dataRegistro: new Date() }, token);
+        toast.success('Lançamento registrado com sucesso!');
+      }
       onSuccess();
     } catch {
-      toast.error('Erro ao registrar lançamento.');
+      toast.error(isEditing ? 'Erro ao atualizar lançamento.' : 'Erro ao registrar lançamento.');
     } finally {
       setLoading(false);
     }
@@ -92,7 +131,9 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
             <ClipboardList className="h-4 w-4 text-sky-600" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Monitoramento</p>
-              <h2 className="text-sm font-bold text-slate-900 leading-tight">Novo lançamento</h2>
+              <h2 className="text-sm font-bold text-slate-900 leading-tight">
+                {isEditing ? 'Editar lançamento' : 'Novo lançamento'}
+              </h2>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -141,6 +182,19 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
               </div>
             </div>
 
+            {/* Data da atividade */}
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                Data da atividade
+              </label>
+              <input
+                type="date"
+                className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                value={dataAtividade}
+                onChange={(e) => setDataAtividade(e.target.value)}
+              />
+            </div>
+
             {/* Description */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
@@ -185,13 +239,29 @@ export function LancamentoModal({ projeto, onClose, onSuccess }: LancamentoModal
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-100 bg-white py-4 mt-5">
-            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-slate-200 px-4 text-xs text-slate-600">
-              Cancelar
-            </Button>
-            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">
-              {loading ? 'Salvando...' : 'Registrar lançamento'}
-            </Button>
+          <div className="sticky bottom-0 flex items-center justify-between gap-2 border-t border-slate-100 bg-white py-4 mt-5">
+            <div>
+              {isEditing && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="h-8 rounded-full px-4 text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  <Trash2 className="mr-1.5 h-3 w-3" />
+                  Excluir
+                </Button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-slate-200 px-4 text-xs text-slate-600">
+                Cancelar
+              </Button>
+              <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">
+                {loading ? 'Salvando...' : isEditing ? 'Salvar alterações' : 'Registrar lançamento'}
+              </Button>
+            </div>
           </div>
         </form>
       </div>

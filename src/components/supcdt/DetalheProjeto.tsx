@@ -36,6 +36,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
   const [isMonitoramentoModalOpen, setIsMonitoramentoModalOpen] = useState(false);
   const [isEditarProjetoOpen, setIsEditarProjetoOpen] = useState(false);
   const [editingMeta, setEditingMeta] = useState<Meta | null>(null);
+  const [editingLancamento, setEditingLancamento] = useState<Lancamento | null>(null);
 
   const carregarLancamentos = useCallback(async () => {
     if (!token || !projeto.id) return;
@@ -313,12 +314,17 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   {lancamentos.map((lanc) => (
                     <li key={lanc.id} className="px-5 py-4">
                       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="rounded-full bg-slate-900 px-2.5 py-0.5 text-xs font-semibold text-white">T{lanc.trimestre}</span>
                             <span className="text-xs text-slate-400">
-                              {new Date(lanc.dataRegistro).toLocaleDateString('pt-BR')} · {lanc.registradoPor}
+                              Reg. {new Date(lanc.dataRegistro).toLocaleDateString('pt-BR')} · {lanc.registradoPor}
                             </span>
+                            {lanc.dataAtividade && (
+                              <span className="text-xs text-sky-600 font-medium">
+                                Ativ. {new Date(lanc.dataAtividade + 'T00:00:00').toLocaleDateString('pt-BR')}
+                              </span>
+                            )}
                           </div>
                           <p className="mt-2 text-sm font-medium text-slate-900">{lanc.descricaoAtividade}</p>
                           {lanc.localAtendido && (
@@ -329,16 +335,26 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                           )}
                         </div>
 
-                        <div className="flex flex-wrap gap-2">
-                          {lanc.valores.map((valor) => {
-                            const meta = projeto.metas.find((item) => item.id === valor.metaId);
-                            return (
-                              <div key={valor.metaId} className="rounded-[1rem] bg-slate-50 px-3 py-1.5 text-xs">
-                                <span className="text-slate-400">{meta?.codigo || 'Meta'}:</span>{' '}
-                                <span className="font-semibold text-slate-900">+{valor.valorRealizado}</span>
-                              </div>
-                            );
-                          })}
+                        <div className="flex items-start gap-3">
+                          <div className="flex flex-wrap gap-2">
+                            {lanc.valores.map((valor) => {
+                              const meta = projeto.metas.find((item) => item.id === valor.metaId);
+                              return (
+                                <div key={valor.metaId} className="rounded-[1rem] bg-slate-50 px-3 py-1.5 text-xs">
+                                  <span className="text-slate-400">{meta?.codigo || 'Meta'}:</span>{' '}
+                                  <span className="font-semibold text-slate-900">+{valor.valorRealizado}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setEditingLancamento(lanc)}
+                            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors shrink-0"
+                            title="Editar lançamento"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </button>
                         </div>
                       </div>
                     </li>
@@ -478,6 +494,19 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           onClose={() => setIsModalOpen(false)}
           onSuccess={() => {
             setIsModalOpen(false);
+            carregarLancamentos();
+            onUpdate();
+          }}
+        />
+      )}
+
+      {editingLancamento && (
+        <LancamentoModal
+          projeto={projeto}
+          lancamento={editingLancamento}
+          onClose={() => setEditingLancamento(null)}
+          onSuccess={() => {
+            setEditingLancamento(null);
             carregarLancamentos();
             onUpdate();
           }}
