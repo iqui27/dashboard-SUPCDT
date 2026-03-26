@@ -138,22 +138,53 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
       {/* Print-specific CSS */}
       <style>{`
         @media print {
-          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-          body > *:not(.pdf-export-overlay) { display: none !important; }
-          .pdf-export-overlay { 
-            position: static !important; 
-            background: white !important; 
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+          
+          /* Esconde tudo */
+          body * {
+            visibility: hidden !important;
+          }
+          
+          /* Mostra apenas o overlay e seus filhos */
+          .pdf-export-overlay,
+          .pdf-export-overlay * {
+            visibility: visible !important;
+          }
+          
+          .pdf-export-overlay {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            right: 0 !important;
+            bottom: auto !important;
+            width: 100% !important;
+            background: white !important;
             overflow: visible !important;
             display: block !important;
           }
-          .pdf-no-print { display: none !important; }
-          .pdf-export-content { 
-            padding: 0 !important; 
+          
+          .pdf-no-print {
+            display: none !important;
+          }
+          
+          .pdf-export-content {
+            padding: 0 !important;
             max-width: 100% !important;
             overflow: visible !important;
           }
-          section { page-break-inside: avoid; }
-          @page { margin: 15mm; size: A4; }
+          
+          section {
+            page-break-inside: avoid;
+          }
+          
+          @page {
+            margin: 15mm;
+            size: A4;
+          }
         }
       `}</style>
 
