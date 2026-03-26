@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, type FormEvent } from 'react';
 import { Target, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { ObjectId } from 'bson';
@@ -38,14 +38,22 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
   const totalTrimesters = projeto.cronograma?.totalTrimestres || 4;
   const isEditing = !!meta;
 
-  const [codigo, setCodigo] = useState(meta?.codigo ?? '');
-  const [descricao, setDescricao] = useState(meta?.descricao ?? '');
-  const [unidade, setUnidade] = useState(meta?.unidade ?? '');
+  const [codigo, setCodigo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [unidade, setUnidade] = useState('');
+  const [previsto, setPrevisto] = useState<number[]>([]);
 
-  // Garantir que o array de previsto tem o tamanho correto (pode chegar incompleto do backend)
-  const initialPrevisto = [...(meta?.previstoPorTrimestre ?? [])];
-  while (initialPrevisto.length < totalTrimesters) initialPrevisto.push(0);
-  const [previsto, setPrevisto] = useState<number[]>(initialPrevisto.slice(0, totalTrimesters));
+  // Atualizar estado quando meta mudar (importante para edição!)
+  useEffect(() => {
+    setCodigo(meta?.codigo ?? '');
+    setDescricao(meta?.descricao ?? '');
+    setUnidade(meta?.unidade ?? '');
+
+    // Garantir que o array de previsto tem o tamanho correto
+    const initialPrevisto = [...(meta?.previstoPorTrimestre ?? [])];
+    while (initialPrevisto.length < totalTrimesters) initialPrevisto.push(0);
+    setPrevisto(initialPrevisto.slice(0, totalTrimesters));
+  }, [meta, totalTrimesters]);
 
   const handlePrevistoChange = (index: number, valStr: string) => {
     const value = parseFloat(valStr);
