@@ -1,11 +1,22 @@
-import { useState, type FormEvent } from 'react';
-import { FolderOpen, X } from 'lucide-react';
+import { useState, useEffect, type FormEvent } from 'react';
+import { FolderOpen, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Projeto, getProjetoNome } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProjeto } from '../../lib/api/projetos';
 import { Button } from '../ui/button';
+
+interface OscOption {
+  _id?: string;
+  osc: string;
+}
+
+interface UserOption {
+  _id?: string;
+  username: string;
+  fullName?: string;
+}
 
 interface EditarProjetoModalProps {
   projeto: Projeto;
@@ -19,6 +30,49 @@ const CATEGORIA_OPTIONS = ['Emenda', 'INEX', 'Convênio', 'Recurso Próprio', 'O
 export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjetoModalProps) {
   const { token } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [loadingOscs, setLoadingOscs] = useState(true);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [oscs, setOscs] = useState<OscOption[]>([]);
+  const [users, setUsers] = useState<UserOption[]>([]);
+
+  // Carregar lista de OSCs
+  useEffect(() => {
+    async function fetchOscs() {
+      try {
+        const res = await fetch('/api/oscs');
+        if (res.ok) {
+          const data = await res.json();
+          setOscs(data || []);
+        }
+      } catch {
+        console.error('Erro ao carregar OSCs');
+      } finally {
+        setLoadingOscs(false);
+      }
+    }
+    fetchOscs();
+  }, []);
+
+  // Carregar lista de usuários
+  useEffect(() => {
+    async function fetchUsers() {
+      if (!token) return;
+      try {
+        const res = await fetch('/api/auth/users/options', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUsers(data.users || []);
+        }
+      } catch {
+        console.error('Erro ao carregar usuários');
+      } finally {
+        setLoadingUsers(false);
+      }
+    }
+    fetchUsers();
+  }, [token]);
 
   // Campos editáveis — inicializados com valores atuais do projeto
   const [nome, setNome] = useState(projeto.nome ?? '');
@@ -146,23 +200,45 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">OSC</label>
-                <input
-                  type="text"
-                  placeholder="Nome da organização"
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                  value={nomeOSC}
-                  onChange={(e) => setNomeOSC(e.target.value)}
-                />
+                {loadingOscs ? (
+                  <div className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 flex items-center">
+                    <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+                    <span className="ml-2 text-sm text-slate-400">Carregando...</span>
+                  </div>
+                ) : (
+                  <select
+                    className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    value={nomeOSC}
+                    onChange={(e) => setNomeOSC(e.target.value)}
+                  >
+                    <option value="">Selecionar OSC...</option>
+                    {oscs.map((osc) => (
+                      <option key={osc._id || osc.osc} value={osc.osc}>{osc.osc}</option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Responsável SECTI</label>
-                <input
-                  type="text"
-                  placeholder="Nome do responsável"
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                  value={responsavelSECTI}
-                  onChange={(e) => setResponsavelSECTI(e.target.value)}
-                />
+                {loadingUsers ? (
+                  <div className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 flex items-center">
+                    <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+                    <span className="ml-2 text-sm text-slate-400">Carregando...</span>
+                  </div>
+                ) : (
+                  <select
+                    className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    value={responsavelSECTI}
+                    onChange={(e) => setResponsavelSECTI(e.target.value)}
+                  >
+                    <option value="">Selecionar responsável...</option>
+                    {users.map((user) => (
+                      <option key={user._id || user.username} value={user.fullName || user.username}>
+                        {user.fullName || user.username}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 
