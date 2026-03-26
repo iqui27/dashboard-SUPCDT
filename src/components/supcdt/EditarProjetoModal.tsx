@@ -59,12 +59,12 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
     async function fetchUsers() {
       if (!token) return;
       try {
-        const res = await fetch(`${API_BASE_URL}/api/auth/users/options`, {
+        const res = await fetch(`${API_BASE_URL}/api/auth/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
           const data = await res.json();
-          setUsers(data.users || []);
+          setUsers(data.users || data || []);
         }
       } catch {
         console.error('Erro ao carregar usuários');
