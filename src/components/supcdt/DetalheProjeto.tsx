@@ -16,6 +16,7 @@ import { ParceirosSection } from './ParceirosSection';
 import { RiscosSection } from './RiscosSection';
 import { GovernancaSection } from './GovernancaSection';
 import { IndicadoresSection } from './IndicadoresSection';
+import { EditarProjetoModal } from './EditarProjetoModal';
 import { LancamentoModal } from './LancamentoModal';
 import { MetaModal } from './MetaModal';
 import { ModulosConfigPanel } from './ModulosConfigPanel';
@@ -33,6 +34,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMetaModalOpen, setIsMetaModalOpen] = useState(false);
   const [isMonitoramentoModalOpen, setIsMonitoramentoModalOpen] = useState(false);
+  const [isEditarProjetoOpen, setIsEditarProjetoOpen] = useState(false);
   const [editingMeta, setEditingMeta] = useState<Meta | null>(null);
 
   const carregarLancamentos = useCallback(async () => {
@@ -110,6 +112,10 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
               <PencilLine className="mr-1.5 h-3 w-3" />
               Monitoramento
+            </Button>
+            <Button onClick={() => setIsEditarProjetoOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
+              <Pencil className="mr-1.5 h-3 w-3" />
+              Editar projeto
             </Button>
             <Button disabled variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-400">
               <Download className="mr-1.5 h-3 w-3" />
@@ -500,6 +506,17 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           onClose={() => setIsMonitoramentoModalOpen(false)}
           onSuccess={() => {
             setIsMonitoramentoModalOpen(false);
+            onUpdate();
+          }}
+        />
+      )}
+
+      {isEditarProjetoOpen && (
+        <EditarProjetoModal
+          projeto={projeto}
+          onClose={() => setIsEditarProjetoOpen(false)}
+          onSuccess={() => {
+            setIsEditarProjetoOpen(false);
             onUpdate();
           }}
         />
