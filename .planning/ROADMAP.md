@@ -208,7 +208,7 @@ Plans:
 **Depends on**: Phase 10 ✅
 **Requirements**: EDIT-01, EDIT-02, EDIT-03, EDIT-04, META-01, VIS-01, VIS-02, VIS-03, VIS-04, PDF-01, PDF-02, MON-FLOW-01
 **Status**: PLANNING
-**Plans:** 2/4 plans executed
+**Plans:** 3/4 plans executed
 
 Plans:
 - [ ] 11-01-PLAN.md — Backend PUT/DELETE lançamentos + EditarProjetoModal
@@ -234,7 +234,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 11. UX Polish, Formulários & PDF Export | 2/4 | In Progress|  |
+| 11. UX Polish, Formulários & PDF Export | 3/4 | In Progress|  |
 
 ---
 

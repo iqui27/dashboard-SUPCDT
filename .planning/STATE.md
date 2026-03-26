@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 11 of 11 (UX Polish, Formulários & PDF Export) — EXECUTING
-Plans: 2/4 complete (11-01, 11-02 done; 11-03, 11-04 pending)
-Status: Executing Phase 11 — plan 02 complete
-Last activity: 2026-03-26 — 11-02 Edição lançamentos + correção MetaModal
+Plans: 3/4 complete (11-01, 11-02, 11-03 done; 11-04 pending)
+Status: Executing Phase 11 — plan 03 complete
+Last activity: 2026-03-26 — 11-03 Semáforos, MetasChart Recharts, badge Meta Superada, timestamp
 
 Progress: [████░░░░░░] 50% (Phase 11)
 
@@ -37,7 +37,7 @@ Progress: [████░░░░░░] 50% (Phase 11)
 | 8. UI Etapas + Orçamento | 2/2 | Complete |
 | 9. UI Parceiros, Riscos, Gov, Ind | 2/2 | Complete |
 | 10. Config | 1/1 | Complete |
-| 11. UX Polish, Formulários & PDF | 1/4 | Executing |
+| 11. UX Polish, Formulários & PDF | 3/4 | Executing |
 
 ## Accumulated Context
 
@@ -60,6 +60,7 @@ Progress: [████░░░░░░] 50% (Phase 11)
   - **Phase 11:** PDF export usa window.print() + CSS @media print — sem bibliotecas externas de PDF
 - **Phase 11:** Semáforos usam dot colorido (h-2 w-2 rounded-full) com 3 cores: emerald (bom), amber (atenção), rose (crítico)
 - **Phase 11:** MetaModal envia apenas `{ metas: novasMetas }` no update (não o projeto inteiro) para evitar sobrescrever dados de módulos
+- [Phase 11-polish-ux-formularios-pdf]: getSemaforoCor() recebe label + value para distinguir contexto semântico de semáforos
 
 ### Pending Todos
 
@@ -73,6 +74,6 @@ Progress: [████░░░░░░] 50% (Phase 11)
 ## Session Continuity
 
 Last session: 2026-03-26
-Stopped at: Phase 11, Plan 02 complete — Edição lançamentos + correção MetaModal
-Next planned: Execute Phase 11 Plan 03 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
+Stopped at: Phase 11, Plan 03 complete — Semáforos, MetasChart Recharts, badge Meta Superada, timestamp
+Next planned: Execute Phase 11 Plan 04 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
 Resume file: .planning/phases/11-polish-ux-formularios-pdf/
