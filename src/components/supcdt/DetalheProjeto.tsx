@@ -1,5 +1,33 @@
 import { useState, useEffect, useCallback } from 'react';
 import { CalendarDays, Download, Link2, MapPin, Pencil, PencilLine, Plus, Radar, Settings, ShieldAlert, UserRound } from 'lucide-react';
+
+function getSemaforoCor(label: string, value: string): string {
+  const v = value.trim();
+  switch (label) {
+    case 'Status atual':
+      if (['Em andamento', 'Assinado'].includes(v)) return 'bg-emerald-500';
+      if (['Suspenso'].includes(v)) return 'bg-amber-400';
+      if (['Encerrado'].includes(v)) return 'bg-slate-400';
+      return 'bg-slate-300';
+    case 'Status operacional':
+      if (['Operando'].includes(v)) return 'bg-emerald-500';
+      if (['Planejado', 'Em implantação'].includes(v)) return 'bg-amber-400';
+      if (['Atenção', 'Crítico', 'Encerrado'].includes(v)) return 'bg-rose-500';
+      return 'bg-slate-300';
+    case 'Nível de risco':
+      if (['Baixo'].includes(v)) return 'bg-emerald-500';
+      if (['Médio'].includes(v)) return 'bg-amber-400';
+      if (['Alto', 'Crítico'].includes(v)) return 'bg-rose-500';
+      return 'bg-slate-300';
+    case 'Saúde da entrega':
+      if (['Saudável'].includes(v)) return 'bg-emerald-500';
+      if (['Observação'].includes(v)) return 'bg-amber-400';
+      if (['Risco'].includes(v)) return 'bg-rose-500';
+      return 'bg-slate-300';
+    default:
+      return 'bg-slate-300';
+  }
+}
 import { toast } from 'sonner';
 
 import { Projeto, Lancamento, Meta, getProjetoIncidentesAbertos, getProjetoLacunasMonitoramento, getProjetoMonitoramento, getProjetoMonitoramentoOperacional, getProjetoNivelRisco, getProjetoNome, getProjetoNumeroTermo, getProjetoNumeroUnico, getProjetoOsc, getProjetoParceiro, getProjetoPercentualExecucao, getProjetoPrecisaAcao, getProjetoResponsavel, getProjetoSaudeEntrega, getProjetoStatus, getProjetoStatusOperacional, getProjetoTerritorio, parseProjetoDate } from '../../types/projeto';
@@ -141,14 +169,20 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           ].map((item) => (
             <div key={item.label} className="px-4 py-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
-              <p className={`mt-0.5 text-sm font-bold ${item.flag ? 'text-rose-700' : 'text-slate-900'}`}>{item.value}</p>
+              <div className="mt-0.5 flex items-center gap-2">
+                <span className={`h-2 w-2 shrink-0 rounded-full ${getSemaforoCor(item.label, item.value)}`} />
+                <p className={`text-sm font-bold ${item.flag ? 'text-rose-700' : 'text-slate-900'}`}>{item.value}</p>
+              </div>
             </div>
           ))}
         </div>
         <div className="grid divide-y divide-slate-100 border-t border-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           <div className="px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Progresso físico</p>
-            <p className="mt-0.5 text-sm font-bold text-slate-900">{progresso.toFixed(0)}%</p>
+            <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-emerald-700' : 'text-slate-900'}`}>
+              {progresso.toFixed(0)}%
+              {progresso > 100 && <span className="ml-1 text-[10px] font-normal text-emerald-600">Acima do previsto</span>}
+            </p>
             <div className="mt-1.5 h-1 rounded-full bg-slate-100">
               <div className="h-1 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
             </div>
@@ -231,6 +265,11 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                             <div className="rounded-[1rem] bg-slate-50 px-4 py-2.5 text-right">
                               <p className="text-[10px] uppercase tracking-[0.16em] text-slate-400">Execução</p>
                               <p className="mt-0.5 text-base font-semibold text-slate-950">{meta.realizadoTotal} / {meta.totalPrevisto}</p>
+                              {meta.totalPrevisto > 0 && meta.realizadoTotal > meta.totalPrevisto && (
+                                <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                  Meta superada ({percentual.toFixed(0)}%)
+                                </span>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -432,6 +471,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </div>
             <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100 text-sm">
               {[
+                {
+                  label: 'Última atualização',
+                  value: operacional.ultimaAtualizacao
+                    ? new Date(operacional.ultimaAtualizacao).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+                    : 'Nunca atualizado'
+                },
                 { label: 'Resumo executivo', value: operacional.resumoExecutivo || 'Não registrado.' },
                 { label: 'Responsável operacional', value: operacional.responsavelOperacional || 'Não informado' },
                 { label: 'Metas com execução', value: `${projeto.metas.filter((m) => m.realizadoTotal > 0).length} de ${projeto.metas.length}` },
