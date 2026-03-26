@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 11 of 11 (UX Polish, Formulários & PDF Export) — EXECUTING
-Plans: 1/4 complete (11-01 done; 11-02, 11-03, 11-04 pending)
-Status: Executing Phase 11 — plan 01 complete
-Last activity: 2026-03-26 — 11-01 CRUD lançamentos + EditarProjetoModal
+Plans: 2/4 complete (11-01, 11-02 done; 11-03, 11-04 pending)
+Status: Executing Phase 11 — plan 02 complete
+Last activity: 2026-03-26 — 11-02 Edição lançamentos + correção MetaModal
 
-Progress: [██░░░░░░░░] 25% (Phase 11)
+Progress: [████░░░░░░] 50% (Phase 11)
 
 ## Performance Metrics
 
@@ -55,8 +55,9 @@ Progress: [██░░░░░░░░] 25% (Phase 11)
 - StatusParceiro cores: Ativo=green (emerald), Apoiador=blue (sky), Consultor=amber, Inativo=slate
 - Risco severity usa matriz 4 cores: critical (red), high (amber), moderate (yellow), low (green) baseado em probabilidade × impacto
 - Riscos encerrados mostrados separadamente com opacity-50
-- **11-01:** Backend PUT/DELETE lançamentos + EditarProjetoModal — PUT/DELETE via `findOneAndUpdate` + `deleteOne`; modal usa `updateProjeto` existente, sem novos endpoints
-- **Phase 11:** PDF export usa window.print() + CSS @media print — sem bibliotecas externas de PDF
+  - **11-01:** Backend PUT/DELETE lançamentos + EditarProjetoModal — PUT/DELETE via `findOneAndUpdate` + `deleteOne`; modal usa `updateProjeto` existente, sem novos endpoints
+  - **11-02:** LancamentoModal modo edição + date picker + delete; MetaModal envia apenas { metas } (não sobrescreve módulos); previsto padded para totalTrimestres
+  - **Phase 11:** PDF export usa window.print() + CSS @media print — sem bibliotecas externas de PDF
 - **Phase 11:** Semáforos usam dot colorido (h-2 w-2 rounded-full) com 3 cores: emerald (bom), amber (atenção), rose (crítico)
 - **Phase 11:** MetaModal envia apenas `{ metas: novasMetas }` no update (não o projeto inteiro) para evitar sobrescrever dados de módulos
 
@@ -72,6 +73,6 @@ Progress: [██░░░░░░░░] 25% (Phase 11)
 ## Session Continuity
 
 Last session: 2026-03-26
-Stopped at: Phase 11, Plan 01 complete — CRUD lançamentos + EditarProjetoModal
-Next planned: Execute Phase 11 Plan 02 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
+Stopped at: Phase 11, Plan 02 complete — Edição lançamentos + correção MetaModal
+Next planned: Execute Phase 11 Plan 03 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
 Resume file: .planning/phases/11-polish-ux-formularios-pdf/
