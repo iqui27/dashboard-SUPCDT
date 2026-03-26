@@ -138,10 +138,21 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
       {/* Print-specific CSS */}
       <style>{`
         @media print {
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
           body > *:not(.pdf-export-overlay) { display: none !important; }
-          .pdf-export-overlay { position: static !important; background: white !important; }
+          .pdf-export-overlay { 
+            position: static !important; 
+            background: white !important; 
+            overflow: visible !important;
+            display: block !important;
+          }
           .pdf-no-print { display: none !important; }
-          .pdf-export-content { padding: 0 !important; max-width: 100% !important; }
+          .pdf-export-content { 
+            padding: 0 !important; 
+            max-width: 100% !important;
+            overflow: visible !important;
+          }
+          section { page-break-inside: avoid; }
           @page { margin: 15mm; size: A4; }
         }
       `}</style>
