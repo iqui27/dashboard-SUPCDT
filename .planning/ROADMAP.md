@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 Fundação + Monitoramento + Wi-Fi Social** - Phases 1-4 (concluído)
 - ✅ **v1.1 Módulos de Monitoramento Avançado** - Phases 5-10 (concluído)
-- 🚧 **v1.2 UX Polish, Formulários & PDF Export** - Phase 11 (em andamento)
+- ✅ **v1.2 UX Polish, Formulários & PDF Export** - Phase 11 (concluído)
 
 ---
 
@@ -193,13 +193,13 @@ Plans:
 
 ---
 
-## 🚧 v1.2 UX Polish, Formulários & PDF Export
+## 🚧 v1.2 UX Polish, Formulários & PDF Export — CONCLUÍDO
 
 **Milestone Goal:** Gestor consegue editar dados de projetos e lançamentos com facilidade, visualizar indicadores com semáforos coloridos e gráficos temporais, e exportar relatórios institucionais em PDF — tudo sem instalar bibliotecas pesadas.
 
 ## Phases
 
-- [ ] **Phase 11: UX Polish, Formulários & PDF Export** — CRUD completo de lançamentos, edição de projetos, semáforos visuais, gráficos Recharts, exportação PDF via window.print()
+- [x] **Phase 11: UX Polish, Formulários & PDF Export** — CRUD completo de lançamentos, edição de projetos, semáforos visuais, gráficos Recharts, exportação PDF via window.print()
 
 ## Phase Details
 
@@ -207,14 +207,14 @@ Plans:
 **Goal**: Gestor consegue editar projetos e lançamentos sem recriar, visualizar saúde do projeto com semáforos e gráficos temporais, e gerar relatório PDF institucional
 **Depends on**: Phase 10 ✅
 **Requirements**: EDIT-01, EDIT-02, EDIT-03, EDIT-04, META-01, VIS-01, VIS-02, VIS-03, VIS-04, PDF-01, PDF-02, MON-FLOW-01
-**Status**: PLANNING
-**Plans:** 3/4 plans executed
+**Status**: COMPLETE (2026-03-26)
+**Plans:** 4/4 plans executed
 
 Plans:
-- [ ] 11-01-PLAN.md — Backend PUT/DELETE lançamentos + EditarProjetoModal
-- [ ] 11-02-PLAN.md — Refatorar LancamentoModal (edição/exclusão/data) + Fix MetaModal (previsto)
-- [ ] 11-03-PLAN.md — Semáforos na stats bar + Meta Superada + Gráfico Recharts + Timestamp
-- [ ] 11-04-PLAN.md — PDF Export via window.print() + Reorganizar ProjetoMonitoramentoModal
+- [x] 11-01-PLAN.md — Backend PUT/DELETE lançamentos + EditarProjetoModal
+- [x] 11-02-PLAN.md — Refatorar LancamentoModal (edição/exclusão/data) + Fix MetaModal (previsto)
+- [x] 11-03-PLAN.md — Semáforos na stats bar + Meta Superada + Gráfico Recharts + Timestamp
+- [x] 11-04-PLAN.md — PDF Export via window.print() + Reorganizar ProjetoMonitoramentoModal
 
 **Success Criteria** (what must be TRUE):
   1. PUT e DELETE de lançamentos funcionam via API; metas recalculadas automaticamente
@@ -234,7 +234,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 11. UX Polish, Formulários & PDF Export | 3/4 | In Progress|  |
+| 11. UX Polish, Formulários & PDF Export | 4/4 | Complete | 2026-03-26 |
 
 ---
 
