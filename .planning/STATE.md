@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Cada projeto pode ser monitorado com o nível de detalhe que seu contrato exige — sem configuração técnica
-**Current focus:** Phase 11 — UX Polish, Formulários & PDF Export (PLANNING)
+**Current focus:** Phase 11 — UX Polish, Formulários & PDF Export (EXECUTING)
 
 ## Current Position
 
-Phase: 11 of 11 (UX Polish, Formulários & PDF Export) — PLANNING
-Plans: 0/4 complete (11-01, 11-02, 11-03, 11-04 written, awaiting execution)
-Status: Planning complete — 4 plans written, validated, ready for execution
-Last activity: 2026-03-26 — Phase 11 planning complete
+Phase: 11 of 11 (UX Polish, Formulários & PDF Export) — EXECUTING
+Plans: 1/4 complete (11-01 done; 11-02, 11-03, 11-04 pending)
+Status: Executing Phase 11 — plan 01 complete
+Last activity: 2026-03-26 — 11-01 CRUD lançamentos + EditarProjetoModal
 
-Progress: [░░░░░░░░░░] 0% (Phase 11)
+Progress: [██░░░░░░░░] 25% (Phase 11)
 
 ## Performance Metrics
 
@@ -37,7 +37,7 @@ Progress: [░░░░░░░░░░] 0% (Phase 11)
 | 8. UI Etapas + Orçamento | 2/2 | Complete |
 | 9. UI Parceiros, Riscos, Gov, Ind | 2/2 | Complete |
 | 10. Config | 1/1 | Complete |
-| 11. UX Polish, Formulários & PDF | 0/4 | Planning |
+| 11. UX Polish, Formulários & PDF | 1/4 | Executing |
 
 ## Accumulated Context
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0% (Phase 11)
 - StatusParceiro cores: Ativo=green (emerald), Apoiador=blue (sky), Consultor=amber, Inativo=slate
 - Risco severity usa matriz 4 cores: critical (red), high (amber), moderate (yellow), low (green) baseado em probabilidade × impacto
 - Riscos encerrados mostrados separadamente com opacity-50
+- **11-01:** Backend PUT/DELETE lançamentos + EditarProjetoModal — PUT/DELETE via `findOneAndUpdate` + `deleteOne`; modal usa `updateProjeto` existente, sem novos endpoints
 - **Phase 11:** PDF export usa window.print() + CSS @media print — sem bibliotecas externas de PDF
 - **Phase 11:** Semáforos usam dot colorido (h-2 w-2 rounded-full) com 3 cores: emerald (bom), amber (atenção), rose (crítico)
 - **Phase 11:** MetaModal envia apenas `{ metas: novasMetas }` no update (não o projeto inteiro) para evitar sobrescrever dados de módulos
@@ -71,6 +72,6 @@ Progress: [░░░░░░░░░░] 0% (Phase 11)
 ## Session Continuity
 
 Last session: 2026-03-26
-Stopped at: Phase 11 planning complete — 4 plans written and validated
-Next planned: Execute Phase 11 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
+Stopped at: Phase 11, Plan 01 complete — CRUD lançamentos + EditarProjetoModal
+Next planned: Execute Phase 11 Plan 02 — `/gsd-execute-phase 11-polish-ux-formularios-pdf`
 Resume file: .planning/phases/11-polish-ux-formularios-pdf/
