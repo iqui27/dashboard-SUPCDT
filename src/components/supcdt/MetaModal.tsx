@@ -41,9 +41,11 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
   const [codigo, setCodigo] = useState(meta?.codigo ?? '');
   const [descricao, setDescricao] = useState(meta?.descricao ?? '');
   const [unidade, setUnidade] = useState(meta?.unidade ?? '');
-  const [previsto, setPrevisto] = useState<number[]>(
-    meta?.previstoPorTrimestre ?? Array(totalTrimesters).fill(0)
-  );
+
+  // Garantir que o array de previsto tem o tamanho correto (pode chegar incompleto do backend)
+  const initialPrevisto = [...(meta?.previstoPorTrimestre ?? [])];
+  while (initialPrevisto.length < totalTrimesters) initialPrevisto.push(0);
+  const [previsto, setPrevisto] = useState<number[]>(initialPrevisto.slice(0, totalTrimesters));
 
   const handlePrevistoChange = (index: number, valStr: string) => {
     const value = parseFloat(valStr);
@@ -64,6 +66,11 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
     }
 
     const totalPrevisto = previsto.reduce((acc, curr) => acc + curr, 0);
+
+    if (totalPrevisto <= 0) {
+      toast.error('O total previsto deve ser maior que zero.');
+      return;
+    }
 
     setLoading(true);
     try {
@@ -89,7 +96,8 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
         novasMetas = [...projeto.metas, novaMeta];
       }
 
-      await updateProjeto(projeto.id, { ...projeto, metas: novasMetas }, token);
+      // Enviar apenas metas para não sobrescrever outros campos do projeto (módulos, etc.)
+      await updateProjeto(projeto.id, { metas: novasMetas }, token);
       toast.success(isEditing ? 'Meta atualizada.' : 'Meta adicionada.');
       onSuccess();
     } catch {

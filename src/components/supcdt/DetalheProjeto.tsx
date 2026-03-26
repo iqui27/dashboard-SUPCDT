@@ -208,6 +208,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 <ul role="list" className="divide-y divide-slate-100">
                   {projeto.metas.map((meta) => {
                     const percentual = meta.totalPrevisto > 0 ? (meta.realizadoTotal / meta.totalPrevisto) * 100 : 0;
+                    const metaSuperada = meta.realizadoTotal > meta.totalPrevisto && meta.totalPrevisto > 0;
                     return (
                       <li key={meta.id} className="px-5 py-4">
                         <div className="flex items-start justify-between gap-3">
@@ -237,10 +238,15 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         <div className="mt-3">
                           <div className="flex items-center justify-between text-xs text-slate-500">
                             <span>Progresso</span>
-                            <span className="font-semibold text-slate-900">{percentual.toFixed(0)}%</span>
+                            <span className={`font-semibold ${metaSuperada ? 'text-emerald-600' : 'text-slate-900'}`}>
+                              {metaSuperada ? `Meta atingida (${percentual.toFixed(0)}%)` : `${percentual.toFixed(0)}%`}
+                            </span>
                           </div>
                           <div className="mt-1.5 h-1.5 rounded-full bg-slate-100">
-                            <div className="h-1.5 rounded-full bg-sky-600" style={{ width: `${Math.min(100, Math.max(0, percentual))}%` }} />
+                            <div
+                              className={`h-1.5 rounded-full ${metaSuperada ? 'bg-emerald-500' : 'bg-sky-600'}`}
+                              style={{ width: `${Math.min(100, Math.max(0, percentual))}%` }}
+                            />
                           </div>
                         </div>
 
