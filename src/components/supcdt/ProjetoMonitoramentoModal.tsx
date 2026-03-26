@@ -1,9 +1,10 @@
-import { useState, type FormEvent } from 'react';
-import { Activity, X } from 'lucide-react';
+import { useState, useEffect, type FormEvent } from 'react';
+import { Activity, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProjeto } from '../../lib/api/projetos';
+import { API_BASE_URL } from '../../lib/api/base';
 import {
   Projeto,
   ProjetoEvidencia,
@@ -16,6 +17,12 @@ import {
   getProjetoStatusOperacional
 } from '../../types/projeto';
 import { Button } from '../ui/button';
+
+interface UserOption {
+  _id?: string;
+  username: string;
+  fullName?: string;
+}
 
 interface ProjetoMonitoramentoModalProps {
   projeto: Projeto;
@@ -88,6 +95,8 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
   const operacional = getProjetoMonitoramentoOperacional(projeto);
 
   const [loading, setLoading] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState(true);
+  const [users, setUsers] = useState<UserOption[]>([]);
   const [statusOperacional, setStatusOperacional] = useState(getProjetoStatusOperacional(projeto));
   const [nivelRisco, setNivelRisco] = useState(getProjetoNivelRisco(projeto));
   const [saudeEntrega, setSaudeEntrega] = useState(getProjetoSaudeEntrega(projeto));
@@ -100,6 +109,27 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
   const [proximosPassos, setProximosPassos] = useState(listToText(operacional.proximosPassos));
   const [coberturaDetalhada, setCoberturaDetalhada] = useState(listToText(operacional.coberturaDetalhada));
   const [evidencias, setEvidencias] = useState(evidenciasToText(operacional.evidencias));
+
+  // Carregar lista de usuários
+  useEffect(() => {
+    async function fetchUsers() {
+      if (!token) return;
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/users`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setUsers(data.users || data || []);
+        }
+      } catch {
+        console.error('Erro ao carregar usuários');
+      } finally {
+        setLoadingUsers(false);
+      }
+    }
+    fetchUsers();
+  }, [token]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -254,13 +284,25 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               </div>
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Responsável operacional</label>
-                <input
-                  type="text"
-                  placeholder="Nome do responsável"
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
-                  value={responsavelOperacional}
-                  onChange={(e) => setResponsavelOperacional(e.target.value)}
-                />
+                {loadingUsers ? (
+                  <div className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 flex items-center">
+                    <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
+                    <span className="ml-2 text-sm text-slate-400">Carregando...</span>
+                  </div>
+                ) : (
+                  <select
+                    className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    value={responsavelOperacional}
+                    onChange={(e) => setResponsavelOperacional(e.target.value)}
+                  >
+                    <option value="">Selecionar responsável...</option>
+                    {users.map((user) => (
+                      <option key={user._id || user.username} value={user.fullName || user.username}>
+                        {user.fullName || user.username}
+                      </option>
+                    ))}
+                  </select>
+                )}
               </div>
             </div>
 
