@@ -48,6 +48,7 @@ import { EditarProjetoModal } from './EditarProjetoModal';
 import { LancamentoModal } from './LancamentoModal';
 import { MetaModal } from './MetaModal';
 import { ModulosConfigPanel } from './ModulosConfigPanel';
+import { MetasChart } from './MetasChart';
 import { ProjetoMonitoramentoModal } from './ProjetoMonitoramentoModal';
 
 interface DetalheProjetoProps {
@@ -310,6 +311,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                                 </div>
                               );
                             })}
+                          </div>
+                        )}
+
+                        {projeto.cronograma.totalTrimestres > 0 && (
+                          <div className="mt-3">
+                            <MetasChart meta={meta} totalTrimestres={projeto.cronograma.totalTrimestres} />
                           </div>
                         )}
                       </li>
