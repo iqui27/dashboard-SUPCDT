@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { Projeto, getProjetoNome } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { updateProjeto } from '../../lib/api/projetos';
+import { API_BASE_URL } from '../../lib/api/base';
 import { Button } from '../ui/button';
 
 interface OscOption {
@@ -39,7 +40,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
   useEffect(() => {
     async function fetchOscs() {
       try {
-        const res = await fetch('/api/oscs');
+        const res = await fetch(`${API_BASE_URL}/api/oscs`);
         if (res.ok) {
           const data = await res.json();
           setOscs(data || []);
@@ -58,7 +59,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
     async function fetchUsers() {
       if (!token) return;
       try {
-        const res = await fetch('/api/auth/users/options', {
+        const res = await fetch(`${API_BASE_URL}/api/auth/users/options`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
