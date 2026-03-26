@@ -17,7 +17,12 @@ export async function createLancamento(lancamentoData: Omit<DBLancamento, '_id'>
     };
 
     const result = await collection.insertOne(novaEntrada);
-    return { ...novaEntrada, _id: result.insertedId };
+    return { 
+        ...novaEntrada, 
+        _id: result.insertedId,
+        id: result.insertedId.toString(),
+        projetoId: novaEntrada.projetoId.toString()
+    } as DBLancamento;
 }
 
 // Update
@@ -43,7 +48,11 @@ export async function updateLancamento(id: string, updateData: Partial<DBLancame
     const projetoIdStr = result.projetoId.toString();
     await recalculateProjetoMetas(projetoIdStr);
 
-    return result;
+    return {
+        ...result,
+        id: result._id?.toString(),
+        projetoId: result.projetoId.toString()
+    } as DBLancamento;
 }
 
 // Delete
@@ -73,10 +82,17 @@ export async function getLancamentosByProjeto(projetoId: string): Promise<DBLanc
     const db = await getDatabase('dashboard_supcdt');
     const collection = db.collection<DBLancamento>(COLLECTION_NAME);
 
-    return await collection
+    const lancamentos = await collection
         .find({ projetoId: new ObjectId(projetoId) })
         .sort({ trimestre: 1, dataRegistro: 1 })
         .toArray();
+
+    // Mapear _id para id para o frontend
+    return lancamentos.map(l => ({
+        ...l,
+        id: l._id?.toString(),
+        projetoId: l.projetoId.toString()
+    })) as DBLancamento[];
 }
 
 // Read All
