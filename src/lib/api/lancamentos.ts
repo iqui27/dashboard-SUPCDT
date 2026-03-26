@@ -24,6 +24,29 @@ export async function criarLancamento(data: Partial<Lancamento>, token: string):
     return response.json();
 }
 
+export async function updateLancamento(id: string, data: Partial<Lancamento>, token: string): Promise<Lancamento> {
+    const response = await fetch(`${API_URL}/lancamentos/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Falha ao atualizar lançamento');
+    return response.json();
+}
+
+export async function deleteLancamento(id: string, token: string): Promise<void> {
+    const response = await fetch(`${API_URL}/lancamentos/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) throw new Error('Falha ao deletar lançamento');
+}
+
 // Relatório Saiweb - Download de CSV
 export async function downloadRelatorioSaiweb(token: string, projetoId?: string, trimestre?: number): Promise<void> {
     const params = new URLSearchParams();
@@ -49,3 +72,4 @@ export async function downloadRelatorioSaiweb(token: string, projetoId?: string,
     a.click();
     a.remove();
 }
+

@@ -20,6 +20,54 @@ export async function createLancamento(lancamentoData: Omit<DBLancamento, '_id'>
     return { ...novaEntrada, _id: result.insertedId };
 }
 
+// Update
+export async function updateLancamento(id: string, updateData: Partial<DBLancamento>): Promise<DBLancamento | null> {
+    const db = await getDatabase('dashboard_supcdt');
+    const collection = db.collection<DBLancamento>(COLLECTION_NAME);
+
+    if (!ObjectId.isValid(id)) return null;
+
+    // Remove campos que não devem ser alterados
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, projetoId, createdAt, ...fieldsToUpdate } = updateData as DBLancamento;
+
+    const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { ...fieldsToUpdate, updatedAt: new Date() } },
+        { returnDocument: 'after' }
+    );
+
+    if (!result) return null;
+
+    // Recalcula metas após atualizar
+    const projetoIdStr = result.projetoId.toString();
+    await recalculateProjetoMetas(projetoIdStr);
+
+    return result;
+}
+
+// Delete
+export async function deleteLancamento(id: string): Promise<boolean> {
+    const db = await getDatabase('dashboard_supcdt');
+    const collection = db.collection<DBLancamento>(COLLECTION_NAME);
+
+    if (!ObjectId.isValid(id)) return false;
+
+    // Busca o lançamento para obter projetoId antes de deletar
+    const lancamento = await collection.findOne({ _id: new ObjectId(id) });
+    if (!lancamento) return false;
+
+    const projetoIdStr = lancamento.projetoId.toString();
+
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    if (result.deletedCount === 0) return false;
+
+    // Recalcula metas após deletar
+    await recalculateProjetoMetas(projetoIdStr);
+
+    return true;
+}
+
 // Read por Projeto
 export async function getLancamentosByProjeto(projetoId: string): Promise<DBLancamento[]> {
     const db = await getDatabase('dashboard_supcdt');

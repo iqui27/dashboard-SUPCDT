@@ -281,6 +281,7 @@ export interface DBLancamento {
   _id?: ObjectId;
   projetoId: ObjectId | string;
   trimestre: number;
+  dataAtividade?: string | null;
   dataRegistro: Date;
   registradoPor: string;
   valores: {
@@ -293,4 +294,5 @@ export interface DBLancamento {
   fotoUrl?: string[];
   documentoUrl?: string[];
   createdAt?: Date;
+  updatedAt?: Date;
 }
