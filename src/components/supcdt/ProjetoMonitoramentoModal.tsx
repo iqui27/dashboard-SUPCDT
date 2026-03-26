@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react';
-import { Activity, Save, ShieldAlert, X } from 'lucide-react';
+import { Activity, ClipboardList, ListChecks, MapPin, Save, ShieldAlert, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
@@ -139,7 +139,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             </div>
             <h2 className="mt-2 text-2xl font-bold text-slate-950">{getProjetoNome(projeto)}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600">
-              Atualize saúde, risco, incidentes, manutenção, evidências e próximos passos. Esta camada já prepara o modelo que será aprofundado no Wi-Fi Social.
+              Atualize indicadores, operação, planejamento e evidências do projeto.
             </p>
           </div>
           <Button type="button" variant="ghost" size="icon" onClick={onClose} className="rounded-full">
@@ -149,127 +149,184 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
 
         <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 py-6 overscroll-contain">
           <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-            <div className="space-y-5">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Status operacional</Label>
-                  <Select value={statusOperacional} onValueChange={setStatusOperacional}>
-                    <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Planejado">Planejado</SelectItem>
-                      <SelectItem value="Em implantação">Em implantação</SelectItem>
-                      <SelectItem value="Operando">Operando</SelectItem>
-                      <SelectItem value="Atenção">Atenção</SelectItem>
-                      <SelectItem value="Crítico">Crítico</SelectItem>
-                      <SelectItem value="Encerrado">Encerrado</SelectItem>
-                    </SelectContent>
-                  </Select>
+
+            {/* ── Coluna esquerda ── */}
+            <div className="space-y-6">
+
+              {/* Seção 1: Indicadores de saúde */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <Activity className="h-4 w-4 text-sky-600" />
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Indicadores de saúde</p>
                 </div>
-
-                <div className="space-y-2">
-                  <Label>Nível de risco</Label>
-                  <Select value={nivelRisco} onValueChange={setNivelRisco}>
-                    <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Baixo">Baixo</SelectItem>
-                      <SelectItem value="Médio">Médio</SelectItem>
-                      <SelectItem value="Alto">Alto</SelectItem>
-                      <SelectItem value="Crítico">Crítico</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Saúde da entrega</Label>
-                  <Select value={saudeEntrega} onValueChange={setSaudeEntrega}>
-                    <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Saudável">Saudável</SelectItem>
-                      <SelectItem value="Observação">Observação</SelectItem>
-                      <SelectItem value="Risco">Risco</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Manutenção</Label>
-                  <Select value={manutencaoStatus} onValueChange={setManutencaoStatus}>
-                    <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="Sem rotina">Sem rotina</SelectItem>
-                      <SelectItem value="Em dia">Em dia</SelectItem>
-                      <SelectItem value="Pendente">Pendente</SelectItem>
-                      <SelectItem value="Incidente">Incidente</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Incidentes abertos</Label>
-                  <Input
-                    type="number"
-                    min={0}
-                    value={incidentesAbertos}
-                    onChange={(e) => setIncidentesAbertos(e.target.value)}
-                    className="rounded-2xl"
-                  />
-                </div>
-
-                <ResponsavelOperacionalField
-                  value={responsavelOperacional}
-                  onChange={setResponsavelOperacional}
-                />
-              </div>
-
-              <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3">
-                <label className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    checked={precisaAcao}
-                    onChange={(e) => setPrecisaAcao(e.target.checked)}
-                    className="h-4 w-4 rounded border-slate-300 text-sky-700 focus:ring-sky-700"
-                  />
-                  <div>
-                    <p className="text-sm font-semibold text-slate-900">Projeto exige ação prioritária</p>
-                    <p className="text-xs text-slate-500">{resumoHelper}</p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Status operacional</Label>
+                    <Select value={statusOperacional} onValueChange={setStatusOperacional}>
+                      <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Planejado">Planejado</SelectItem>
+                        <SelectItem value="Em implantação">Em implantação</SelectItem>
+                        <SelectItem value="Operando">Operando</SelectItem>
+                        <SelectItem value="Atenção">Atenção</SelectItem>
+                        <SelectItem value="Crítico">Crítico</SelectItem>
+                        <SelectItem value="Encerrado">Encerrado</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
-                </label>
+
+                  <div className="space-y-2">
+                    <Label>Nível de risco</Label>
+                    <Select value={nivelRisco} onValueChange={setNivelRisco}>
+                      <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Baixo">Baixo</SelectItem>
+                        <SelectItem value="Médio">Médio</SelectItem>
+                        <SelectItem value="Alto">Alto</SelectItem>
+                        <SelectItem value="Crítico">Crítico</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Saúde da entrega</Label>
+                    <Select value={saudeEntrega} onValueChange={setSaudeEntrega}>
+                      <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Saudável">Saudável</SelectItem>
+                        <SelectItem value="Observação">Observação</SelectItem>
+                        <SelectItem value="Risco">Risco</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Manutenção</Label>
+                    <Select value={manutencaoStatus} onValueChange={setManutencaoStatus}>
+                      <SelectTrigger className="rounded-2xl"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Sem rotina">Sem rotina</SelectItem>
+                        <SelectItem value="Em dia">Em dia</SelectItem>
+                        <SelectItem value="Pendente">Pendente</SelectItem>
+                        <SelectItem value="Incidente">Incidente</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3">
+                  <label className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      checked={precisaAcao}
+                      onChange={(e) => setPrecisaAcao(e.target.checked)}
+                      className="h-4 w-4 rounded border-slate-300 text-sky-700 focus:ring-sky-700"
+                    />
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">Projeto exige ação prioritária</p>
+                      <p className="text-xs text-slate-500">{resumoHelper}</p>
+                    </div>
+                  </label>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Resumo executivo</Label>
-                <Textarea
-                  value={resumoExecutivo}
-                  onChange={(e) => setResumoExecutivo(e.target.value)}
-                  placeholder="Resumo curto do estado atual, decisões recentes e leitura executiva."
-                  className="min-h-[120px] rounded-[1.5rem]"
-                />
-              </div>
+              {/* Seção 2: Dados operacionais */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <ClipboardList className="h-4 w-4 text-sky-600" />
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Dados operacionais</p>
+                </div>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Incidentes abertos</Label>
+                    <Input
+                      type="number"
+                      min={0}
+                      value={incidentesAbertos}
+                      onChange={(e) => setIncidentesAbertos(e.target.value)}
+                      className="rounded-2xl"
+                    />
+                  </div>
 
-              <div className="grid gap-4 lg:grid-cols-2">
-                <div className="space-y-2">
-                  <Label>Bloqueios e riscos</Label>
-                  <Textarea
-                    value={bloqueios}
-                    onChange={(e) => setBloqueios(e.target.value)}
-                    placeholder={"Um item por linha\nEx: Falta validar termo de referência"}
-                    className="min-h-[160px] rounded-[1.5rem]"
+                  <ResponsavelOperacionalField
+                    value={responsavelOperacional}
+                    onChange={setResponsavelOperacional}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Próximos passos</Label>
+                  <Label>Resumo executivo</Label>
                   <Textarea
-                    value={proximosPassos}
-                    onChange={(e) => setProximosPassos(e.target.value)}
-                    placeholder={"Um item por linha\nEx: Consolidar plano de implantação por RA"}
-                    className="min-h-[160px] rounded-[1.5rem]"
+                    value={resumoExecutivo}
+                    onChange={(e) => setResumoExecutivo(e.target.value)}
+                    placeholder="Resumo curto do estado atual, decisões recentes e leitura executiva."
+                    className="min-h-[120px] rounded-[1.5rem]"
                   />
+                </div>
+              </div>
+
+              {/* Seção 3: Planejamento e riscos */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <ListChecks className="h-4 w-4 text-sky-600" />
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Planejamento e riscos</p>
+                </div>
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label>Bloqueios e riscos</Label>
+                    <Textarea
+                      value={bloqueios}
+                      onChange={(e) => setBloqueios(e.target.value)}
+                      placeholder={"Um item por linha\nEx: Falta validar termo de referência"}
+                      className="min-h-[160px] rounded-[1.5rem]"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Próximos passos</Label>
+                    <Textarea
+                      value={proximosPassos}
+                      onChange={(e) => setProximosPassos(e.target.value)}
+                      placeholder={"Um item por linha\nEx: Consolidar plano de implantação por RA"}
+                      className="min-h-[160px] rounded-[1.5rem]"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* ── Coluna direita ── */}
             <div className="space-y-5">
+
+              {/* Seção 4: Território e evidências */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <MapPin className="h-4 w-4 text-sky-600" />
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Território e evidências</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Cobertura detalhada</Label>
+                  <Textarea
+                    value={coberturaDetalhada}
+                    onChange={(e) => setCoberturaDetalhada(e.target.value)}
+                    placeholder={"Um item por linha\nEx: Gama - Rodoviária\nEx: Samambaia Sul - praça central"}
+                    className="min-h-[150px] rounded-[1.5rem]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Evidências e links</Label>
+                  <Textarea
+                    value={evidencias}
+                    onChange={(e) => setEvidencias(e.target.value)}
+                    placeholder={"Uma evidência por linha no formato:\nNome do relatório | https://link-da-evidencia"}
+                    className="min-h-[170px] rounded-[1.5rem]"
+                  />
+                </div>
+              </div>
+
+              {/* Card: Base para o Wi-Fi Social */}
               <div className="rounded-[1.75rem] border border-slate-200 bg-slate-950 px-5 py-5 text-white shadow-[0_24px_70px_-42px_rgba(15,23,42,0.55)]">
                 <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-amber-200/80">
                   <ShieldAlert className="h-4 w-4" />
@@ -278,26 +335,6 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <p className="mt-3 text-sm leading-6 text-slate-200">
                   Cobertura detalhada, manutenção e incidentes já entram aqui porque serão a espinha dorsal do módulo de pontos Wi‑Fi.
                 </p>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Cobertura detalhada</Label>
-                <Textarea
-                  value={coberturaDetalhada}
-                  onChange={(e) => setCoberturaDetalhada(e.target.value)}
-                  placeholder={"Um item por linha\nEx: Gama - Rodoviária\nEx: Samambaia Sul - praça central"}
-                  className="min-h-[150px] rounded-[1.5rem]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Evidências e links</Label>
-                <Textarea
-                  value={evidencias}
-                  onChange={(e) => setEvidencias(e.target.value)}
-                  placeholder={"Uma evidência por linha no formato:\nNome do relatório | https://link-da-evidencia"}
-                  className="min-h-[170px] rounded-[1.5rem]"
-                />
               </div>
             </div>
           </div>
