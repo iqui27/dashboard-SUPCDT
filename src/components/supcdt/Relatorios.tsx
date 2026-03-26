@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react';
-import { CheckCircle2, Download, FileSpreadsheet, ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
+import { CheckCircle2, Download, FileSpreadsheet } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Projeto, getProjetoLacunasMonitoramento } from '../../types/projeto';
+import { Projeto, getProjetoNome } from '../../types/projeto';
 import { useAuth } from '../../contexts/AuthContext';
 import { downloadRelatorioSaiweb } from '../../lib/api/lancamentos';
 import { Button } from '../ui/button';
+import { ProjetoPDFExport } from './ProjetoPDFExport';
 
 interface RelatoriosProps {
   projetos: Projeto[];
@@ -14,8 +15,8 @@ interface RelatoriosProps {
 export function Relatorios({ projetos }: RelatoriosProps) {
   const { token } = useAuth();
   const [isDownloading, setIsDownloading] = useState(false);
-
-  const lacunas = useMemo(() => (projetos[0] ? getProjetoLacunasMonitoramento(projetos[0]) : []), [projetos]);
+  const [selectedProjetoForPDF, setSelectedProjetoForPDF] = useState<Projeto | null>(null);
+  const [pdfSelectIndex, setPdfSelectIndex] = useState<string>('0');
 
   const handleDownloadSaiweb = async () => {
     if (!token) return;
@@ -27,6 +28,14 @@ export function Relatorios({ projetos }: RelatoriosProps) {
       toast.error('Erro ao gerar relatório Saiweb.');
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleGerarPDF = () => {
+    const idx = Number(pdfSelectIndex);
+    const projeto = projetos[idx] ?? projetos[0];
+    if (projeto) {
+      setSelectedProjetoForPDF(projeto);
     }
   };
 
@@ -69,32 +78,51 @@ export function Relatorios({ projetos }: RelatoriosProps) {
             <div className="flex items-start justify-between gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <ShieldAlert className="h-4 w-4 shrink-0 text-amber-500" />
+                  <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
                   <p className="text-sm font-semibold text-slate-900">Relatório institucional por projeto</p>
-                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-700">Indisponível</span>
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">Disponível</span>
                 </div>
                 <p className="mt-1 ml-6 text-[11px] text-slate-500">
-                  Aguardando suporte a anexos, evidências e saída institucional padronizada.
+                  Selecione um projeto para gerar relatório institucional em PDF.
                 </p>
-                {lacunas.length > 0 && (
-                  <div className="mt-2 ml-6 flex flex-wrap gap-1.5">
-                    {lacunas.map((lacuna) => (
-                      <span key={lacuna} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] text-slate-600">
-                        {lacuna}
-                      </span>
-                    ))}
+                {projetos.length > 1 && (
+                  <div className="mt-2 ml-6">
+                    <select
+                      value={pdfSelectIndex}
+                      onChange={(e) => setPdfSelectIndex(e.target.value)}
+                      className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-600/30"
+                    >
+                      {projetos.map((p, idx) => (
+                        <option key={p.id} value={String(idx)}>
+                          {getProjetoNome(p)}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 )}
               </div>
-              <Button disabled variant="outline" className="h-8 shrink-0 rounded-full border-slate-200 px-3 text-xs text-slate-400">
+              <Button
+                disabled={projetos.length === 0}
+                onClick={handleGerarPDF}
+                variant="outline"
+                className="h-8 shrink-0 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50"
+              >
                 <FileSpreadsheet className="mr-1.5 h-3 w-3" />
-                PDF indisponível
+                Gerar PDF
               </Button>
             </div>
           </li>
 
         </ul>
       </div>
+
+      {selectedProjetoForPDF && (
+        <ProjetoPDFExport
+          projeto={selectedProjetoForPDF}
+          lancamentos={[]}
+          onClose={() => setSelectedProjetoForPDF(null)}
+        />
+      )}
     </div>
   );
 }

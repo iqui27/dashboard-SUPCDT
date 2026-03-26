@@ -50,6 +50,7 @@ import { MetaModal } from './MetaModal';
 import { ModulosConfigPanel } from './ModulosConfigPanel';
 import { MetasChart } from './MetasChart';
 import { ProjetoMonitoramentoModal } from './ProjetoMonitoramentoModal';
+import { ProjetoPDFExport } from './ProjetoPDFExport';
 
 interface DetalheProjetoProps {
   projeto: Projeto;
@@ -64,6 +65,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
   const [isMetaModalOpen, setIsMetaModalOpen] = useState(false);
   const [isMonitoramentoModalOpen, setIsMonitoramentoModalOpen] = useState(false);
   const [isEditarProjetoOpen, setIsEditarProjetoOpen] = useState(false);
+  const [isPDFExportOpen, setIsPDFExportOpen] = useState(false);
   const [editingMeta, setEditingMeta] = useState<Meta | null>(null);
   const [editingLancamento, setEditingLancamento] = useState<Lancamento | null>(null);
 
@@ -147,9 +149,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <Pencil className="mr-1.5 h-3 w-3" />
               Editar projeto
             </Button>
-            <Button disabled variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-400">
+            <Button disabled={false} onClick={() => setIsPDFExportOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
               <Download className="mr-1.5 h-3 w-3" />
-              PDF indisponível
+              Exportar PDF
             </Button>
             <Button onClick={() => setIsModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
               <Plus className="mr-1.5 h-3 w-3" />
@@ -606,6 +608,14 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             setIsEditarProjetoOpen(false);
             onUpdate();
           }}
+        />
+      )}
+
+      {isPDFExportOpen && (
+        <ProjetoPDFExport
+          projeto={projeto}
+          lancamentos={lancamentos}
+          onClose={() => setIsPDFExportOpen(false)}
         />
       )}
     </div>
