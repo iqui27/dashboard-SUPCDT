@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { Header } from './components/Header';
 import { ModuleLoadingState } from './components/ModuleLoadingState';
 import { useAuth } from './contexts/AuthContext';
+import { useTheme } from './contexts/ThemeContext';
 import { canAccessUserManagement } from './lib/auth';
 import { fetchProjetos } from './lib/api/projetos';
 import { Projeto } from './types/projeto';
@@ -20,6 +21,7 @@ const UserManagement = lazy(() => import('./components/UserManagement').then((mo
 
 export function App() {
   const { user, token, requirePasswordChange } = useAuth();
+  const { theme } = useTheme();
   const [currentTab, setCurrentTab] = useState<AppTab>('dashboard');
   const [projetos, setProjetos] = useState<Projeto[]>([]);
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,10 @@ export function App() {
       }[currentTab];
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(15,118,110,0.08),transparent_24%),linear-gradient(180deg,#f7fafc_0%,#eef3f8_100%)] text-foreground">
+    <div
+      data-theme-surface="app-shell"
+      className="min-h-screen bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.16),transparent_26%),radial-gradient(circle_at_bottom_right,hsl(var(--accent)/0.12),transparent_24%),linear-gradient(180deg,hsl(var(--background))_0%,hsl(var(--muted))_100%)] text-foreground transition-colors"
+    >
       <Header
         currentTab={tabForHeader}
         activeContextTitle={activeContext.title}
@@ -104,11 +109,11 @@ export function App() {
       <main className="mx-auto w-full max-w-[1480px] px-4 pb-10 pt-4 sm:px-6 lg:px-8">
         {loading ? (
           <div className="flex min-h-[55vh] items-center justify-center">
-            <div className="flex flex-col items-center gap-4 rounded-[1.75rem] border border-white/80 bg-white/85 px-8 py-10 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
-              <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-sky-200 border-t-sky-700" />
-              <div className="text-center">
-                <p className="font-semibold text-slate-900">Carregando monitoramento</p>
-                <p className="mt-1 text-sm text-slate-500">Conferindo projetos e métricas da base atual.</p>
+            <div className="glass-elevated flex flex-col items-center gap-4 rounded-[1.75rem] px-8 py-10 text-center">
+              <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-primary/20 border-t-primary" />
+              <div>
+                <p className="font-semibold text-foreground">Carregando monitoramento</p>
+                <p className="mt-1 text-sm text-muted-foreground">Conferindo projetos e métricas da base atual.</p>
               </div>
             </div>
           </div>
@@ -124,7 +129,7 @@ export function App() {
             >
               <button
                 onClick={() => setSelectedProjectId(null)}
-                className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/85 px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:border-sky-200 hover:text-sky-700"
+                className="inline-flex items-center gap-2 rounded-full border border-border/80 bg-card/80 px-4 py-2 text-sm font-medium text-muted-foreground shadow-sm transition hover:border-primary/40 hover:bg-accent/20 hover:text-foreground"
               >
                 ← Voltar para a carteira de projetos
               </button>
@@ -171,7 +176,7 @@ export function App() {
         )}
       </main>
 
-      <Toaster position="top-right" theme="light" />
+      <Toaster position="top-right" theme={theme} />
     </div>
   );
 }

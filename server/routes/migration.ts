@@ -752,7 +752,7 @@ migrationRouter.get('/frontend-comparison', async (_req: Request, res: Response)
         // Converter números
         if (field === 'valorTotal' && value) {
           const numValue = typeof value === 'string' ? 
-            parseFloat(value.replace(/[R$\.\s]/g, '').replace(',', '.')) : 
+            parseFloat(value.replace(/[R$.\s]/g, '').replace(',', '.')) : 
             value;
           value = isNaN(numValue) ? 0 : numValue;
         }

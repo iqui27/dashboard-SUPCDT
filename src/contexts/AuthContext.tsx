@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+
 import { API_URL } from '../lib/api/base';
 
 export interface User {
@@ -25,7 +26,44 @@ interface AuthContextValue {
   checkAuth: () => Promise<void>;
 }
 
+const AUTH_TOKEN_STORAGE_KEY = 'auth_token';
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+
+function readStoredAuthToken() {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return window.localStorage.getItem(AUTH_TOKEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredAuthToken(token: string) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.localStorage.setItem(AUTH_TOKEN_STORAGE_KEY, token);
+  } catch {
+    // Ignora indisponibilidade do storage para não quebrar o bootstrap público.
+  }
+}
+
+function clearStoredAuthToken() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    window.localStorage.removeItem(AUTH_TOKEN_STORAGE_KEY);
+  } catch {
+    // Ignora indisponibilidade do storage para não quebrar o bootstrap público.
+  }
+}
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -41,6 +79,7 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(() => readStoredAuthToken());
   const [isLoading, setIsLoading] = useState(true);
 
   const login = useCallback(async (username: string, password: string) => {
@@ -58,18 +97,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const data = await response.json();
-    localStorage.setItem('auth_token', data.token);
+    writeStoredAuthToken(data.token);
+    setToken(data.token);
     setUser(data.user);
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('auth_token');
+    clearStoredAuthToken();
+    setToken(null);
     setUser(null);
   }, []);
 
   const checkAuth = useCallback(async () => {
-    const token = localStorage.getItem('auth_token');
-
     if (!token) {
       setIsLoading(false);
       return;
@@ -78,7 +117,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const response = await fetch(`${API_URL}/auth/me`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -96,22 +135,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [logout]);
+  }, [logout, token]);
 
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+  useEffect(
+    function validateStoredSession() {
+      checkAuth();
+    },
+    [checkAuth]
+  );
 
-  const value: AuthContextValue = {
-    user,
-    token: localStorage.getItem('auth_token'),
-    isAuthenticated: !!user,
-    isLoading,
-    requirePasswordChange: false,
-    login,
-    logout,
-    checkAuth
-  };
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      token,
+      isAuthenticated: !!user,
+      isLoading,
+      requirePasswordChange: false,
+      login,
+      logout,
+      checkAuth
+    }),
+    [checkAuth, isLoading, login, logout, token, user]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
