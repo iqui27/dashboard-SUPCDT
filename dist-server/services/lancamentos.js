@@ -12,16 +12,66 @@ export async function createLancamento(lancamentoData) {
         createdAt: new Date()
     };
     const result = await collection.insertOne(novaEntrada);
-    return { ...novaEntrada, _id: result.insertedId };
+    return {
+        ...novaEntrada,
+        _id: result.insertedId,
+        id: result.insertedId.toString(),
+        projetoId: novaEntrada.projetoId.toString()
+    };
+}
+// Update
+export async function updateLancamento(id, updateData) {
+    const db = await getDatabase('dashboard_supcdt');
+    const collection = db.collection(COLLECTION_NAME);
+    if (!ObjectId.isValid(id))
+        return null;
+    // Remove campos que não devem ser alterados
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, projetoId, createdAt, ...fieldsToUpdate } = updateData;
+    const result = await collection.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: { ...fieldsToUpdate, updatedAt: new Date() } }, { returnDocument: 'after' });
+    if (!result)
+        return null;
+    // Recalcula metas após atualizar
+    const projetoIdStr = result.projetoId.toString();
+    await recalculateProjetoMetas(projetoIdStr);
+    return {
+        ...result,
+        id: result._id?.toString(),
+        projetoId: result.projetoId.toString()
+    };
+}
+// Delete
+export async function deleteLancamento(id) {
+    const db = await getDatabase('dashboard_supcdt');
+    const collection = db.collection(COLLECTION_NAME);
+    if (!ObjectId.isValid(id))
+        return false;
+    // Busca o lançamento para obter projetoId antes de deletar
+    const lancamento = await collection.findOne({ _id: new ObjectId(id) });
+    if (!lancamento)
+        return false;
+    const projetoIdStr = lancamento.projetoId.toString();
+    const result = await collection.deleteOne({ _id: new ObjectId(id) });
+    if (result.deletedCount === 0)
+        return false;
+    // Recalcula metas após deletar
+    await recalculateProjetoMetas(projetoIdStr);
+    return true;
 }
 // Read por Projeto
 export async function getLancamentosByProjeto(projetoId) {
     const db = await getDatabase('dashboard_supcdt');
     const collection = db.collection(COLLECTION_NAME);
-    return await collection
+    const lancamentos = await collection
         .find({ projetoId: new ObjectId(projetoId) })
         .sort({ trimestre: 1, dataRegistro: 1 })
         .toArray();
+    // Mapear _id para id para o frontend
+    return lancamentos.map(l => ({
+        ...l,
+        id: l._id?.toString(),
+        projetoId: l.projetoId.toString()
+    }));
 }
 // Read All
 export async function getAllLancamentos() {

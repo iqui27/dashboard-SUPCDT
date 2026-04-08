@@ -1,6 +1,0 @@
-import{c as h}from"./button-CCdaQssx.js";import{A as r}from"./index-DjMA17Gp.js";/**
- * @license lucide-react v0.522.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const l=[["path",{d:"M12 15V3",key:"m9g1x1"}],["path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",key:"ih7n3h"}],["path",{d:"m7 10 5 5 5-5",key:"brsn70"}]],p=h("download",l);async function f(a,t){const o=await fetch(`${r}/lancamentos/projeto/${a}`,{headers:{Authorization:`Bearer ${t}`}});if(!o.ok)throw new Error("Falha ao carregar lançamentos");return o.json()}async function u(a,t){const o=await fetch(`${r}/lancamentos`,{method:"POST",headers:{Authorization:`Bearer ${t}`,"Content-Type":"application/json"},body:JSON.stringify(a)});if(!o.ok)throw new Error("Falha ao criar lançamento");return o.json()}async function y(a,t,o){const n=new URLSearchParams,c=n.toString()?`?${n.toString()}`:"",s=await fetch(`${r}/relatorios/csv${c}`,{headers:{Authorization:`Bearer ${a}`}});if(!s.ok)throw new Error("Falha ao gerar CSV");const i=await s.blob(),d=window.URL.createObjectURL(i),e=document.createElement("a");e.href=d,e.download=`relatorio_saiweb_${new Date().toISOString().split("T")[0]}.csv`,document.body.appendChild(e),e.click(),e.remove()}export{p as D,u as c,y as d,f};

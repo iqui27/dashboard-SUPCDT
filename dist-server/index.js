@@ -63,6 +63,7 @@ function sanitizeObject(input) {
 const allowedOrigins = [
     'http://localhost:5173',
     'http://localhost:3000',
+    'http://localhost:4000',
     'https://dashboard-secti-2025.vercel.app', // URL Antiga
     'https://dashboard-supcdt.vercel.app', // URL Nova Produção
     process.env.FRONTEND_URL
@@ -71,7 +72,7 @@ const allowedOrigins = [
 const isDevelopment = process.env.NODE_ENV !== 'production';
 app.use(cors({
     origin: (origin, callback) => {
-        // Permite requisições sem origin (ex: mobile apps, Postman)
+        // Permite requisições sem origin (ex: mobile apps, Postman, curl)
         if (!origin) {
             return callback(null, true);
         }
@@ -79,10 +80,15 @@ app.use(cors({
         if (isDevelopment) {
             return callback(null, true);
         }
-        // Em produção, apenas origens permitidas
-        if (allowedOrigins.includes(origin)) {
+        // Em produção, apenas origens permitidas ou subdomínios da Vercel
+        const isAllowed = allowedOrigins.includes(origin) ||
+            origin.endsWith('.vercel.app') ||
+            origin.includes('localhost');
+        if (isAllowed) {
             return callback(null, true);
         }
+        // Log para debug
+        console.log('CORS blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
     },
     credentials: true
