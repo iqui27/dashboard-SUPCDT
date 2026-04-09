@@ -115,15 +115,15 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
             <ClipboardList className="h-4 w-4 text-sky-600" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Monitoramento</p>
-              <h2 className="text-sm font-bold text-slate-900 leading-tight">
+              <h2 className="text-sm font-bold text-foreground leading-tight">
                 {isEditing ? 'Editar lançamento' : 'Novo lançamento'}
               </h2>
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="text-[11px] text-slate-400">{getProjetoNome(projeto)}</span>
+            <span className="text-[11px] text-muted-foreground">{getProjetoNome(projeto)}</span>
             <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
-              <X className="h-4 w-4 text-slate-400" />
+              <X className="h-4 w-4 text-muted-foreground" />
             </Button>
           </div>
         </div>
@@ -135,12 +135,12 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
             {/* Trimestre + Local */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                   Trimestre de referência
                 </label>
                 <select
                   title="Trimestre"
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
                   value={trimestre}
                   onChange={(e) => setTrimestre(Number(e.target.value))}
                 >
@@ -153,13 +153,13 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                   Local da atividade
                 </label>
                 <input
                   type="text"
                   placeholder="Ex: CEF 01 do Recanto das Emas"
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
                   value={localAtendido}
                   onChange={(e) => setLocalAtendido(e.target.value)}
                 />
@@ -168,12 +168,12 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
 
             {/* Data da atividade */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 Data da atividade
               </label>
               <input
                 type="date"
-                className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
                 value={dataAtividade}
                 onChange={(e) => setDataAtividade(e.target.value)}
               />
@@ -181,14 +181,14 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
 
             {/* Description */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 Descrição da atividade
               </label>
               <textarea
                 required
                 rows={3}
                 placeholder="Descreva o que foi feito de forma resumida, mas clara..."
-                className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
                 value={descricaoAtividade}
                 onChange={(e) => setDescricaoAtividade(e.target.value)}
               />
@@ -196,7 +196,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
 
             {/* Meta values */}
             <div>
-              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 Valores realizados
               </p>
               <div className="overflow-hidden rounded-[1.1rem] border border-slate-100">
@@ -204,14 +204,14 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                   {projeto.metas.map((meta) => (
                     <li key={meta.id} className="flex items-center justify-between gap-4 px-4 py-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-medium text-slate-900 truncate">{meta.codigo} — {meta.descricao}</p>
-                        <p className="text-[11px] text-slate-400">{meta.unidade}</p>
+                        <p className="text-sm font-medium text-foreground truncate">{meta.codigo} — {meta.descricao}</p>
+                        <p className="text-[11px] text-muted-foreground">{meta.unidade}</p>
                       </div>
                       <input
                         type="number"
                         min="0"
                         placeholder="0"
-                        className="h-8 w-24 shrink-0 rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-right text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        className="h-8 w-24 shrink-0 rounded-full border border-border bg-muted px-3 text-sm text-right text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
                         value={valores[meta.id] || ''}
                         onChange={(e) => handleMudarValor(meta.id, e.target.value)}
                       />
@@ -239,7 +239,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
               )}
             </div>
             <div className="flex gap-2">
-              <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-slate-200 px-4 text-xs text-slate-600">
+              <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
                 Cancelar
               </Button>
               <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">

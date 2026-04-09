@@ -57,7 +57,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
       <div className="flex items-center justify-between gap-4 px-1 py-1">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Base operacional</p>
-          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-slate-900">Projetos monitorados</h2>
+          <h2 className="mt-0.5 text-lg font-bold tracking-tight text-foreground">Projetos monitorados</h2>
         </div>
         <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
           <Plus className="mr-1.5 h-3 w-3" />
@@ -65,19 +65,19 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
         </Button>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-[1.45rem] border border-white/80 bg-white/85 p-4 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)] lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-4 rounded-[1.45rem] border border-border/80 bg-card/85 p-4 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)] lg:flex-row lg:items-center lg:justify-between">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Buscar por projeto, OSC, categoria, território ou chave de integração..."
-            className="h-11 rounded-full border-slate-200 bg-slate-50 pl-11 text-slate-900"
+            className="h-11 rounded-full border-border bg-muted pl-11 text-foreground"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
 
-        <div className="flex items-center gap-3 text-sm text-slate-500">
-          <span className="rounded-full bg-slate-100 px-3 py-1 font-medium text-slate-700">
+        <div className="flex items-center gap-3 text-sm text-muted-foreground">
+          <span className="rounded-full bg-secondary px-3 py-1 font-medium text-muted-foreground">
             {filtered.length} de {projetos.length} projetos
           </span>
         </div>
@@ -100,7 +100,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
               key={projeto.id}
               type="button"
               onClick={() => onProjectSelect(projeto.id)}
-              className="group rounded-[1.45rem] border border-white/80 bg-white/85 p-5 text-left shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-sky-200"
+              className="group rounded-[1.45rem] border border-border/80 bg-card/85 p-5 text-left shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-sky-200"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -108,10 +108,10 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                     {status}
                   </span>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="inline-flex rounded-full bg-slate-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600">
+                    <span className="inline-flex rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                       {statusOperacional}
                     </span>
-                    <span className="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-600 ring-1 ring-slate-200">
+                    <span className="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ring-1 ring-slate-200">
                       Risco {nivelRisco}
                     </span>
                     {precisaAcao && (
@@ -120,49 +120,49 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-3.5 text-lg font-bold text-slate-950 transition-colors group-hover:text-sky-700">
+                  <h3 className="mt-3.5 text-lg font-bold text-foreground transition-colors group-hover:text-sky-700">
                     {getProjetoNome(projeto)}
                   </h3>
-                  <p className="mt-1 text-[13px] text-slate-600">{osc}</p>
+                  <p className="mt-1 text-[13px] text-muted-foreground">{osc}</p>
                 </div>
 
-                <ArrowUpRight className="h-5 w-5 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-700" />
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-700" />
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Categoria</p>
-                  <p className="mt-1 text-[13px] font-medium text-slate-900">{projeto.categoria || 'Sem categoria'}</p>
+                <div className="rounded-2xl bg-muted px-4 py-3">
+                  <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Categoria</p>
+                  <p className="mt-1 text-[13px] font-medium text-foreground">{projeto.categoria || 'Sem categoria'}</p>
                 </div>
-                <div className="rounded-2xl bg-slate-50 px-4 py-3">
-                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Investimento</p>
-                  <p className="mt-1 text-[13px] font-medium text-slate-900">{formatCurrency(projeto.valorTotal)}</p>
+                <div className="rounded-2xl bg-muted px-4 py-3">
+                  <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">Investimento</p>
+                  <p className="mt-1 text-[13px] font-medium text-foreground">{formatCurrency(projeto.valorTotal)}</p>
                 </div>
               </div>
 
               <div className="mt-4 space-y-2.5">
-                <div className="flex items-center gap-2 text-[13px] text-slate-600">
-                  <MapPin className="h-4 w-4 text-slate-400" />
+                <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-muted-foreground" />
                   <span>{territorio}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[13px] text-slate-600">
-                  <UserRound className="h-4 w-4 text-slate-400" />
+                <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                  <UserRound className="h-4 w-4 text-muted-foreground" />
                   <span>{responsavel}</span>
                 </div>
-                <div className="flex items-center gap-2 text-[13px] text-slate-600">
-                  <Target className="h-4 w-4 text-slate-400" />
+                <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                  <Target className="h-4 w-4 text-muted-foreground" />
                   <span>{monitoramento.totalMetas} metas modeladas</span>
                 </div>
-                <div className="flex items-center gap-2 text-[13px] text-slate-600">
-                  <Link2 className="h-4 w-4 text-slate-400" />
+                <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                  <Link2 className="h-4 w-4 text-muted-foreground" />
                   <span className="truncate font-mono text-xs text-slate-800">{projeto.chaveIntegracao}</span>
                 </div>
               </div>
 
-              <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
-                <div className="flex items-center justify-between text-[13px] text-slate-600">
+              <div className="mt-4 rounded-2xl border border-border bg-muted px-4 py-3">
+                <div className="flex items-center justify-between text-[13px] text-muted-foreground">
                   <span>Progresso físico</span>
-                  <span className="font-semibold text-slate-900">{progresso.toFixed(0)}%</span>
+                  <span className="font-semibold text-foreground">{progresso.toFixed(0)}%</span>
                 </div>
                 <div className="mt-3 h-2 rounded-full bg-slate-200">
                   <div className="h-2 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
@@ -173,9 +173,9 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
         })}
 
         {filtered.length === 0 && (
-          <div className="col-span-full rounded-[1.45rem] border border-dashed border-slate-200 bg-white/75 py-14 text-center">
-            <p className="text-base font-medium text-slate-700">Nenhum projeto encontrado.</p>
-            <p className="mt-2 text-sm text-slate-500">Ajuste a busca ou cadastre um novo projeto para iniciar o monitoramento.</p>
+          <div className="col-span-full rounded-[1.45rem] border border-dashed border-border bg-white/75 py-14 text-center">
+            <p className="text-base font-medium text-muted-foreground">Nenhum projeto encontrado.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Ajuste a busca ou cadastre um novo projeto para iniciar o monitoramento.</p>
           </div>
         )}
       </div>

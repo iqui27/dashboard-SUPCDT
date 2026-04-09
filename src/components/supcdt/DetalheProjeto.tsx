@@ -117,11 +117,11 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">{status}</span>
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">{projeto.categoria || 'Sem categoria'}</p>
             </div>
-            <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950">{nome}</h1>
+            <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-foreground">{nome}</h1>
             {projeto.descricao && (
-              <p className="mt-1 max-w-3xl text-sm leading-5 text-slate-500">{projeto.descricao}</p>
+              <p className="mt-1 max-w-3xl text-sm leading-5 text-muted-foreground">{projeto.descricao}</p>
             )}
-            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] text-slate-500">
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 text-[12px] text-muted-foreground">
               <span className="flex items-center gap-1.5"><UserRound className="h-3.5 w-3.5 shrink-0" />{osc}</span>
               <span className="flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 shrink-0" />{territorio}</span>
               <span className="flex items-center gap-1.5"><CalendarDays className="h-3.5 w-3.5 shrink-0" />{dataInicio} até {dataFim}</span>
@@ -132,7 +132,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="flex shrink-0 flex-wrap gap-2">
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="h-8 w-8 rounded-full border-slate-200 p-0 text-slate-500 hover:bg-slate-50 hover:text-slate-700">
+                <Button variant="outline" className="h-8 w-8 rounded-full border-border p-0 text-muted-foreground hover:bg-muted hover:text-muted-foreground">
                   <Settings className="h-3.5 w-3.5" />
                   <span className="sr-only">Configurar módulos</span>
                 </Button>
@@ -141,15 +141,15 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 <ModulosConfigPanel projeto={projeto} onUpdate={onUpdate} />
               </PopoverContent>
             </Popover>
-            <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
+            <Button onClick={() => setIsMonitoramentoModalOpen(true)} variant="outline" className="h-8 rounded-full border-border px-3 text-xs text-muted-foreground hover:bg-muted">
               <PencilLine className="mr-1.5 h-3 w-3" />
               Monitoramento
             </Button>
-            <Button onClick={() => setIsEditarProjetoOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
+            <Button onClick={() => setIsEditarProjetoOpen(true)} variant="outline" className="h-8 rounded-full border-border px-3 text-xs text-muted-foreground hover:bg-muted">
               <Pencil className="mr-1.5 h-3 w-3" />
               Editar projeto
             </Button>
-            <Button disabled={false} onClick={() => setIsPDFExportOpen(true)} variant="outline" className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50">
+            <Button disabled={false} onClick={() => setIsPDFExportOpen(true)} variant="outline" className="h-8 rounded-full border-border px-3 text-xs text-muted-foreground hover:bg-muted">
               <Download className="mr-1.5 h-3 w-3" />
               Exportar PDF
             </Button>
@@ -171,34 +171,34 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             { label: 'Saúde da entrega', value: saudeEntrega },
           ].map((item) => (
             <div key={item.label} className="px-4 py-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">{item.label}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{item.label}</p>
               <div className="mt-0.5 flex items-center gap-2">
                 <span className={`h-2 w-2 shrink-0 rounded-full ${getSemaforoCor(item.label, item.value)}`} />
-                <p className={`text-sm font-bold ${item.flag ? 'text-rose-700' : 'text-slate-900'}`}>{item.value}</p>
+                <p className={`text-sm font-bold ${item.flag ? 'text-rose-700' : 'text-foreground'}`}>{item.value}</p>
               </div>
             </div>
           ))}
         </div>
         <div className="grid divide-y divide-slate-100 border-t border-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           <div className="px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Progresso físico</p>
-            <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-emerald-700' : 'text-slate-900'}`}>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Progresso físico</p>
+            <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-emerald-700' : 'text-foreground'}`}>
               {progresso.toFixed(0)}%
               {progresso > 100 && <span className="ml-1 text-[10px] font-normal text-emerald-600">Acima do previsto</span>}
             </p>
-            <div className="mt-1.5 h-1 rounded-full bg-slate-100">
+            <div className="mt-1.5 h-1 rounded-full bg-secondary">
               <div className="h-1 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
             </div>
           </div>
           <div className="px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Metas modeladas</p>
-            <p className="mt-0.5 text-sm font-bold text-slate-900">{monitoramento.totalMetas}</p>
-            <p className="text-[10px] text-slate-400">{monitoramento.totalRealizado} de {monitoramento.totalPrevisto} realizados</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Metas modeladas</p>
+            <p className="mt-0.5 text-sm font-bold text-foreground">{monitoramento.totalMetas}</p>
+            <p className="text-[10px] text-muted-foreground">{monitoramento.totalRealizado} de {monitoramento.totalPrevisto} realizados</p>
           </div>
           <div className="px-4 py-3">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Investimento total</p>
-            <p className="mt-0.5 text-sm font-bold text-slate-900">{formatCurrency(projeto.valorTotal)}</p>
-            <p className="text-[10px] text-slate-400">{incidentesAbertos} incidente(s) aberto(s)</p>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Investimento total</p>
+            <p className="mt-0.5 text-sm font-bold text-foreground">{formatCurrency(projeto.valorTotal)}</p>
+            <p className="text-[10px] text-muted-foreground">{incidentesAbertos} incidente(s) aberto(s)</p>
           </div>
         </div>
       </div>
@@ -213,15 +213,15 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Escopo</p>
-              <h3 className="mt-0.5 text-sm font-bold text-slate-900">Objetivo e escopo atual</h3>
+              <h3 className="mt-0.5 text-sm font-bold text-foreground">Objetivo e escopo atual</h3>
             </div>
-            <div className="divide-y divide-slate-100 border-t border-slate-100 text-sm leading-6 text-slate-600">
+            <div className="divide-y divide-slate-100 border-t border-slate-100 text-sm leading-6 text-muted-foreground">
               <div className="px-5 py-4">
-                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Objetivos</p>
+                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Objetivos</p>
                 <p>{projeto.objetivos || 'Objetivos ainda não detalhados no cadastro atual.'}</p>
               </div>
               <div className="px-5 py-4">
-                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Descrição operacional</p>
+                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Descrição operacional</p>
                 <p>{projeto.descricao || 'Descrição operacional ainda não consolidada.'}</p>
               </div>
             </div>
@@ -232,9 +232,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             <div className="flex items-center justify-between px-5 py-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Execução</p>
-                <h3 className="mt-0.5 text-sm font-bold text-slate-900">Acompanhamento das metas</h3>
+                <h3 className="mt-0.5 text-sm font-bold text-foreground">Acompanhamento das metas</h3>
               </div>
-              <Button variant="outline" size="sm" onClick={() => setIsMetaModalOpen(true)} className="h-8 rounded-full border-slate-200 px-3 text-xs">
+              <Button variant="outline" size="sm" onClick={() => setIsMetaModalOpen(true)} className="h-8 rounded-full border-border px-3 text-xs">
                 <Plus className="mr-1.5 h-3 w-3" />
                 Nova meta
               </Button>
@@ -252,22 +252,22 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
                               <span className="rounded-full bg-slate-900 px-2.5 py-0.5 text-xs font-semibold text-white">{meta.codigo}</span>
-                              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500">{meta.unidade}</p>
+                              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{meta.unidade}</p>
                             </div>
-                            <h4 className="mt-2 text-sm font-semibold text-slate-950">{meta.descricao}</h4>
+                            <h4 className="mt-2 text-sm font-semibold text-foreground">{meta.descricao}</h4>
                           </div>
                           <div className="flex shrink-0 items-center gap-2">
                             <button
                               type="button"
                               onClick={() => setEditingMeta(meta)}
-                              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+                              className="rounded-full p-1.5 text-muted-foreground hover:bg-secondary hover:text-muted-foreground transition-colors"
                               title="Editar meta"
                             >
                               <Pencil className="h-3.5 w-3.5" />
                             </button>
-                            <div className="rounded-[1rem] bg-slate-50 px-4 py-2.5 text-right">
-                              <p className="text-[10px] uppercase tracking-[0.16em] text-slate-400">Execução</p>
-                              <p className="mt-0.5 text-base font-semibold text-slate-950">{meta.realizadoTotal} / {meta.totalPrevisto}</p>
+                            <div className="rounded-[1rem] bg-muted px-4 py-2.5 text-right">
+                              <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Execução</p>
+                              <p className="mt-0.5 text-base font-semibold text-foreground">{meta.realizadoTotal} / {meta.totalPrevisto}</p>
                               {meta.totalPrevisto > 0 && meta.realizadoTotal > meta.totalPrevisto && (
                                 <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
                                   Meta superada ({percentual.toFixed(0)}%)
@@ -278,13 +278,13 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         </div>
 
                         <div className="mt-3">
-                          <div className="flex items-center justify-between text-xs text-slate-500">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>Progresso</span>
-                            <span className={`font-semibold ${metaSuperada ? 'text-emerald-600' : 'text-slate-900'}`}>
+                            <span className={`font-semibold ${metaSuperada ? 'text-emerald-600' : 'text-foreground'}`}>
                               {metaSuperada ? `Meta atingida (${percentual.toFixed(0)}%)` : `${percentual.toFixed(0)}%`}
                             </span>
                           </div>
-                          <div className="mt-1.5 h-1.5 rounded-full bg-slate-100">
+                          <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
                             <div
                               className={`h-1.5 rounded-full ${metaSuperada ? 'bg-emerald-500' : 'bg-sky-600'}`}
                               style={{ width: `${Math.min(100, Math.max(0, percentual))}%` }}
@@ -298,16 +298,16 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                               const previsto = meta.previstoPorTrimestre[idx] || 0;
                               const realizado = meta.realizadoPorTrimestre[idx] || 0;
                               return (
-                                <div key={`${meta.id}-${idx}`} className="rounded-[1rem] bg-slate-50 px-3.5 py-2.5">
-                                  <p className="text-[10px] uppercase tracking-[0.14em] text-slate-400">{getTrimestreLabelShort(idx, projeto.dataInicio)}</p>
+                                <div key={`${meta.id}-${idx}`} className="rounded-[1rem] bg-muted px-3.5 py-2.5">
+                                  <p className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground">{getTrimestreLabelShort(idx, projeto.dataInicio)}</p>
                                   <div className="mt-1.5 flex items-end justify-between gap-2">
                                     <div>
-                                      <p className="text-[10px] text-slate-400">Prev.</p>
-                                      <p className="text-xs font-semibold text-slate-900">{previsto}</p>
+                                      <p className="text-[10px] text-muted-foreground">Prev.</p>
+                                      <p className="text-xs font-semibold text-foreground">{previsto}</p>
                                     </div>
                                     <div className="text-right">
-                                      <p className="text-[10px] text-slate-400">Real.</p>
-                                      <p className="text-xs font-semibold text-slate-900">{realizado}</p>
+                                      <p className="text-[10px] text-muted-foreground">Real.</p>
+                                      <p className="text-xs font-semibold text-foreground">{realizado}</p>
                                     </div>
                                   </div>
                                 </div>
@@ -326,7 +326,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   })}
                 </ul>
               ) : (
-                <div className="px-5 py-10 text-center text-sm text-slate-500">
+                <div className="px-5 py-10 text-center text-sm text-muted-foreground">
                   Nenhuma meta cadastrada. Cadastre a primeira meta para iniciar o acompanhamento físico.
                 </div>
               )}
@@ -355,14 +355,14 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Histórico</p>
-              <h3 className="mt-0.5 text-sm font-bold text-slate-900">Histórico de lançamentos</h3>
+              <h3 className="mt-0.5 text-sm font-bold text-foreground">Histórico de lançamentos</h3>
             </div>
 
             <div className="border-t border-slate-100">
               {loading ? (
-                <div className="px-5 py-10 text-center text-sm text-slate-500">Carregando histórico...</div>
+                <div className="px-5 py-10 text-center text-sm text-muted-foreground">Carregando histórico...</div>
               ) : lancamentos.length === 0 ? (
-                <div className="px-5 py-10 text-center text-sm text-slate-500">Nenhum lançamento registrado até o momento.</div>
+                <div className="px-5 py-10 text-center text-sm text-muted-foreground">Nenhum lançamento registrado até o momento.</div>
               ) : (
                 <ul role="list" className="divide-y divide-slate-100">
                   {lancamentos.map((lanc) => (
@@ -371,7 +371,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
                             <span className="rounded-full bg-slate-900 px-2.5 py-0.5 text-xs font-semibold text-white">{lanc.trimestre}º Trim</span>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-xs text-muted-foreground">
                               Reg. {new Date(lanc.dataRegistro).toLocaleDateString('pt-BR')} · {lanc.registradoPor}
                             </span>
                             {lanc.dataAtividade && (
@@ -380,9 +380,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                               </span>
                             )}
                           </div>
-                          <p className="mt-2 text-sm font-medium text-slate-900">{lanc.descricaoAtividade}</p>
+                          <p className="mt-2 text-sm font-medium text-foreground">{lanc.descricaoAtividade}</p>
                           {lanc.localAtendido && (
-                            <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+                            <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
                               <MapPin className="h-3 w-3 shrink-0" />
                               {lanc.localAtendido}
                             </p>
@@ -394,9 +394,9 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                             {lanc.valores.map((valor) => {
                               const meta = projeto.metas.find((item) => item.id === valor.metaId);
                               return (
-                                <div key={valor.metaId} className="rounded-[1rem] bg-slate-50 px-3 py-1.5 text-xs">
-                                  <span className="text-slate-400">{meta?.codigo || 'Meta'}:</span>{' '}
-                                  <span className="font-semibold text-slate-900">+{valor.valorRealizado}</span>
+                                <div key={valor.metaId} className="rounded-[1rem] bg-muted px-3 py-1.5 text-xs">
+                                  <span className="text-muted-foreground">{meta?.codigo || 'Meta'}:</span>{' '}
+                                  <span className="font-semibold text-foreground">+{valor.valorRealizado}</span>
                                 </div>
                               );
                             })}
@@ -404,7 +404,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                           <button
                             type="button"
                             onClick={() => setEditingLancamento(lanc)}
-                            className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors shrink-0"
+                            className="rounded-full p-1.5 text-muted-foreground hover:bg-secondary hover:text-muted-foreground transition-colors shrink-0"
                             title="Editar lançamento"
                           >
                             <Pencil className="h-3.5 w-3.5" />
@@ -426,7 +426,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Estrutura</p>
-              <h3 className="mt-0.5 text-sm font-bold text-slate-900">Governança do projeto</h3>
+              <h3 className="mt-0.5 text-sm font-bold text-foreground">Governança do projeto</h3>
             </div>
             <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100">
               {[
@@ -438,8 +438,8 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 { label: 'Número único', value: numeroUnico || 'Ainda não definido' },
               ].map((item) => (
                 <li key={item.label} className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
-                  <p className="mt-0.5 text-sm font-medium text-slate-900">{item.value}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{item.label}</p>
+                  <p className="mt-0.5 text-sm font-medium text-foreground">{item.value}</p>
                 </li>
               ))}
               <li className="bg-slate-950 px-5 py-3 text-white">
@@ -456,7 +456,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 <ShieldAlert className="h-4 w-4 shrink-0 text-amber-500" />
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-600/80">Atenção</p>
-                  <h3 className="mt-0.5 text-sm font-bold text-slate-900">Lacunas remanescentes</h3>
+                  <h3 className="mt-0.5 text-sm font-bold text-foreground">Lacunas remanescentes</h3>
                 </div>
               </div>
               <div className="flex flex-wrap gap-1.5 border-t border-slate-100 px-5 py-4">
@@ -475,7 +475,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <Radar className="h-4 w-4 shrink-0 text-sky-600" />
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Operação</p>
-                <h3 className="mt-0.5 text-sm font-bold text-slate-900">Painel operacional</h3>
+                <h3 className="mt-0.5 text-sm font-bold text-foreground">Painel operacional</h3>
               </div>
             </div>
             <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100 text-sm">
@@ -493,17 +493,17 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 { label: 'Execução consolidada', value: `${monitoramento.totalRealizado} de ${monitoramento.totalPrevisto}` },
               ].map((item) => (
                 <li key={item.label} className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">{item.label}</p>
-                  <p className="mt-0.5 font-medium text-slate-900">{item.value}</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">{item.label}</p>
+                  <p className="mt-0.5 font-medium text-foreground">{item.value}</p>
                 </li>
               ))}
 
               {operacional.bloqueios.length > 0 && (
                 <li className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Bloqueios</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Bloqueios</p>
                   <div className="mt-1 space-y-0.5">
                     {operacional.bloqueios.map((item) => (
-                      <p key={item} className="font-medium text-slate-900">{item}</p>
+                      <p key={item} className="font-medium text-foreground">{item}</p>
                     ))}
                   </div>
                 </li>
@@ -511,10 +511,10 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
 
               {operacional.proximosPassos.length > 0 && (
                 <li className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Próximos passos</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Próximos passos</p>
                   <div className="mt-1 space-y-0.5">
                     {operacional.proximosPassos.map((item) => (
-                      <p key={item} className="font-medium text-slate-900">{item}</p>
+                      <p key={item} className="font-medium text-foreground">{item}</p>
                     ))}
                   </div>
                 </li>
@@ -522,10 +522,10 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
 
               {operacional.coberturaDetalhada.length > 0 && (
                 <li className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Cobertura detalhada</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Cobertura detalhada</p>
                   <div className="mt-1 space-y-0.5">
                     {operacional.coberturaDetalhada.map((item) => (
-                      <p key={item} className="font-medium text-slate-900">{item}</p>
+                      <p key={item} className="font-medium text-foreground">{item}</p>
                     ))}
                   </div>
                 </li>
@@ -533,7 +533,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
 
               {operacional.evidencias.length > 0 && (
                 <li className="px-5 py-3">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">Evidências</p>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Evidências</p>
                   <div className="mt-1 space-y-1">
                     {operacional.evidencias.map((item) => (
                       <a key={`${item.titulo}-${item.url}`} href={item.url} target="_blank" rel="noreferrer" className="block text-sm font-medium text-sky-700 hover:text-sky-800">
