@@ -91,23 +91,23 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[160] flex items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm">
-      <Card className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)]">
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-100 px-6 py-3.5">
+    <div className="fixed inset-0 z-[160] flex items-center justify-center bg-primary/70 p-4 backdrop-blur-sm">
+      <Card className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-[2rem] border border-border/80 bg-card shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)]">
+        <div className="flex shrink-0 items-center justify-between border-b border-border/70 px-6 py-3.5">
           <div className="flex items-center gap-2.5">
-            <FolderPlus className="h-4 w-4 text-sky-600" />
+            <FolderPlus className="h-4 w-4 text-primary" />
             <div>
-              <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.22em] text-sky-700/70">SUPCDT</p>
-              <h2 className="text-sm font-bold leading-tight text-slate-900">Novo projeto</h2>
+              <p className="text-[10px] font-semibold uppercase leading-none tracking-[0.22em] text-primary/70">SUPCDT</p>
+              <h2 className="text-sm font-bold leading-tight text-foreground">Novo projeto</h2>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
-            <X className="h-4 w-4 text-slate-400" />
+            <X className="h-4 w-4 text-muted-foreground" />
           </Button>
         </div>
 
         <CardContent className="flex min-h-0 flex-1 flex-col p-0 md:flex-row">
-          <div className="w-full border-b border-slate-100 bg-slate-50/80 p-5 md:w-72 md:border-b-0 md:border-r">
+          <div className="w-full border-b border-border/70 bg-muted/80 p-5 md:w-72 md:border-b-0 md:border-r">
             <div className="flex flex-col gap-2">
               {steps.map((step, index) => (
                 <button
@@ -116,8 +116,8 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
                   onClick={() => setActiveStep(index)}
                   className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
                     activeStep === index
-                      ? 'bg-slate-950 text-white'
-                      : 'bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                      ? 'bg-primary text-white'
+                      : 'bg-white text-muted-foreground hover:bg-secondary hover:text-foreground'
                   }`}
                 >
                   {step.label}
@@ -129,7 +129,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
           <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6 md:px-8">
             {activeStep === 0 && (
               <div className="space-y-5">
-                <h3 className="text-lg font-semibold text-slate-950">Identificação</h3>
+                <h3 className="text-lg font-semibold text-foreground">Identificação</h3>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2 md:col-span-2">
                     <Label>Nome do projeto *</Label>
@@ -169,7 +169,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
 
             {activeStep === 1 && (
               <div className="space-y-5">
-                <h3 className="text-lg font-semibold text-slate-950">Governança e território</h3>
+                <h3 className="text-lg font-semibold text-foreground">Governança e território</h3>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2 md:col-span-2">
                     <Label>OSC</Label>
@@ -193,7 +193,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
 
             {activeStep === 2 && (
               <div className="space-y-5">
-                <h3 className="text-lg font-semibold text-slate-950">Escopo e valor</h3>
+                <h3 className="text-lg font-semibold text-foreground">Escopo e valor</h3>
                 <div className="space-y-2">
                   <Label>Descrição operacional</Label>
                   <textarea
@@ -228,7 +228,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
 
             {activeStep === 3 && (
               <div className="space-y-5">
-                <h3 className="text-lg font-semibold text-slate-950">Cronograma</h3>
+                <h3 className="text-lg font-semibold text-foreground">Cronograma</h3>
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label>Data de início</Label>
@@ -255,20 +255,20 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
 
             {activeStep === 4 && (
               <div className="space-y-5">
-                <h3 className="text-lg font-semibold text-slate-950">Módulos</h3>
-                <p className="text-sm text-slate-500">
+                <h3 className="text-lg font-semibold text-foreground">Módulos</h3>
+                <p className="text-sm text-muted-foreground">
                   Ative os módulos de monitoramento que este projeto utilizará. Você poderá alterar essa configuração depois.
                 </p>
-                <div className="divide-y divide-slate-100 rounded-[1.35rem] border border-slate-200 bg-white">
+                <div className="divide-y divide-slate-100 rounded-[1.35rem] border border-border bg-white">
                   {MODULOS_CONFIG.map((mod) => (
                     <label
                       key={mod.key}
                       htmlFor={`modulo-${mod.key}`}
-                      className="flex cursor-pointer items-center justify-between px-5 py-4 transition hover:bg-slate-50"
+                      className="flex cursor-pointer items-center justify-between px-5 py-4 transition hover:bg-muted"
                     >
                       <div className="space-y-0.5">
-                        <p className="text-sm font-semibold text-slate-900">{mod.nome}</p>
-                        <p className="text-xs text-slate-500">{mod.descricao}</p>
+                        <p className="text-sm font-semibold text-foreground">{mod.nome}</p>
+                        <p className="text-xs text-muted-foreground">{mod.descricao}</p>
                       </div>
                       <Switch
                         id={`modulo-${mod.key}`}
@@ -288,19 +288,19 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
           </div>
         </CardContent>
 
-        <CardFooter className="flex justify-between border-t border-slate-100 bg-slate-50/80 p-4">
+        <CardFooter className="flex justify-between border-t border-border/70 bg-muted/80 p-4">
           <Button variant="outline" onClick={handlePrev} disabled={activeStep === 0 || loading} className="rounded-full">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
 
           {activeStep < steps.length - 1 ? (
-            <Button onClick={handleNext} disabled={loading} className="rounded-full bg-slate-950 text-white hover:bg-slate-800">
+            <Button onClick={handleNext} disabled={loading} className="rounded-full bg-primary text-white hover:bg-primary/90">
               Próximo
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           ) : (
-            <Button onClick={handleSubmit} disabled={loading} className="rounded-full bg-slate-950 text-white hover:bg-slate-800">
+            <Button onClick={handleSubmit} disabled={loading} className="rounded-full bg-primary text-white hover:bg-primary/90">
               {loading ? 'Salvando...' : 'Salvar projeto'}
               <Save className="ml-2 h-4 w-4" />
             </Button>

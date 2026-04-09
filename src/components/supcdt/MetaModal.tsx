@@ -103,12 +103,12 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
 
   return (
     <div className="fixed inset-0 z-[160] flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-xl overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
+      <div className="w-full max-w-xl overflow-hidden rounded-[1.5rem] border border-border/80 bg-card shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
 
         {/* Header */}
-        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-6 py-3.5 backdrop-blur-sm">
           <div className="flex items-center gap-2.5">
-            <Target className="h-4 w-4 text-sky-600" />
+            <Target className="h-4 w-4 text-primary" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Metas</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">
@@ -178,7 +178,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                 Previsto por trimestre
               </p>
-              <div className="overflow-hidden rounded-[1.1rem] border border-slate-100">
+              <div className="overflow-hidden rounded-[1.1rem] border border-border/70">
                 <ul role="list" className="divide-y divide-slate-100">
                   {Array.from({ length: totalTrimesters }).map((_, idx) => (
                     <li key={idx} className="flex items-center justify-between gap-4 px-4 py-3">
@@ -195,7 +195,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
                     </li>
                   ))}
                 </ul>
-                <div className="flex items-center justify-between border-t border-slate-100 bg-muted px-4 py-2.5">
+                <div className="flex items-center justify-between border-t border-border/70 bg-muted px-4 py-2.5">
                   <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Total previsto</p>
                   <p className="text-sm font-bold text-foreground">{totalPrevisto} {unidade || '—'}</p>
                 </div>
@@ -204,11 +204,11 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-100 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">
+            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90">
               {loading ? 'Salvando...' : isEditing ? 'Salvar alterações' : 'Adicionar meta'}
             </Button>
           </div>

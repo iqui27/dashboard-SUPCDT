@@ -52,9 +52,9 @@ export function ForgotPassword() {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#eaf4fb_0%,#f8fafc_40%,#eef6f2_100%)] px-4">
-      <Card className="w-full max-w-lg rounded-[1.75rem] border border-white/80 bg-white/88 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.45)] backdrop-blur-xl">
-        <CardHeader className="space-y-3 border-b border-slate-100 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82))] px-6 py-6 text-center sm:px-8">
-          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-slate-950">Recuperar senha</CardTitle>
+      <Card className="w-full max-w-lg rounded-[1.75rem] border border-border/80 bg-card/88 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.45)] backdrop-blur-xl">
+        <CardHeader className="space-y-3 border-b border-border/70 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82))] px-6 py-6 text-center sm:px-8">
+          <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-foreground">Recuperar senha</CardTitle>
           <CardDescription>
             Informe seu e-mail institucional para localizarmos sua conta e um e-mail pessoal para receber o link de redefinição.
           </CardDescription>
@@ -98,7 +98,7 @@ export function ForgotPassword() {
               />
             </div>
 
-            <Button type="submit" className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-slate-950 text-white hover:bg-slate-800" disabled={isSubmitting}>
+            <Button type="submit" className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-primary text-white hover:bg-primary/90" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
               Enviar link de redefinição
             </Button>

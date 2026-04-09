@@ -370,10 +370,10 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
 
           {/* Footer */}
           <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
-            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-slate-600">
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-primary px-4 text-xs text-white hover:bg-slate-800">
+            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90">
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>

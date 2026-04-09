@@ -95,7 +95,7 @@ function MapViewportSync({ selectedPoint }: { selectedPoint: WifiPoint | null })
 
 function WifiPointDetailCard({ point, onEditPoint, onClose }: WifiPointDetailCardProps) {
   return (
-    <div className="rounded-[1.5rem] border border-white/85 bg-white/96 p-4 shadow-[0_24px_70px_-36px_rgba(15,23,42,0.42)] backdrop-blur-md">
+    <div className="rounded-[1.5rem] border border-border/85 bg-card/96 p-4 shadow-[0_24px_70px_-36px_rgba(15,23,42,0.42)] backdrop-blur-md">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary/75">Ponto selecionado</p>
@@ -180,7 +180,7 @@ function WifiPointDetailCard({ point, onEditPoint, onClose }: WifiPointDetailCar
         </div>
 
         {point.precisaAcao && (
-          <div className="flex items-start gap-2 rounded-[1.2rem] border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+          <div className="flex items-start gap-2 rounded-[1.2rem] border border-warning/40 bg-warning/10 px-4 py-3 text-sm leading-6 text-warning">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
             Este ponto está marcado para atuação prioritária da equipe de campo.
           </div>
@@ -196,7 +196,7 @@ function WifiPointDetailCard({ point, onEditPoint, onClose }: WifiPointDetailCar
 
       <Button
         type="button"
-        className="mt-4 h-11 w-full rounded-full bg-slate-950 text-white hover:bg-slate-800"
+        className="mt-4 h-11 w-full rounded-full bg-primary text-white hover:bg-primary/90"
         onClick={() => onEditPoint(point)}
       >
         <PenSquare className="mr-2 h-4 w-4" />
@@ -242,7 +242,7 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
 
   return (
     <div className="overflow-hidden rounded-[1.45rem] border border-border/80 bg-card/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
-      <div className="flex flex-col gap-3 border-b border-slate-100 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b border-border/70 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h3 className="text-base font-semibold text-foreground">Mapa do DF</h3>
           <p className="mt-1 text-[13px] text-muted-foreground">
@@ -257,7 +257,7 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
 
       <div className="relative">
         <div className="relative h-[420px] w-full md:h-[520px] xl:h-[620px]">
-          <div className="pointer-events-none absolute left-4 top-4 z-[90] hidden max-w-[240px] rounded-[1.15rem] border border-white/80 bg-white/92 px-3.5 py-3 text-xs leading-5 text-muted-foreground shadow-[0_16px_40px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm md:block">
+          <div className="pointer-events-none absolute left-4 top-4 z-[90] hidden max-w-[240px] rounded-[1.15rem] border border-border/80 bg-card/92 px-3.5 py-3 text-xs leading-5 text-muted-foreground shadow-[0_16px_40px_-28px_rgba(15,23,42,0.45)] backdrop-blur-sm md:block">
             Clique no mapa para cadastrar um novo ponto. Clique em um marcador para abrir o painel operacional.
           </div>
 
@@ -312,7 +312,7 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
         </div>
 
         {selectedPoint ? (
-          <div className="border-t border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] p-4 lg:hidden">
+          <div className="border-t border-border/70 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] p-4 lg:hidden">
             <WifiPointDetailCard
               point={selectedPoint}
               onEditPoint={onEditPoint}
@@ -320,8 +320,8 @@ export function WifiMap({ points, onCreateAt, onEditPoint }: WifiMapProps) {
             />
           </div>
         ) : (
-          <div className="border-t border-slate-100 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] px-4 py-5">
-            <div className="rounded-[1.2rem] border border-dashed border-border bg-white/70 px-4 py-4 text-sm leading-6 text-muted-foreground">
+          <div className="border-t border-border/70 bg-[linear-gradient(180deg,rgba(248,250,252,0.92),rgba(255,255,255,0.98))] px-4 py-5">
+            <div className="rounded-[1.2rem] border border-dashed border-border bg-card/70 px-4 py-4 text-sm leading-6 text-muted-foreground">
               Clique em um marcador para abrir o painel operacional do ponto sem comprimir o mapa.
             </div>
           </div>

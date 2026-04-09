@@ -123,17 +123,17 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+    <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Execução</p>
-          <h3 className="mt-0.5 text-sm font-bold text-slate-900">Etapas do projeto</h3>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Execução</p>
+          <h3 className="mt-0.5 text-sm font-bold text-foreground">Etapas do projeto</h3>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setAddingEtapa(true)}
-          className="h-8 rounded-full border-slate-200 px-3 text-xs"
+          className="h-8 rounded-full border-border px-3 text-xs"
           disabled={loading}
         >
           <Plus className="mr-1.5 h-3 w-3" />
@@ -141,37 +141,37 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
         </Button>
       </div>
 
-      <div className="border-t border-slate-100">
+      <div className="border-t border-border/70">
         {addingEtapa && (
-          <div className="divide-y divide-slate-100 border-b border-slate-100 bg-slate-50/50 px-5 py-4">
+          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <div className="flex-1 space-y-1">
-                <label className="text-xs font-medium text-slate-600">Nome da etapa</label>
+                <label className="text-xs font-medium text-muted-foreground">Nome da etapa</label>
                 <input
                   type="text"
                   value={newEtapaNome}
                   onChange={(e) => setNewEtapaNome(e.target.value)}
                   placeholder="Ex: Planejamento, Execução, Encerramento..."
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
                   autoFocus
                 />
               </div>
               <div className="w-28 space-y-1">
-                <label className="text-xs font-medium text-slate-600">Percentual</label>
+                <label className="text-xs font-medium text-muted-foreground">Percentual</label>
                 <input
                   type="number"
                   min={0}
                   max={100}
                   value={newEtapaPercentual}
                   onChange={(e) => setNewEtapaPercentual(Number(e.target.value))}
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
               <div className="flex gap-2">
                 <Button
                   size="sm"
                   onClick={handleCreateEtapa}
-                  className="h-9 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800"
+                  className="h-9 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90"
                   disabled={loading}
                 >
                   Salvar
@@ -184,7 +184,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                     setNewEtapaNome('');
                     setNewEtapaPercentual(0);
                   }}
-                  className="h-9 rounded-full px-3 text-xs text-slate-500"
+                  className="h-9 rounded-full px-3 text-xs text-muted-foreground"
                 >
                   Cancelar
                 </Button>
@@ -194,7 +194,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
         )}
 
         {etapas.length === 0 && !addingEtapa ? (
-          <div className="px-5 py-10 text-center text-sm text-slate-500">
+          <div className="px-5 py-10 text-center text-sm text-muted-foreground">
             <ListChecks className="mx-auto h-8 w-8 text-slate-300" />
             <p className="mt-2">Nenhuma etapa cadastrada. Clique em "Nova etapa" para começar.</p>
           </div>
@@ -204,7 +204,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
               <li key={etapa.id} className="px-5 py-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-sm font-semibold text-slate-950">{etapa.nome}</h4>
+                    <h4 className="text-sm font-semibold text-foreground">{etapa.nome}</h4>
                     <div className="mt-2 flex items-center gap-2">
                       {editingPercentual === etapa.id ? (
                         <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                             max={100}
                             value={editPercentualValue}
                             onChange={(e) => setEditPercentualValue(Number(e.target.value))}
-                            className="h-7 w-16 rounded-lg border border-slate-200 px-2 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                            className="h-7 w-16 rounded-lg border border-border px-2 text-sm outline-none focus:ring-2 focus:ring-sky-500"
                             autoFocus
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') handleUpdatePercentual(etapa);
@@ -224,14 +224,14 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                           <button
                             type="button"
                             onClick={() => handleUpdatePercentual(etapa)}
-                            className="rounded-full p-1 text-sky-600 hover:bg-sky-50"
+                            className="rounded-full p-1 text-primary hover:bg-sky-50"
                           >
                             <Check className="h-4 w-4" />
                           </button>
                           <button
                             type="button"
                             onClick={() => setEditingPercentual(null)}
-                            className="rounded-full p-1 text-slate-400 hover:bg-slate-100"
+                            className="rounded-full p-1 text-muted-foreground hover:bg-secondary"
                           >
                             <X className="h-4 w-4" />
                           </button>
@@ -243,12 +243,12 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                             setEditingPercentual(etapa.id);
                             setEditPercentualValue(etapa.percentual);
                           }}
-                          className="flex items-center gap-2 rounded-lg bg-slate-50 px-2 py-1 text-sm font-semibold text-slate-700 hover:bg-slate-100"
+                          className="flex items-center gap-2 rounded-lg bg-muted px-2 py-1 text-sm font-semibold text-muted-foreground hover:bg-secondary"
                         >
                           {etapa.percentual}%
                         </button>
                       )}
-                      <div className="h-1.5 flex-1 rounded-full bg-slate-100">
+                      <div className="h-1.5 flex-1 rounded-full bg-secondary">
                         <div
                           className="h-1.5 rounded-full bg-sky-600 transition-all"
                           style={{ width: `${Math.min(100, Math.max(0, etapa.percentual))}%` }}
@@ -267,18 +267,18 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                               className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition ${
                                 ent.concluido
                                   ? 'border-emerald-500 bg-emerald-500 text-white'
-                                  : 'border-slate-300 bg-white hover:border-slate-400'
+                                  : 'border-input bg-white hover:border-slate-400'
                               }`}
                             >
                               {ent.concluido && <Check className="h-3 w-3" />}
                             </button>
-                            <span className={`text-xs ${ent.concluido ? 'text-slate-400 line-through' : 'text-slate-700'}`}>
+                            <span className={`text-xs ${ent.concluido ? 'text-muted-foreground line-through' : 'text-muted-foreground'}`}>
                               {ent.nome}
                             </span>
                             <button
                               type="button"
                               onClick={() => handleDeleteEntregavel(etapa.id, ent.id)}
-                              className="rounded-full p-0.5 text-slate-300 hover:bg-slate-100 hover:text-slate-500"
+                              className="rounded-full p-0.5 text-slate-300 hover:bg-secondary hover:text-muted-foreground"
                             >
                               <X className="h-3 w-3" />
                             </button>
@@ -295,7 +295,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                           value={newEntregavelNome}
                           onChange={(e) => setNewEntregavelNome(e.target.value)}
                           placeholder="Nome do entregável..."
-                          className="h-7 flex-1 rounded-lg border border-slate-200 bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                          className="h-7 flex-1 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
                           autoFocus
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleAddEntregavel(etapa.id);
@@ -313,7 +313,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                         <button
                           type="button"
                           onClick={() => handleAddEntregavel(etapa.id)}
-                          className="rounded-full p-1 text-sky-600 hover:bg-sky-50"
+                          className="rounded-full p-1 text-primary hover:bg-sky-50"
                         >
                           <Check className="h-4 w-4" />
                         </button>
@@ -322,7 +322,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                       <button
                         type="button"
                         onClick={() => setAddingEntregavelForEtapa(etapa.id)}
-                        className="mt-2 flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600"
+                        className="mt-2 flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground"
                       >
                         <Plus className="h-3 w-3" />
                         Adicionar entregável
@@ -333,7 +333,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                   <button
                     type="button"
                     onClick={() => handleDeleteEtapa(etapa.id)}
-                    className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                    className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

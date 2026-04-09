@@ -130,12 +130,12 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
 
   return (
     <div className="fixed inset-0 z-[160] flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
+      <div className="w-full max-w-2xl overflow-hidden rounded-[1.5rem] border border-border/80 bg-card shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
 
         {/* Header */}
-        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-6 py-3.5 backdrop-blur-sm">
           <div className="flex items-center gap-2.5">
-            <FolderOpen className="h-4 w-4 text-sky-600" />
+            <FolderOpen className="h-4 w-4 text-primary" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Projeto</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">Editar dados básicos</h2>
@@ -354,11 +354,11 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-100 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">
+            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90">
               {loading ? 'Salvando...' : 'Salvar alterações'}
             </Button>
           </div>

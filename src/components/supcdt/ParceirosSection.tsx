@@ -14,14 +14,14 @@ interface ParceirosSectionProps {
 
 const STATUS_OPTIONS: { value: StatusParceiro; label: string; color: string }[] = [
   { value: 'Ativo', label: 'Ativo', color: 'bg-emerald-100 text-emerald-700 border-emerald-200' },
-  { value: 'Apoiador', label: 'Apoiador', color: 'bg-sky-100 text-sky-700 border-sky-200' },
-  { value: 'Consultor', label: 'Consultor', color: 'bg-amber-100 text-amber-700 border-amber-200' },
-  { value: 'Inativo', label: 'Inativo', color: 'bg-slate-100 text-slate-600 border-slate-200' },
+  { value: 'Apoiador', label: 'Apoiador', color: 'bg-primary/20 text-primary border-sky-200' },
+  { value: 'Consultor', label: 'Consultor', color: 'bg-amber-100 text-amber-700 border-warning/40' },
+  { value: 'Inativo', label: 'Inativo', color: 'bg-secondary text-muted-foreground border-border' },
 ];
 
 function getStatusColor(status: StatusParceiro): string {
   const option = STATUS_OPTIONS.find((opt) => opt.value === status);
-  return option?.color ?? 'bg-slate-100 text-slate-600 border-slate-200';
+  return option?.color ?? 'bg-secondary text-muted-foreground border-border';
 }
 
 export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
@@ -92,17 +92,17 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
   };
 
   return (
-    <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+    <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-emerald-700/70">Rede</p>
-          <h3 className="mt-0.5 text-sm font-bold text-slate-900">Parceiros</h3>
+          <h3 className="mt-0.5 text-sm font-bold text-foreground">Parceiros</h3>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setAddingParceiro(true)}
-          className="h-8 rounded-full border-slate-200 px-3 text-xs"
+          className="h-8 rounded-full border-border px-3 text-xs"
           disabled={loading}
         >
           <Plus className="mr-1.5 h-3 w-3" />
@@ -110,37 +110,37 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
         </Button>
       </div>
 
-      <div className="border-t border-slate-100">
+      <div className="border-t border-border/70">
         {addingParceiro && (
-          <div className="divide-y divide-slate-100 border-b border-slate-100 bg-slate-50/50 px-5 py-4">
+          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <div className="flex-1 space-y-1">
-                <label className="text-xs font-medium text-slate-600">Nome *</label>
+                <label className="text-xs font-medium text-muted-foreground">Nome *</label>
                 <input
                   type="text"
                   value={newNome}
                   onChange={(e) => setNewNome(e.target.value)}
                   placeholder="Nome do parceiro"
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                   autoFocus
                 />
               </div>
               <div className="flex-1 space-y-1">
-                <label className="text-xs font-medium text-slate-600">Papel</label>
+                <label className="text-xs font-medium text-muted-foreground">Papel</label>
                 <input
                   type="text"
                   value={newPapel}
                   onChange={(e) => setNewPapel(e.target.value)}
                   placeholder="Ex: Executor, Financiador..."
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
               <div className="w-32 space-y-1">
-                <label className="text-xs font-medium text-slate-600">Status</label>
+                <label className="text-xs font-medium text-muted-foreground">Status</label>
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value as StatusParceiro)}
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {STATUS_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -151,7 +151,7 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
                 <Button
                   size="sm"
                   onClick={handleCreateParceiro}
-                  className="h-9 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800"
+                  className="h-9 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90"
                   disabled={loading}
                 >
                   Salvar
@@ -165,7 +165,7 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
                     setNewPapel('');
                     setNewStatus('Ativo');
                   }}
-                  className="h-9 rounded-full px-3 text-xs text-slate-500"
+                  className="h-9 rounded-full px-3 text-xs text-muted-foreground"
                 >
                   Cancelar
                 </Button>
@@ -175,7 +175,7 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
         )}
 
         {parceiros.length === 0 && !addingParceiro ? (
-          <div className="px-5 py-10 text-center text-sm text-slate-500">
+          <div className="px-5 py-10 text-center text-sm text-muted-foreground">
             <Users className="mx-auto h-8 w-8 text-slate-300" />
             <p className="mt-2">Nenhum parceiro cadastrado. Clique em "Novo parceiro" para começar.</p>
           </div>
@@ -184,9 +184,9 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
             {parceiros.map((parceiro) => (
               <li key={parceiro.id} className="flex items-center justify-between gap-3 px-5 py-3">
                 <div className="min-w-0 flex-1">
-                  <h4 className="text-sm font-semibold text-slate-950">{parceiro.nome}</h4>
+                  <h4 className="text-sm font-semibold text-foreground">{parceiro.nome}</h4>
                   {parceiro.papel && (
-                    <p className="text-xs text-slate-500">{parceiro.papel}</p>
+                    <p className="text-xs text-muted-foreground">{parceiro.papel}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
@@ -203,7 +203,7 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
                           <option key={opt.value} value={opt.value}>{opt.label}</option>
                         ))}
                       </select>
-                      <Check className="pointer-events-none absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-slate-400" />
+                      <Check className="pointer-events-none absolute right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
                     </div>
                   ) : (
                     <button
@@ -217,7 +217,7 @@ export function ParceirosSection({ projeto, onUpdate }: ParceirosSectionProps) {
                   <button
                     type="button"
                     onClick={() => handleDeleteParceiro(parceiro.id)}
-                    className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+                    className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

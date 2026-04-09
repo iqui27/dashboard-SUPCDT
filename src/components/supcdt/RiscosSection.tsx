@@ -17,13 +17,13 @@ const IMPACTO_OPTIONS: ImpactoRisco[] = ['Baixo', 'Médio', 'Alto'];
 
 const STATUS_OPTIONS: { value: StatusRisco; label: string; color: string }[] = [
   { value: 'Aberto', label: 'Aberto', color: 'bg-rose-100 text-rose-700 border-rose-200' },
-  { value: 'Mitigado', label: 'Mitigado', color: 'bg-amber-100 text-amber-700 border-amber-200' },
-  { value: 'Encerrado', label: 'Encerrado', color: 'bg-slate-100 text-slate-600 border-slate-200' },
+  { value: 'Mitigado', label: 'Mitigado', color: 'bg-amber-100 text-amber-700 border-warning/40' },
+  { value: 'Encerrado', label: 'Encerrado', color: 'bg-secondary text-muted-foreground border-border' },
 ];
 
 function getStatusColor(status: StatusRisco): string {
   const option = STATUS_OPTIONS.find((opt) => opt.value === status);
-  return option?.color ?? 'bg-slate-100 text-slate-600 border-slate-200';
+  return option?.color ?? 'bg-secondary text-muted-foreground border-border';
 }
 
 /**
@@ -36,10 +36,10 @@ function getStatusColor(status: StatusRisco): string {
 function getSeverityColor(probabilidade: ProbabilidadeRisco, impacto: ImpactoRisco): string {
   if (probabilidade === 'Alta') {
     if (impacto === 'Alto' || impacto === 'Médio') return 'bg-red-500';
-    return 'bg-amber-500'; // Alta × Baixo
+    return 'bg-warning/100'; // Alta × Baixo
   }
   if (probabilidade === 'Média') {
-    if (impacto === 'Alto') return 'bg-amber-500';
+    if (impacto === 'Alto') return 'bg-warning/100';
     if (impacto === 'Médio') return 'bg-yellow-500';
     return 'bg-green-500'; // Média × Baixo
   }
@@ -135,18 +135,18 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
           <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${getSeverityColor(risco.probabilidade, risco.impacto)}`} />
-          <h4 className="text-sm font-semibold text-slate-950">{risco.descricao}</h4>
+          <h4 className="text-sm font-semibold text-foreground">{risco.descricao}</h4>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
             P: {risco.probabilidade}
           </span>
-          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-xs text-muted-foreground">
             I: {risco.impacto}
           </span>
         </div>
         {risco.mitigacao && (
-          <p className="mt-2 text-xs text-slate-500">
+          <p className="mt-2 text-xs text-muted-foreground">
             <span className="font-medium">Mitigação:</span> {risco.mitigacao}
           </p>
         )}
@@ -176,7 +176,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
         <button
           type="button"
           onClick={() => handleDeleteRisco(risco.id)}
-          className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600"
+          className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -185,17 +185,17 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
   );
 
   return (
-    <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+    <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-700/70">Gestão</p>
-          <h3 className="mt-0.5 text-sm font-bold text-slate-900">Riscos</h3>
+          <h3 className="mt-0.5 text-sm font-bold text-foreground">Riscos</h3>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setAddingRisco(true)}
-          className="h-8 rounded-full border-slate-200 px-3 text-xs"
+          className="h-8 rounded-full border-border px-3 text-xs"
           disabled={loading}
         >
           <Plus className="mr-1.5 h-3 w-3" />
@@ -203,28 +203,28 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
         </Button>
       </div>
 
-      <div className="border-t border-slate-100">
+      <div className="border-t border-border/70">
         {addingRisco && (
-          <div className="divide-y divide-slate-100 border-b border-slate-100 bg-slate-50/50 px-5 py-4">
+          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="space-y-3">
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-600">Descrição *</label>
+                <label className="text-xs font-medium text-muted-foreground">Descrição *</label>
                 <input
                   type="text"
                   value={newDescricao}
                   onChange={(e) => setNewDescricao(e.target.value)}
                   placeholder="Descreva o risco..."
-                  className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
                   autoFocus
                 />
               </div>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <div className="w-32 space-y-1">
-                  <label className="text-xs font-medium text-slate-600">Probabilidade</label>
+                  <label className="text-xs font-medium text-muted-foreground">Probabilidade</label>
                   <select
                     value={newProbabilidade}
                     onChange={(e) => setNewProbabilidade(e.target.value as ProbabilidadeRisco)}
-                    className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
                   >
                     {PROBABILIDADE_OPTIONS.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -232,11 +232,11 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                   </select>
                 </div>
                 <div className="w-32 space-y-1">
-                  <label className="text-xs font-medium text-slate-600">Impacto</label>
+                  <label className="text-xs font-medium text-muted-foreground">Impacto</label>
                   <select
                     value={newImpacto}
                     onChange={(e) => setNewImpacto(e.target.value as ImpactoRisco)}
-                    className="h-9 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
                   >
                     {IMPACTO_OPTIONS.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -245,20 +245,20 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                 </div>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-slate-600">Mitigação (opcional)</label>
+                <label className="text-xs font-medium text-muted-foreground">Mitigação (opcional)</label>
                 <textarea
                   value={newMitigacao}
                   onChange={(e) => setNewMitigacao(e.target.value)}
                   placeholder="Como este risco está sendo mitigado..."
                   rows={2}
-                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-500"
                 />
               </div>
               <div className="flex gap-2">
                 <Button
                   size="sm"
                   onClick={handleCreateRisco}
-                  className="h-9 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800"
+                  className="h-9 rounded-full bg-primary px-4 text-xs text-white hover:bg-primary/90"
                   disabled={loading}
                 >
                   Salvar
@@ -273,7 +273,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                     setNewImpacto('Médio');
                     setNewMitigacao('');
                   }}
-                  className="h-9 rounded-full px-3 text-xs text-slate-500"
+                  className="h-9 rounded-full px-3 text-xs text-muted-foreground"
                 >
                   Cancelar
                 </Button>
@@ -283,7 +283,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
         )}
 
         {riscos.length === 0 && !addingRisco ? (
-          <div className="px-5 py-10 text-center text-sm text-slate-500">
+          <div className="px-5 py-10 text-center text-sm text-muted-foreground">
             <AlertTriangle className="mx-auto h-8 w-8 text-slate-300" />
             <p className="mt-2">Nenhum risco cadastrado. Clique em "Novo risco" para começar.</p>
           </div>
@@ -299,8 +299,8 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
             {/* Closed risks separator */}
             {closedRiscos.length > 0 && (
               <>
-                <div className="border-t border-slate-200 bg-slate-50 px-5 py-2">
-                  <p className="text-xs font-medium uppercase tracking-[0.16em] text-slate-400">Encerrados</p>
+                <div className="border-t border-border bg-muted px-5 py-2">
+                  <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Encerrados</p>
                 </div>
                 <ul role="list" className="divide-y divide-slate-100">
                   {closedRiscos.map((risco) => renderRisco(risco, true))}

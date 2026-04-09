@@ -167,7 +167,7 @@ export function WifiDashboard({ stats, points }: WifiDashboardProps) {
                     <span className="text-sm text-muted-foreground">{item.total} ponto(s)</span>
                   </div>
                   <div className="mt-3 h-2 rounded-full bg-slate-200">
-                    <div className="h-2 rounded-full bg-amber-500" style={{ width: `${Math.min(100, item.total * 18)}%` }} />
+                    <div className="h-2 rounded-full bg-warning/100" style={{ width: `${Math.min(100, item.total * 18)}%` }} />
                   </div>
                 </div>
               ))

@@ -149,7 +149,7 @@ export function ResponsavelOperacionalField({
         />
       )}
 
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-muted-foreground">
         {loadError || 'Selecione um usuário ativo da base compartilhada ou use a opção manual se o nome ainda não existir.'}
       </p>
     </div>

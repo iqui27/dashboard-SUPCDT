@@ -153,7 +153,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <Download className="mr-1.5 h-3 w-3" />
               Exportar PDF
             </Button>
-            <Button onClick={() => setIsModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-slate-800">
+            <Button onClick={() => setIsModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-primary/90">
               <Plus className="mr-1.5 h-3 w-3" />
               Novo lançamento
             </Button>
@@ -162,7 +162,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
       </div>
 
       {/* Stats bar */}
-      <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+      <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
         <div className="grid divide-y divide-slate-100 sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
           {[
             { label: 'Status atual', value: status },
@@ -179,7 +179,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             </div>
           ))}
         </div>
-        <div className="grid divide-y divide-slate-100 border-t border-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="grid divide-y divide-slate-100 border-t border-border/70 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           <div className="px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Progresso físico</p>
             <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-success' : 'text-foreground'}`}>
@@ -210,12 +210,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
         <div className="space-y-5">
 
           {/* Objective */}
-          <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Escopo</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Objetivo e escopo atual</h3>
             </div>
-            <div className="divide-y divide-slate-100 border-t border-slate-100 text-sm leading-6 text-muted-foreground">
+            <div className="divide-y divide-slate-100 border-t border-border/70 text-sm leading-6 text-muted-foreground">
               <div className="px-5 py-4">
                 <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Objetivos</p>
                 <p>{projeto.objetivos || 'Objetivos ainda não detalhados no cadastro atual.'}</p>
@@ -228,7 +228,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           </div>
 
           {/* Metas */}
-          <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
             <div className="flex items-center justify-between px-5 py-4">
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Execução</p>
@@ -240,7 +240,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               </Button>
             </div>
 
-            <div className="border-t border-slate-100">
+            <div className="border-t border-border/70">
               {projeto.metas.length ? (
                 <ul role="list" className="divide-y divide-slate-100">
                   {projeto.metas.map((meta) => {
@@ -352,13 +352,13 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <IndicadoresSection projeto={projeto} onUpdate={onUpdate} />
 
           {/* Lançamentos */}
-          <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Histórico</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Histórico de lançamentos</h3>
             </div>
 
-            <div className="border-t border-slate-100">
+            <div className="border-t border-border/70">
               {loading ? (
                 <div className="px-5 py-10 text-center text-sm text-muted-foreground">Carregando histórico...</div>
               ) : lancamentos.length === 0 ? (
@@ -423,12 +423,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
         <div className="space-y-5">
 
           {/* Governance */}
-          <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
             <div className="px-5 py-4">
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Estrutura</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Governança do projeto</h3>
             </div>
-            <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100">
+            <ul role="list" className="divide-y divide-slate-100 border-t border-border/70">
               {[
                 { label: 'OSC', value: osc },
                 { label: 'Responsável SECTI', value: responsavel },
@@ -451,7 +451,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
 
           {/* Gaps */}
           {lacunas.length > 0 && (
-            <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+            <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
               <div className="flex items-center gap-2 px-5 py-4">
                 <ShieldAlert className="h-4 w-4 shrink-0 text-warning" />
                 <div>
@@ -459,7 +459,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   <h3 className="mt-0.5 text-sm font-bold text-foreground">Lacunas remanescentes</h3>
                 </div>
               </div>
-              <div className="flex flex-wrap gap-1.5 border-t border-slate-100 px-5 py-4">
+              <div className="flex flex-wrap gap-1.5 border-t border-border/70 px-5 py-4">
                 {lacunas.map((lacuna) => (
                   <span key={lacuna} className="rounded-full border border-warning/40 bg-warning/10 px-2.5 py-0.5 text-[11px] text-warning">
                     {lacuna}
@@ -470,7 +470,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           )}
 
           {/* Operational panel */}
-          <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+          <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
             <div className="flex items-center gap-2 px-5 py-4">
               <Radar className="h-4 w-4 shrink-0 text-primary" />
               <div>
@@ -478,7 +478,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 <h3 className="mt-0.5 text-sm font-bold text-foreground">Painel operacional</h3>
               </div>
             </div>
-            <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100 text-sm">
+            <ul role="list" className="divide-y divide-slate-100 border-t border-border/70 text-sm">
               {[
                 {
                   label: 'Última atualização',

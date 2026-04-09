@@ -39,8 +39,8 @@ export function ModulosConfigPanel({ projeto, onUpdate }: ModulosConfigPanelProp
   return (
     <div className="w-80">
       <div className="mb-3 px-3 pt-3">
-        <h3 className="text-sm font-semibold text-slate-950">Módulos ativos</h3>
-        <p className="mt-1 text-xs text-slate-500">
+        <h3 className="text-sm font-semibold text-foreground">Módulos ativos</h3>
+        <p className="mt-1 text-xs text-muted-foreground">
           Ative ou desative módulos de monitoramento. Os dados são preservados ao desativar.
         </p>
       </div>
@@ -48,11 +48,11 @@ export function ModulosConfigPanel({ projeto, onUpdate }: ModulosConfigPanelProp
         {MODULOS_CONFIG.map((mod) => (
           <label
             key={mod.key}
-            className="flex cursor-pointer items-center justify-between px-3 py-3 hover:bg-slate-50"
+            className="flex cursor-pointer items-center justify-between px-3 py-3 hover:bg-muted"
           >
             <div className="flex-1 pr-3">
-              <span className="block text-sm font-medium text-slate-900">{mod.nome}</span>
-              <span className="block text-xs text-slate-500">{mod.descricao}</span>
+              <span className="block text-sm font-medium text-foreground">{mod.nome}</span>
+              <span className="block text-xs text-muted-foreground">{mod.descricao}</span>
             </div>
             <Switch
               checked={!!projeto.modulosAtivos?.[mod.key]}

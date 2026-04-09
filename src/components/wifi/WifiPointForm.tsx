@@ -292,18 +292,18 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-[160] bg-slate-950/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[160] bg-primary/70 backdrop-blur-sm">
       <div className="absolute inset-0 overflow-hidden px-3 py-3 sm:px-6 sm:py-5">
         <div className="flex min-h-full items-center justify-center">
           <div
-            className="relative flex min-h-0 max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-white shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:max-h-[calc(100dvh-2.5rem)]"
+            className="relative flex min-h-0 max-h-[calc(100dvh-1.5rem)] w-full max-w-4xl flex-col overflow-hidden rounded-[2rem] border border-border/80 bg-card shadow-[0_40px_120px_-60px_rgba(15,23,42,0.65)] sm:max-h-[calc(100dvh-2.5rem)]"
             role="dialog"
             aria-modal="true"
             aria-label={point ? 'Editar ponto Wi-Fi' : 'Novo ponto Wi-Fi'}
           >
-        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-6 py-3.5 backdrop-blur-sm">
           <div className="flex items-center gap-2.5">
-            <Wifi className="h-4 w-4 text-sky-600" />
+            <Wifi className="h-4 w-4 text-primary" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Wi‑Fi Social</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">
@@ -327,7 +327,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             <div className="space-y-2">
               <Label>Nome do ponto</Label>
               <Input value={form.nome} onChange={(e) => setForm((current) => ({ ...current, nome: e.target.value }))} className="rounded-2xl" />
-              {errors.nome && <p className="text-xs text-rose-600">{errors.nome}</p>}
+              {errors.nome && <p className="text-xs text-destructive">{errors.nome}</p>}
             </div>
 
             <div className="space-y-2">
@@ -340,7 +340,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                   ))}
                 </SelectContent>
               </Select>
-              {errors.regiaoAdministrativa && <p className="text-xs text-rose-600">{errors.regiaoAdministrativa}</p>}
+              {errors.regiaoAdministrativa && <p className="text-xs text-destructive">{errors.regiaoAdministrativa}</p>}
             </div>
 
             <div className="space-y-2 md:col-span-2">
@@ -380,14 +380,14 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                   )}
                 </Button>
               </div>
-              {errors.cep && <p className="text-xs text-rose-600">{errors.cep}</p>}
+              {errors.cep && <p className="text-xs text-destructive">{errors.cep}</p>}
               {cepFeedback && <p className="text-xs text-muted-foreground">{cepFeedback}</p>}
             </div>
 
             <div className="space-y-2 md:col-span-2">
               <Label>Endereço</Label>
               <Input value={form.endereco} onChange={(e) => setForm((current) => ({ ...current, endereco: e.target.value }))} className="rounded-2xl" />
-              {errors.endereco && <p className="text-xs text-rose-600">{errors.endereco}</p>}
+              {errors.endereco && <p className="text-xs text-destructive">{errors.endereco}</p>}
             </div>
 
             <div className="space-y-3 md:col-span-2">
@@ -439,7 +439,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                         onChange={(e) => setForm((current) => ({ ...current, latitude: e.target.value }))}
                         className="rounded-2xl bg-white"
                       />
-                      {errors.latitude && <p className="text-xs text-rose-600">{errors.latitude}</p>}
+                      {errors.latitude && <p className="text-xs text-destructive">{errors.latitude}</p>}
                     </div>
 
                     <div className="space-y-2">
@@ -451,13 +451,13 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                         onChange={(e) => setForm((current) => ({ ...current, longitude: e.target.value }))}
                         className="rounded-2xl bg-white"
                       />
-                      {errors.longitude && <p className="text-xs text-rose-600">{errors.longitude}</p>}
+                      {errors.longitude && <p className="text-xs text-destructive">{errors.longitude}</p>}
                     </div>
                   </div>
                 )}
 
                 {!manualCoordinates && (errors.latitude || errors.longitude) && (
-                  <div className="mt-3 text-xs text-rose-600">
+                  <div className="mt-3 text-xs text-destructive">
                     {errors.latitude || errors.longitude}
                   </div>
                 )}
@@ -479,7 +479,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             <div className="space-y-2">
               <Label>Cobertura estimada (m)</Label>
               <Input type="number" min={50} max={1500} step={10} value={form.coberturaRaioMetros} onChange={(e) => setForm((current) => ({ ...current, coberturaRaioMetros: e.target.value }))} className="rounded-2xl" />
-              {errors.coberturaRaioMetros && <p className="text-xs text-rose-600">{errors.coberturaRaioMetros}</p>}
+              {errors.coberturaRaioMetros && <p className="text-xs text-destructive">{errors.coberturaRaioMetros}</p>}
             </div>
 
             <div className="space-y-2">
@@ -507,7 +507,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             <div className="space-y-2">
               <Label>Incidentes abertos</Label>
               <Input type="number" min={0} step={1} value={form.incidentesAbertos} onChange={(e) => setForm((current) => ({ ...current, incidentesAbertos: e.target.value }))} className="rounded-2xl" />
-              {errors.incidentesAbertos && <p className="text-xs text-rose-600">{errors.incidentesAbertos}</p>}
+              {errors.incidentesAbertos && <p className="text-xs text-destructive">{errors.incidentesAbertos}</p>}
             </div>
 
             <ResponsavelOperacionalField
@@ -526,7 +526,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                   type="checkbox"
                   checked={form.precisaAcao}
                   onChange={(e) => setForm((current) => ({ ...current, precisaAcao: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-sky-700"
+                  className="h-4 w-4 rounded border-input text-primary focus:ring-sky-700"
                 />
                 <div>
                   <p className="text-sm font-semibold text-foreground">Ponto exige ação prioritária</p>
@@ -541,9 +541,9 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             </div>
           </div>
 
-          <div className="sticky bottom-0 z-10 -mx-6 mt-6 flex justify-end gap-3 border-t border-slate-100 bg-white/95 px-6 py-4 backdrop-blur-sm">
+          <div className="sticky bottom-0 z-10 -mx-6 mt-6 flex justify-end gap-3 border-t border-border/70 bg-card/95 px-6 py-4 backdrop-blur-sm">
             <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button type="submit" disabled={saving} className="rounded-full bg-slate-950 text-white hover:bg-slate-800">
+            <Button type="submit" disabled={saving} className="rounded-full bg-primary text-white hover:bg-primary/90">
               {saving ? 'Salvando...' : point ? 'Salvar alterações' : 'Cadastrar ponto'}
               <Save className="ml-2 h-4 w-4" />
             </Button>

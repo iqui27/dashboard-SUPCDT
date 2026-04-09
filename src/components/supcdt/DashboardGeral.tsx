@@ -217,7 +217,7 @@ function getRiskTone(nivelRisco: string) {
     return 'bg-warning/20 text-amber-800 ring-1 ring-amber-200';
   }
   if (normalized.includes('medio')) {
-    return 'bg-primary/20 text-sky-800 ring-1 ring-sky-200';
+    return 'bg-primary/20 text-primary/90 ring-1 ring-sky-200';
   }
   return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
 }
@@ -497,7 +497,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
           <span className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{projetos.length} projetos</span>
         </div>
 
-        <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
+        <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
           <ul role="list" className="divide-y divide-slate-100">
             {projetos.map((projeto) => {
               const status = getProjetoStatus(projeto);
@@ -544,7 +544,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-0.5">
                       <span className="flex items-center gap-1">
                         <span className="uppercase tracking-[0.12em] text-muted-foreground">Valor</span>
-                        <span className="font-semibold text-slate-800">{formatCurrency(projeto.valorTotal)}</span>
+                        <span className="font-semibold text-muted-foreground">{formatCurrency(projeto.valorTotal)}</span>
                       </span>
                       {incidentesAbertos > 0 && (
                         <span className="flex items-center gap-1">
@@ -562,7 +562,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
 
                     {/* Alert */}
                     {alerta && (
-                      <span className={`flex items-center gap-1 ${alerta.severidade === 'critico' ? 'text-rose-600' : 'text-amber-600'}`}>
+                      <span className={`flex items-center gap-1 ${alerta.severidade === 'critico' ? 'text-destructive' : 'text-warning'}`}>
                         <AlertTriangle className="h-3 w-3 shrink-0" />{alerta.motivo}
                       </span>
                     )}
@@ -574,7 +574,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         </div>
 
         {projetos.length === 0 && (
-          <div className="rounded-[1.45rem] border border-dashed border-border bg-white/70 py-10 text-center text-sm text-muted-foreground">
+          <div className="rounded-[1.45rem] border border-dashed border-border bg-card/70 py-10 text-center text-sm text-muted-foreground">
             Nenhum projeto cadastrado no portfólio.
           </div>
         )}

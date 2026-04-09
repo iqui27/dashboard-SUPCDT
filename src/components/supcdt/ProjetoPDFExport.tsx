@@ -192,18 +192,18 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
       <div className="pdf-export-overlay fixed inset-0 z-[200] overflow-y-auto bg-white">
 
         {/* Action bar — hidden on print */}
-        <div className="pdf-no-print sticky top-0 z-10 border-b border-slate-200 bg-white px-6 py-3 shadow-sm">
+        <div className="pdf-no-print sticky top-0 z-10 border-b border-border bg-white px-6 py-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700/80">Exportar PDF</p>
-              <p className="mt-0.5 text-sm font-semibold text-slate-900">{nome}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Exportar PDF</p>
+              <p className="mt-0.5 text-sm font-semibold text-foreground">{nome}</p>
             </div>
             <div className="flex items-center gap-3">
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="h-8 rounded-full border-slate-200 px-3 text-xs text-slate-700 hover:bg-slate-50"
+                className="h-8 rounded-full border-border px-3 text-xs text-muted-foreground hover:bg-muted"
               >
                 <X className="mr-1.5 h-3 w-3" />
                 Fechar
@@ -211,7 +211,7 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
               <Button
                 type="button"
                 onClick={handlePrint}
-                className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800"
+                className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-primary/90"
               >
                 <Printer className="mr-1.5 h-3 w-3" />
                 Imprimir / Salvar PDF
@@ -233,10 +233,10 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                   disabled={!hasData}
                   className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all ${
                     isActive && hasData
-                      ? 'bg-sky-100 text-sky-800 ring-1 ring-sky-300'
+                      ? 'bg-primary/20 text-primary/90 ring-1 ring-sky-300'
                       : hasData
-                        ? 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                        : 'cursor-not-allowed bg-slate-50 text-slate-300'
+                        ? 'bg-secondary text-muted-foreground hover:bg-slate-200'
+                        : 'cursor-not-allowed bg-muted text-slate-300'
                   }`}
                 >
                   <span>{icon}</span>
@@ -246,7 +246,7 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
               );
             })}
           </div>
-          <p className="mt-2 text-[10px] text-slate-400">
+          <p className="mt-2 text-[10px] text-muted-foreground">
             {activeSections} seç{activeSections === 1 ? 'ão' : 'ões'} selecionadas
           </p>
         </div>
@@ -256,31 +256,31 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Header Institucional ── */}
           <div className="mb-8 border-b-2 border-slate-950 pb-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-950">
+            <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-foreground">
               SECTI — Secretaria de Ciência, Tecnologia e Inovação
             </p>
-            <p className="mt-0.5 text-[10px] uppercase tracking-[0.16em] text-slate-500">
+            <p className="mt-0.5 text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
               Superintendência de Ciência, Desenvolvimento e Transferência de Tecnologia
             </p>
             <div className="mt-4 flex items-end justify-between gap-4">
-              <h1 className="text-xl font-extrabold tracking-tight text-slate-950 leading-tight">
+              <h1 className="text-xl font-extrabold tracking-tight text-foreground leading-tight">
                 {nome}
               </h1>
-              <p className="shrink-0 text-[10px] text-slate-400">
+              <p className="shrink-0 text-[10px] text-muted-foreground">
                 Gerado em {dataGeracao}
               </p>
             </div>
-            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] text-slate-500">
-              <span><span className="font-semibold text-slate-700">Status:</span> {status}</span>
-              <span><span className="font-semibold text-slate-700">Categoria:</span> {projeto.categoria ?? 'Não informada'}</span>
-              <span><span className="font-semibold text-slate-700">Período:</span> {dataInicio} – {dataFim}</span>
+            <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] text-muted-foreground">
+              <span><span className="font-semibold text-muted-foreground">Status:</span> {status}</span>
+              <span><span className="font-semibold text-muted-foreground">Categoria:</span> {projeto.categoria ?? 'Não informada'}</span>
+              <span><span className="font-semibold text-muted-foreground">Período:</span> {dataInicio} – {dataFim}</span>
             </div>
           </div>
 
           {/* ── Seção 1: Dados do Projeto ── */}
           {options.dadosBasicos && (
             <section className="mb-7">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">1. Dados do Projeto</p>
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">1. Dados do Projeto</p>
               <div className="grid grid-cols-2 gap-x-8 gap-y-3">
                 {[
                   { label: 'OSC / Executora', value: osc },
@@ -293,8 +293,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                   { label: 'Valor total', value: formatCurrency(projeto.valorTotal) },
                 ].map(({ label, value }) => (
                   <div key={label}>
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">{label}</p>
-                    <p className="mt-0.5 text-[11px] font-medium text-slate-900">{value}</p>
+                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{label}</p>
+                    <p className="mt-0.5 text-[11px] font-medium text-foreground">{value}</p>
                   </div>
                 ))}
               </div>
@@ -303,8 +303,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção 2: Monitoramento ── */}
           {options.monitoramento && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">2. Monitoramento</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">2. Monitoramento</p>
 
               {/* 4 indicadores */}
               <div className="mb-4 grid grid-cols-4 gap-3">
@@ -314,42 +314,42 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                   { label: 'Saúde da Entrega', value: saudeEntrega },
                   { label: 'Progresso Físico', value: `${progresso.toFixed(0)}%` },
                 ].map(({ label, value }) => (
-                  <div key={label} className="rounded border border-slate-200 bg-slate-50 px-3 py-2.5 text-center">
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">{label}</p>
-                    <p className="mt-1 text-[13px] font-bold text-slate-900">{value}</p>
+                  <div key={label} className="rounded border border-border bg-muted px-3 py-2.5 text-center">
+                    <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
+                    <p className="mt-1 text-[13px] font-bold text-foreground">{value}</p>
                   </div>
                 ))}
               </div>
 
               {/* Metas summary */}
               <div className="mb-4 grid grid-cols-3 gap-3">
-                <div className="rounded border border-slate-200 bg-slate-50 px-3 py-2.5 text-center">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Metas modeladas</p>
-                  <p className="mt-1 text-[13px] font-bold text-slate-900">{monitoramento.totalMetas}</p>
+                <div className="rounded border border-border bg-muted px-3 py-2.5 text-center">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Metas modeladas</p>
+                  <p className="mt-1 text-[13px] font-bold text-foreground">{monitoramento.totalMetas}</p>
                 </div>
-                <div className="rounded border border-slate-200 bg-slate-50 px-3 py-2.5 text-center">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Total previsto</p>
-                  <p className="mt-1 text-[13px] font-bold text-slate-900">{monitoramento.totalPrevisto}</p>
+                <div className="rounded border border-border bg-muted px-3 py-2.5 text-center">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Total previsto</p>
+                  <p className="mt-1 text-[13px] font-bold text-foreground">{monitoramento.totalPrevisto}</p>
                 </div>
-                <div className="rounded border border-slate-200 bg-slate-50 px-3 py-2.5 text-center">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-400">Total realizado</p>
-                  <p className="mt-1 text-[13px] font-bold text-slate-900">{monitoramento.totalRealizado}</p>
+                <div className="rounded border border-border bg-muted px-3 py-2.5 text-center">
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Total realizado</p>
+                  <p className="mt-1 text-[13px] font-bold text-foreground">{monitoramento.totalRealizado}</p>
                 </div>
               </div>
 
               {operacional.resumoExecutivo && (
                 <div className="mb-3">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">Resumo executivo</p>
-                  <p className="mt-1 text-[11px] leading-5 text-slate-700">{operacional.resumoExecutivo}</p>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Resumo executivo</p>
+                  <p className="mt-1 text-[11px] leading-5 text-muted-foreground">{operacional.resumoExecutivo}</p>
                 </div>
               )}
 
               {operacional.bloqueios.length > 0 && (
                 <div className="mb-3">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">Bloqueios</p>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Bloqueios</p>
                   <ul className="mt-1 list-disc space-y-0.5 pl-4">
                     {operacional.bloqueios.map((item) => (
-                      <li key={item} className="text-[11px] text-slate-700">{item}</li>
+                      <li key={item} className="text-[11px] text-muted-foreground">{item}</li>
                     ))}
                   </ul>
                 </div>
@@ -357,10 +357,10 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
               {operacional.proximosPassos.length > 0 && (
                 <div>
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">Próximos passos</p>
+                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Próximos passos</p>
                   <ul className="mt-1 list-disc space-y-0.5 pl-4">
                     {operacional.proximosPassos.map((item) => (
-                      <li key={item} className="text-[11px] text-slate-700">{item}</li>
+                      <li key={item} className="text-[11px] text-muted-foreground">{item}</li>
                     ))}
                   </ul>
                 </div>
@@ -370,17 +370,17 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção 3: Metas ── */}
           {options.metas && projeto.metas.length > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">3. Metas</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">3. Metas</p>
               <table className="w-full border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-slate-100">
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Código</th>
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Descrição</th>
-                    <th className="border border-slate-200 px-3 py-2 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Unidade</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Previsto</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Realizado</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">%</th>
+                  <tr className="bg-secondary">
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Código</th>
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Descrição</th>
+                    <th className="border border-border px-3 py-2 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Unidade</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Previsto</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Realizado</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">%</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -389,13 +389,13 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       ? ((meta.realizadoTotal / meta.totalPrevisto) * 100).toFixed(0)
                       : '—';
                     return (
-                      <tr key={meta.id} className="even:bg-slate-50">
-                        <td className="border border-slate-200 px-3 py-2 font-semibold text-slate-900">{meta.codigo}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-slate-700">{meta.descricao}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-center text-slate-600">{meta.unidade}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right text-slate-700">{meta.totalPrevisto}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right font-semibold text-slate-900">{meta.realizadoTotal}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right font-bold text-slate-900">{percentual}%</td>
+                      <tr key={meta.id} className="even:bg-muted">
+                        <td className="border border-border px-3 py-2 font-semibold text-foreground">{meta.codigo}</td>
+                        <td className="border border-border px-3 py-2 text-muted-foreground">{meta.descricao}</td>
+                        <td className="border border-border px-3 py-2 text-center text-muted-foreground">{meta.unidade}</td>
+                        <td className="border border-border px-3 py-2 text-right text-muted-foreground">{meta.totalPrevisto}</td>
+                        <td className="border border-border px-3 py-2 text-right font-semibold text-foreground">{meta.realizadoTotal}</td>
+                        <td className="border border-border px-3 py-2 text-right font-bold text-foreground">{percentual}%</td>
                       </tr>
                     );
                   })}
@@ -410,14 +410,14 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                 if (!hasTrimData) return null;
                 return (
                   <div key={`trim-${meta.id}`} className="mt-4">
-                    <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-slate-400">
+                    <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                       {meta.codigo} — {meta.descricao} (trimestral)
                     </p>
                     <table className="w-full border-collapse text-[11px]">
                       <thead>
-                        <tr className="bg-slate-100">
+                        <tr className="bg-secondary">
                           {Array.from({ length: projeto.cronograma.totalTrimestres }).map((_, idx) => (
-                            <th key={idx} colSpan={2} className="border border-slate-200 px-2 py-1.5 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+                            <th key={idx} colSpan={2} className="border border-border px-2 py-1.5 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                               T{idx + 1}
                             </th>
                           ))}
@@ -425,8 +425,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                         <tr>
                           {Array.from({ length: projeto.cronograma.totalTrimestres }).map((_, idx) => (
                             <>
-                              <th key={`p-${idx}`} className="border border-slate-200 px-2 py-1 text-center text-[9px] text-slate-400">Prev.</th>
-                              <th key={`r-${idx}`} className="border border-slate-200 px-2 py-1 text-center text-[9px] text-slate-400">Real.</th>
+                              <th key={`p-${idx}`} className="border border-border px-2 py-1 text-center text-[9px] text-muted-foreground">Prev.</th>
+                              <th key={`r-${idx}`} className="border border-border px-2 py-1 text-center text-[9px] text-muted-foreground">Real.</th>
                             </>
                           ))}
                         </tr>
@@ -435,8 +435,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                         <tr>
                           {Array.from({ length: projeto.cronograma.totalTrimestres }).map((_, idx) => (
                             <>
-                              <td key={`pv-${idx}`} className="border border-slate-200 px-2 py-1.5 text-center text-slate-700">{meta.previstoPorTrimestre[idx] ?? 0}</td>
-                              <td key={`rv-${idx}`} className="border border-slate-200 px-2 py-1.5 text-center font-semibold text-slate-900">{meta.realizadoPorTrimestre[idx] ?? 0}</td>
+                              <td key={`pv-${idx}`} className="border border-border px-2 py-1.5 text-center text-muted-foreground">{meta.previstoPorTrimestre[idx] ?? 0}</td>
+                              <td key={`rv-${idx}`} className="border border-border px-2 py-1.5 text-center font-semibold text-foreground">{meta.realizadoPorTrimestre[idx] ?? 0}</td>
                             </>
                           ))}
                         </tr>
@@ -450,14 +450,14 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Etapas ── */}
           {options.etapas && (projeto.etapas?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">4. Etapas e Entregáveis</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">4. Etapas e Entregáveis</p>
               <div className="space-y-3">
                 {projeto.etapas!.map((etapa) => (
-                  <div key={etapa.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div key={etapa.id} className="rounded-lg border border-border bg-muted p-3">
                     <div className="mb-2 flex items-center justify-between">
-                      <p className="text-[11px] font-semibold text-slate-900">{etapa.nome}</p>
-                      <p className="text-[11px] font-bold text-sky-700">{etapa.percentual.toFixed(0)}%</p>
+                      <p className="text-[11px] font-semibold text-foreground">{etapa.nome}</p>
+                      <p className="text-[11px] font-bold text-primary">{etapa.percentual.toFixed(0)}%</p>
                     </div>
                     {/* Progress bar */}
                     <div className="mb-3 h-2 overflow-hidden rounded-full bg-slate-200">
@@ -471,14 +471,14 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       <div className="space-y-1">
                         {etapa.entregaveis.map((entregavel) => (
                           <div key={entregavel.id} className="flex items-center gap-2">
-                            <span className={`h-3.5 w-3.5 rounded-full border-2 ${entregavel.concluido ? 'border-emerald-500 bg-emerald-500' : 'border-slate-300 bg-white'}`}>
+                            <span className={`h-3.5 w-3.5 rounded-full border-2 ${entregavel.concluido ? 'border-emerald-500 bg-emerald-500' : 'border-input bg-white'}`}>
                               {entregavel.concluido && (
                                 <svg className="h-full w-full text-white" viewBox="0 0 12 12" fill="none">
                                   <path d="M2.5 6.5L5 9L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                 </svg>
                               )}
                             </span>
-                            <span className={`text-[10px] ${entregavel.concluido ? 'text-slate-500 line-through' : 'text-slate-700'}`}>
+                            <span className={`text-[10px] ${entregavel.concluido ? 'text-muted-foreground line-through' : 'text-muted-foreground'}`}>
                               {entregavel.nome}
                             </span>
                           </div>
@@ -493,16 +493,16 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Orçamento ── */}
           {options.orcamento && (projeto.rubricas?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">5. Orçamento</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">5. Orçamento</p>
               <table className="w-full border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-slate-100">
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Rubrica</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Previsto</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Executado</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">%</th>
-                    <th className="border border-slate-200 px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Aditivos</th>
+                  <tr className="bg-secondary">
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Rubrica</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Previsto</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Executado</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">%</th>
+                    <th className="border border-border px-3 py-2 text-right text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Aditivos</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -512,12 +512,12 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       : '—';
                     const totalAditivos = rubrica.aditivos.reduce((sum, a) => sum + a.valor, 0);
                     return (
-                      <tr key={rubrica.id} className="even:bg-slate-50">
-                        <td className="border border-slate-200 px-3 py-2 font-medium text-slate-900">{rubrica.nome}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right text-slate-700">{formatCurrency(rubrica.previsto)}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right font-semibold text-slate-900">{formatCurrency(rubrica.executado)}</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right font-bold text-slate-900">{percentual}%</td>
-                        <td className="border border-slate-200 px-3 py-2 text-right text-slate-600">
+                      <tr key={rubrica.id} className="even:bg-muted">
+                        <td className="border border-border px-3 py-2 font-medium text-foreground">{rubrica.nome}</td>
+                        <td className="border border-border px-3 py-2 text-right text-muted-foreground">{formatCurrency(rubrica.previsto)}</td>
+                        <td className="border border-border px-3 py-2 text-right font-semibold text-foreground">{formatCurrency(rubrica.executado)}</td>
+                        <td className="border border-border px-3 py-2 text-right font-bold text-foreground">{percentual}%</td>
+                        <td className="border border-border px-3 py-2 text-right text-muted-foreground">
                           {totalAditivos > 0 ? formatCurrency(totalAditivos) : '—'}
                         </td>
                       </tr>
@@ -525,16 +525,16 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                   })}
                 </tbody>
                 <tfoot>
-                  <tr className="bg-slate-100 font-semibold">
-                    <td className="border border-slate-200 px-3 py-2 text-slate-900">Total</td>
-                    <td className="border border-slate-200 px-3 py-2 text-right text-slate-900">
+                  <tr className="bg-secondary font-semibold">
+                    <td className="border border-border px-3 py-2 text-foreground">Total</td>
+                    <td className="border border-border px-3 py-2 text-right text-foreground">
                       {formatCurrency(projeto.rubricas!.reduce((s, r) => s + r.previsto, 0))}
                     </td>
-                    <td className="border border-slate-200 px-3 py-2 text-right text-slate-900">
+                    <td className="border border-border px-3 py-2 text-right text-foreground">
                       {formatCurrency(projeto.rubricas!.reduce((s, r) => s + r.executado, 0))}
                     </td>
-                    <td className="border border-slate-200 px-3 py-2 text-right text-slate-900">—</td>
-                    <td className="border border-slate-200 px-3 py-2 text-right text-slate-900">
+                    <td className="border border-border px-3 py-2 text-right text-foreground">—</td>
+                    <td className="border border-border px-3 py-2 text-right text-foreground">
                       {formatCurrency(projeto.rubricas!.reduce((s, r) => s + r.aditivos.reduce((ss, a) => ss + a.valor, 0), 0))}
                     </td>
                   </tr>
@@ -545,21 +545,21 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Parceiros ── */}
           {options.parceiros && (projeto.parceirosModulo?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">6. Parceiros</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">6. Parceiros</p>
               <div className="grid grid-cols-2 gap-3">
                 {projeto.parceirosModulo!.map((parceiro) => (
-                  <div key={parceiro.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div key={parceiro.id} className="rounded-lg border border-border bg-muted p-3">
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-[11px] font-semibold text-slate-900">{parceiro.nome}</p>
-                        <p className="mt-0.5 text-[10px] text-slate-500">{parceiro.papel}</p>
+                        <p className="text-[11px] font-semibold text-foreground">{parceiro.nome}</p>
+                        <p className="mt-0.5 text-[10px] text-muted-foreground">{parceiro.papel}</p>
                       </div>
                       <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                         parceiro.status === 'Ativo' ? 'bg-emerald-100 text-emerald-700' :
-                        parceiro.status === 'Apoiador' ? 'bg-sky-100 text-sky-700' :
+                        parceiro.status === 'Apoiador' ? 'bg-primary/20 text-primary' :
                         parceiro.status === 'Consultor' ? 'bg-amber-100 text-amber-700' :
-                        'bg-slate-200 text-slate-500'
+                        'bg-slate-200 text-muted-foreground'
                       }`}>
                         {parceiro.status}
                       </span>
@@ -572,37 +572,37 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Riscos ── */}
           {options.riscos && (projeto.riscos?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">7. Riscos</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">7. Riscos</p>
               <div className="space-y-2">
                 {projeto.riscos!.map((risco) => (
-                  <div key={risco.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div key={risco.id} className="rounded-lg border border-border bg-muted p-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
-                        <p className="text-[11px] font-medium text-slate-900">{risco.descricao}</p>
+                        <p className="text-[11px] font-medium text-foreground">{risco.descricao}</p>
                         {risco.mitigacao && (
-                          <p className="mt-1 text-[10px] text-slate-500"><span className="font-medium">Mitigação:</span> {risco.mitigacao}</p>
+                          <p className="mt-1 text-[10px] text-muted-foreground"><span className="font-medium">Mitigação:</span> {risco.mitigacao}</p>
                         )}
                       </div>
                       <div className="flex shrink-0 gap-2">
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                           risco.probabilidade === 'Alta' ? 'bg-rose-100 text-rose-700' :
                           risco.probabilidade === 'Média' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-200 text-slate-600'
+                          'bg-slate-200 text-muted-foreground'
                         }`}>
                           {risco.probabilidade}
                         </span>
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                           risco.impacto === 'Alto' ? 'bg-rose-100 text-rose-700' :
                           risco.impacto === 'Médio' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-200 text-slate-600'
+                          'bg-slate-200 text-muted-foreground'
                         }`}>
                           {risco.impacto}
                         </span>
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                           risco.status === 'Aberto' ? 'bg-rose-100 text-rose-700' :
                           risco.status === 'Mitigado' ? 'bg-emerald-100 text-emerald-700' :
-                          'bg-slate-200 text-slate-600'
+                          'bg-slate-200 text-muted-foreground'
                         }`}>
                           {risco.status}
                         </span>
@@ -616,22 +616,22 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Governança ── */}
           {options.governanca && (projeto.decisoes?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">8. Governança</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">8. Governança</p>
               <div className="space-y-2">
                 {projeto.decisoes!.map((decisao) => (
-                  <div key={decisao.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div key={decisao.id} className="rounded-lg border border-border bg-muted p-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
-                        <p className="text-[11px] font-semibold text-slate-900">{decisao.titulo}</p>
+                        <p className="text-[11px] font-semibold text-foreground">{decisao.titulo}</p>
                         {decisao.descricao && (
-                          <p className="mt-1 text-[10px] text-slate-600">{decisao.descricao}</p>
+                          <p className="mt-1 text-[10px] text-muted-foreground">{decisao.descricao}</p>
                         )}
                         {decisao.responsavel && (
-                          <p className="mt-1 text-[10px] text-slate-500">Responsável: {decisao.responsavel}</p>
+                          <p className="mt-1 text-[10px] text-muted-foreground">Responsável: {decisao.responsavel}</p>
                         )}
                       </div>
-                      <span className="shrink-0 text-[10px] font-medium text-slate-400">
+                      <span className="shrink-0 text-[10px] font-medium text-muted-foreground">
                         {formatBRDate(parseProjetoDate(decisao.data))}
                       </span>
                     </div>
@@ -643,15 +643,15 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Indicadores ── */}
           {options.indicadores && (projeto.indicadores?.length ?? 0) > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">9. Indicadores de Pesquisa</p>
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">9. Indicadores de Pesquisa</p>
               <div className="space-y-3">
                 {projeto.indicadores!.map((indicador) => (
-                  <div key={indicador.id} className="rounded-lg border border-slate-200 bg-slate-50 p-3">
+                  <div key={indicador.id} className="rounded-lg border border-border bg-muted p-3">
                     <div className="mb-2 flex items-center justify-between">
                       <div>
-                        <p className="text-[11px] font-semibold text-slate-900">{indicador.nome}</p>
-                        <p className="mt-0.5 text-[10px] text-slate-500">{indicador.categoria}</p>
+                        <p className="text-[11px] font-semibold text-foreground">{indicador.nome}</p>
+                        <p className="mt-0.5 text-[10px] text-muted-foreground">{indicador.categoria}</p>
                       </div>
                     </div>
                     {/* Bar chart for series */}
@@ -662,8 +662,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                             className="w-full rounded-t bg-sky-600"
                             style={{ height: `${Math.max(8, (item.valor / Math.max(...indicador.serie.map(s => s.valor))) * 40)}px` }}
                           />
-                          <p className="mt-1 text-center text-[8px] text-slate-500 truncate">{item.label}</p>
-                          <p className="text-center text-[9px] font-semibold text-slate-700">{item.valor}</p>
+                          <p className="mt-1 text-center text-[8px] text-muted-foreground truncate">{item.label}</p>
+                          <p className="text-center text-[9px] font-semibold text-muted-foreground">{item.valor}</p>
                         </div>
                       ))}
                     </div>
@@ -675,32 +675,32 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
 
           {/* ── Seção: Lançamentos recentes ── */}
           {options.lancamentos && ultimosLancamentos.length > 0 && (
-            <section className="mb-7 border-t border-slate-100 pt-5">
-              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-slate-400">
+            <section className="mb-7 border-t border-border/70 pt-5">
+              <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
                 10. Lançamentos recentes (últimos {ultimosLancamentos.length})
               </p>
               <table className="w-full border-collapse text-[11px]">
                 <thead>
-                  <tr className="bg-slate-100">
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Data ativ.</th>
-                    <th className="border border-slate-200 px-3 py-2 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">T</th>
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Descrição</th>
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Local</th>
-                    <th className="border border-slate-200 px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-slate-500">Valores</th>
+                  <tr className="bg-secondary">
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Data ativ.</th>
+                    <th className="border border-border px-3 py-2 text-center text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">T</th>
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Descrição</th>
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Local</th>
+                    <th className="border border-border px-3 py-2 text-left text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Valores</th>
                   </tr>
                 </thead>
                 <tbody>
                   {ultimosLancamentos.map((lanc) => (
-                    <tr key={lanc.id} className="even:bg-slate-50">
-                      <td className="border border-slate-200 px-3 py-2 text-slate-600">
+                    <tr key={lanc.id} className="even:bg-muted">
+                      <td className="border border-border px-3 py-2 text-muted-foreground">
                         {lanc.dataAtividade
                           ? new Date(lanc.dataAtividade + 'T00:00:00').toLocaleDateString('pt-BR')
                           : new Date(lanc.dataRegistro).toLocaleDateString('pt-BR')}
                       </td>
-                      <td className="border border-slate-200 px-3 py-2 text-center font-semibold text-slate-900">T{lanc.trimestre}</td>
-                      <td className="border border-slate-200 px-3 py-2 text-slate-700">{lanc.descricaoAtividade}</td>
-                      <td className="border border-slate-200 px-3 py-2 text-slate-600">{lanc.localAtendido ?? '—'}</td>
-                      <td className="border border-slate-200 px-3 py-2 text-slate-700">
+                      <td className="border border-border px-3 py-2 text-center font-semibold text-foreground">T{lanc.trimestre}</td>
+                      <td className="border border-border px-3 py-2 text-muted-foreground">{lanc.descricaoAtividade}</td>
+                      <td className="border border-border px-3 py-2 text-muted-foreground">{lanc.localAtendido ?? '—'}</td>
+                      <td className="border border-border px-3 py-2 text-muted-foreground">
                         {lanc.valores.map((v) => {
                           const meta = projeto.metas.find((m) => m.id === v.metaId);
                           return `${meta?.codigo ?? 'Meta'}: +${v.valorRealizado}`;
@@ -714,8 +714,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
           )}
 
           {/* ── Footer ── */}
-          <div className="border-t border-slate-200 pt-4 text-center">
-            <p className="text-[9px] text-slate-400">
+          <div className="border-t border-border pt-4 text-center">
+            <p className="text-[9px] text-muted-foreground">
               Gerado automaticamente pelo Dashboard SUPCDT em {dataGeracao}
             </p>
             <p className="mt-0.5 text-[9px] text-slate-300">

@@ -69,7 +69,7 @@ export function WifiTable({ points, onEditPoint, onDeletePoint }: WifiTableProps
       <div className="hidden overflow-hidden rounded-[1.75rem] border border-border/80 bg-card/85 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] lg:block">
         <Table>
           <TableHeader>
-            <TableRow className="border-slate-100">
+            <TableRow className="border-border/70">
               <TableHead>Ponto</TableHead>
               <TableHead>RA</TableHead>
               <TableHead>Status</TableHead>
@@ -84,7 +84,7 @@ export function WifiTable({ points, onEditPoint, onDeletePoint }: WifiTableProps
           </TableHeader>
           <TableBody>
             {points.map((point) => (
-              <TableRow key={point.id} className="border-slate-100">
+              <TableRow key={point.id} className="border-border/70">
                 <TableCell>
                   <div>
                     <p className="font-semibold text-foreground">{point.nome}</p>
