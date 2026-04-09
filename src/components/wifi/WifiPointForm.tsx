@@ -316,10 +316,10 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-white px-6 pt-6 pb-0 overscroll-contain">
+        <form onSubmit={handleSubmit} className="min-h-0 flex-1 overflow-y-auto bg-card px-6 pt-6 pb-0 overscroll-contain">
           <div className="grid gap-4 md:grid-cols-2">
             {initialPosition && !point && (
-              <div className="rounded-[1.5rem] border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900 md:col-span-2">
+              <div className="rounded-[1.5rem] border border-primary/25 bg-primary/10 px-4 py-3 text-sm text-primary md:col-span-2">
                 O ponto inicial veio do mapa principal. Use o mapa abaixo para refinar a localizacao exata antes de salvar.
               </div>
             )}
@@ -365,7 +365,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                   variant="outline"
                   onClick={handleCepLookup}
                   disabled={lookingUpCep}
-                  className="rounded-full border-border bg-white text-muted-foreground hover:bg-muted"
+                  className="rounded-full border-border bg-card text-muted-foreground hover:bg-muted"
                 >
                   {lookingUpCep ? (
                     <>
@@ -406,7 +406,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                     type="button"
                     variant="outline"
                     onClick={() => setManualCoordinates((current) => !current)}
-                    className="rounded-full border-border bg-white text-muted-foreground hover:bg-secondary"
+                    className="rounded-full border-border bg-card text-muted-foreground hover:bg-secondary"
                   >
                     {manualCoordinates ? 'Ocultar coordenadas' : 'Ajuste manual'}
                   </Button>
@@ -422,7 +422,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                 </div>
 
                 {(pointFeedback || lookingUpPointAddress) && (
-                  <div className="mt-3 flex items-start gap-2 rounded-[1.15rem] border border-border bg-white px-3.5 py-3 text-xs leading-5 text-muted-foreground">
+                  <div className="mt-3 flex items-start gap-2 rounded-[1.15rem] border border-border bg-card px-3.5 py-3 text-xs leading-5 text-muted-foreground">
                     {lookingUpPointAddress ? <Loader2 className="mt-0.5 h-3.5 w-3.5 animate-spin text-primary" /> : <MapPinned className="mt-0.5 h-3.5 w-3.5 text-primary" />}
                     <span>{pointFeedback}</span>
                   </div>
@@ -437,7 +437,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                         step="0.000001"
                         value={form.latitude}
                         onChange={(e) => setForm((current) => ({ ...current, latitude: e.target.value }))}
-                        className="rounded-2xl bg-white"
+                        className="rounded-2xl bg-card"
                       />
                       {errors.latitude && <p className="text-xs text-destructive">{errors.latitude}</p>}
                     </div>
@@ -449,7 +449,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                         step="0.000001"
                         value={form.longitude}
                         onChange={(e) => setForm((current) => ({ ...current, longitude: e.target.value }))}
-                        className="rounded-2xl bg-white"
+                        className="rounded-2xl bg-card"
                       />
                       {errors.longitude && <p className="text-xs text-destructive">{errors.longitude}</p>}
                     </div>

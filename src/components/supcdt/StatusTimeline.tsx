@@ -88,19 +88,19 @@ export function StatusTimeline({ history, currentStatus, currentSetor, currentDa
     const getEventColor = (status: string, sector?: string) => {
         if (sector) {
             const normalized = sector.toLowerCase();
-            if (normalized.includes('execução')) return 'bg-blue-500';
-            if (normalized.includes('planejamento')) return 'bg-purple-500';
-            if (normalized.includes('monitoramento')) return 'bg-orange-500';
-            if (normalized.includes('financeiro')) return 'bg-yellow-500';
-            if (normalized.includes('jurídico')) return 'bg-red-500';
-            return 'bg-green-500';
+            if (normalized.includes('execução')) return 'bg-primary';
+            if (normalized.includes('planejamento')) return 'bg-accent';
+            if (normalized.includes('monitoramento')) return 'bg-warning';
+            if (normalized.includes('financeiro')) return 'bg-warning';
+            if (normalized.includes('jurídico')) return 'bg-destructive';
+            return 'bg-success';
         }
 
         // Fallback to status colors (using Tailwind classes to match the bar style)
         const normalized = status.toLowerCase();
-        if (normalized.includes('assinado')) return 'bg-emerald-500';
-        if (normalized.includes('andamento')) return 'bg-blue-500';
-        if (normalized.includes('reprov')) return 'bg-rose-500';
+        if (normalized.includes('assinado')) return 'bg-success';
+        if (normalized.includes('andamento')) return 'bg-primary';
+        if (normalized.includes('reprov')) return 'bg-destructive/100';
         if (normalized.includes('encerrado')) return 'bg-gray-500';
         return 'bg-gray-400';
     };
@@ -143,7 +143,7 @@ export function StatusTimeline({ history, currentStatus, currentSetor, currentDa
                             <div
                                 className={cn("absolute left-0 top-1.5 h-6 w-6 rounded-full border-2 border-background shadow-sm flex items-center justify-center z-10", barColor)}
                             >
-                                <div className="h-2 w-2 rounded-full bg-white/90" />
+                                <div className="h-2 w-2 rounded-full bg-card/90" />
                             </div>
 
                             {/* Content Card */}

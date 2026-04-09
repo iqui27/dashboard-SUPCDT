@@ -369,7 +369,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-card py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>

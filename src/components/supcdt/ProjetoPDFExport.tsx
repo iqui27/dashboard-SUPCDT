@@ -189,10 +189,10 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
       `}</style>
 
       {/* Overlay */}
-      <div className="pdf-export-overlay fixed inset-0 z-[200] overflow-y-auto bg-white">
+      <div className="pdf-export-overlay fixed inset-0 z-[200] overflow-y-auto bg-card">
 
         {/* Action bar — hidden on print */}
-        <div className="pdf-no-print sticky top-0 z-10 border-b border-border bg-white px-6 py-3 shadow-sm">
+        <div className="pdf-no-print sticky top-0 z-10 border-b border-border bg-card px-6 py-3 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">Exportar PDF</p>
@@ -235,8 +235,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                     isActive && hasData
                       ? 'bg-primary/20 text-primary/90 ring-1 ring-sky-300'
                       : hasData
-                        ? 'bg-secondary text-muted-foreground hover:bg-slate-200'
-                        : 'cursor-not-allowed bg-muted text-slate-300'
+                        ? 'bg-secondary text-muted-foreground hover:bg-secondary'
+                        : 'cursor-not-allowed bg-muted text-muted-foreground'
                   }`}
                 >
                   <span>{icon}</span>
@@ -460,9 +460,9 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       <p className="text-[11px] font-bold text-primary">{etapa.percentual.toFixed(0)}%</p>
                     </div>
                     {/* Progress bar */}
-                    <div className="mb-3 h-2 overflow-hidden rounded-full bg-slate-200">
+                    <div className="mb-3 h-2 overflow-hidden rounded-full bg-secondary">
                       <div
-                        className="h-full rounded-full bg-sky-600 transition-all"
+                        className="h-full rounded-full bg-primary transition-all"
                         style={{ width: `${Math.min(100, etapa.percentual)}%` }}
                       />
                     </div>
@@ -471,7 +471,7 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       <div className="space-y-1">
                         {etapa.entregaveis.map((entregavel) => (
                           <div key={entregavel.id} className="flex items-center gap-2">
-                            <span className={`h-3.5 w-3.5 rounded-full border-2 ${entregavel.concluido ? 'border-emerald-500 bg-emerald-500' : 'border-input bg-white'}`}>
+                            <span className={`h-3.5 w-3.5 rounded-full border-2 ${entregavel.concluido ? 'border-success bg-success' : 'border-input bg-card'}`}>
                               {entregavel.concluido && (
                                 <svg className="h-full w-full text-white" viewBox="0 0 12 12" fill="none">
                                   <path d="M2.5 6.5L5 9L9.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -558,8 +558,8 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
                         parceiro.status === 'Ativo' ? 'bg-emerald-100 text-emerald-700' :
                         parceiro.status === 'Apoiador' ? 'bg-primary/20 text-primary' :
-                        parceiro.status === 'Consultor' ? 'bg-amber-100 text-amber-700' :
-                        'bg-slate-200 text-muted-foreground'
+                        parceiro.status === 'Consultor' ? 'bg-warning/10 text-warning' :
+                        'bg-secondary text-muted-foreground'
                       }`}>
                         {parceiro.status}
                       </span>
@@ -586,23 +586,23 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       </div>
                       <div className="flex shrink-0 gap-2">
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
-                          risco.probabilidade === 'Alta' ? 'bg-rose-100 text-rose-700' :
-                          risco.probabilidade === 'Média' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-200 text-muted-foreground'
+                          risco.probabilidade === 'Alta' ? 'bg-destructive/10 text-destructive' :
+                          risco.probabilidade === 'Média' ? 'bg-warning/10 text-warning' :
+                          'bg-secondary text-muted-foreground'
                         }`}>
                           {risco.probabilidade}
                         </span>
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
-                          risco.impacto === 'Alto' ? 'bg-rose-100 text-rose-700' :
-                          risco.impacto === 'Médio' ? 'bg-amber-100 text-amber-700' :
-                          'bg-slate-200 text-muted-foreground'
+                          risco.impacto === 'Alto' ? 'bg-destructive/10 text-destructive' :
+                          risco.impacto === 'Médio' ? 'bg-warning/10 text-warning' :
+                          'bg-secondary text-muted-foreground'
                         }`}>
                           {risco.impacto}
                         </span>
                         <span className={`rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase ${
-                          risco.status === 'Aberto' ? 'bg-rose-100 text-rose-700' :
+                          risco.status === 'Aberto' ? 'bg-destructive/10 text-destructive' :
                           risco.status === 'Mitigado' ? 'bg-emerald-100 text-emerald-700' :
-                          'bg-slate-200 text-muted-foreground'
+                          'bg-secondary text-muted-foreground'
                         }`}>
                           {risco.status}
                         </span>
@@ -659,7 +659,7 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
                       {indicador.serie.map((item, idx) => (
                         <div key={idx} className="flex-1">
                           <div
-                            className="w-full rounded-t bg-sky-600"
+                            className="w-full rounded-t bg-primary"
                             style={{ height: `${Math.max(8, (item.valor / Math.max(...indicador.serie.map(s => s.valor))) * 40)}px` }}
                           />
                           <p className="mt-1 text-center text-[8px] text-muted-foreground truncate">{item.label}</p>
@@ -718,7 +718,7 @@ export function ProjetoPDFExport({ projeto, lancamentos, onClose }: ProjetoPDFEx
             <p className="text-[9px] text-muted-foreground">
               Gerado automaticamente pelo Dashboard SUPCDT em {dataGeracao}
             </p>
-            <p className="mt-0.5 text-[9px] text-slate-300">
+            <p className="mt-0.5 text-[9px] text-muted-foreground">
               SECTI — Secretaria de Ciência, Tecnologia e Inovação do Distrito Federal
             </p>
           </div>

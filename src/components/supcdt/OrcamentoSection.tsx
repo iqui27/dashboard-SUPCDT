@@ -143,7 +143,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
       </div>
 
       {/* Summary header */}
-      <div className="grid divide-y divide-slate-100 border-t border-border/70 text-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      <div className="grid divide-y divide-border/70 border-t border-border/70 text-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
         <div className="px-4 py-3">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Previsto</p>
           <p className="mt-0.5 text-sm font-bold text-foreground">{formatCurrency(totalPrevisto)}</p>
@@ -162,7 +162,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
 
       <div className="border-t border-border/70">
         {addingRubrica && (
-          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
+          <div className="divide-y divide-border/70 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <div className="flex-1 space-y-1">
                 <label className="text-xs font-medium text-muted-foreground">Nome da rubrica</label>
@@ -171,7 +171,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                   value={newRubricaNome}
                   onChange={(e) => setNewRubricaNome(e.target.value)}
                   placeholder="Ex: Material, Serviços, Equipamentos..."
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   autoFocus
                 />
               </div>
@@ -183,7 +183,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                   step={0.01}
                   value={newRubricaPrevisto}
                   onChange={(e) => setNewRubricaPrevisto(Number(e.target.value))}
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
               <div className="w-32 space-y-1">
@@ -194,7 +194,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                   step={0.01}
                   value={newRubricaExecutado}
                   onChange={(e) => setNewRubricaExecutado(Number(e.target.value))}
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
               <div className="flex gap-2">
@@ -226,11 +226,11 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
 
         {rubricas.length === 0 && !addingRubrica ? (
           <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-            <DollarSign className="mx-auto h-8 w-8 text-slate-300" />
+            <DollarSign className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-2">Nenhuma rubrica cadastrada. Clique em "Nova rubrica" para começar.</p>
           </div>
         ) : (
-          <ul role="list" className="divide-y divide-slate-100">
+          <ul role="list" className="divide-y divide-border/70">
             {rubricas.map((rubrica) => {
               const variation = getVariationPercent(rubrica);
               const isOverBudget = variation !== null && variation > 100;
@@ -245,7 +245,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                       <div className="flex items-center gap-2">
                         <h4 className="text-sm font-semibold text-foreground">{rubrica.nome}</h4>
                         {variation !== null && (
-                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${isOverBudget ? 'bg-rose-50 text-destructive' : 'bg-emerald-50 text-emerald-600'}`}>
+                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${isOverBudget ? 'bg-destructive/10 text-destructive' : 'bg-emerald-50 text-emerald-600'}`}>
                             {variation.toFixed(0)}%
                           </span>
                         )}
@@ -259,7 +259,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                       <div className="mt-2 flex items-center gap-2">
                         <div className="h-1.5 flex-1 rounded-full bg-secondary">
                           <div
-                            className={`h-1.5 rounded-full transition-all ${isOverBudget ? 'bg-rose-500' : 'bg-emerald-500'}`}
+                            className={`h-1.5 rounded-full transition-all ${isOverBudget ? 'bg-destructive/100' : 'bg-success'}`}
                             style={{ width: `${barWidth}%` }}
                           />
                         </div>
@@ -310,7 +310,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                               value={newAditivoDescricao}
                               onChange={(e) => setNewAditivoDescricao(e.target.value)}
                               placeholder="Descrição"
-                              className="h-8 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                              className="h-8 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                               autoFocus
                             />
                             <input
@@ -320,13 +320,13 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                               value={newAditivoValor}
                               onChange={(e) => setNewAditivoValor(Number(e.target.value))}
                               placeholder="Valor (R$)"
-                              className="h-8 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                              className="h-8 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                             />
                             <input
                               type="date"
                               value={newAditivoData}
                               onChange={(e) => setNewAditivoData(e.target.value)}
-                              className="h-8 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                              className="h-8 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                             />
                           </div>
                           <div className="flex gap-2">
@@ -368,7 +368,7 @@ export function OrcamentoSection({ projeto, onUpdate }: OrcamentoSectionProps) {
                     <button
                       type="button"
                       onClick={() => handleDeleteRubrica(rubrica.id)}
-                      className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+                      className="rounded-full p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

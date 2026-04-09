@@ -7,7 +7,7 @@ function getSemaforoCor(label: string, value: string): string {
     case 'Status atual':
       if (['Em andamento', 'Assinado'].includes(v)) return 'bg-success/100';
       if (['Suspenso'].includes(v)) return 'bg-warning';
-      if (['Encerrado'].includes(v)) return 'bg-slate-400';
+      if (['Encerrado'].includes(v)) return 'bg-muted-foreground';
       return 'bg-muted';
     case 'Status operacional':
       if (['Operando'].includes(v)) return 'bg-success/100';
@@ -443,8 +443,8 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                 </li>
               ))}
               <li className="bg-primary px-5 py-3 text-white">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-slate-300">Chave de integração</p>
-                <p className="mt-0.5 break-all font-mono text-xs text-slate-200">{projeto.chaveIntegracao}</p>
+                <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Chave de integração</p>
+                <p className="mt-0.5 break-all font-mono text-xs text-foreground/80">{projeto.chaveIntegracao}</p>
               </li>
             </ul>
           </div>

@@ -129,7 +129,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-white px-6 pt-5 pb-0 overscroll-contain">
+        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-card px-6 pt-5 pb-0 overscroll-contain">
           <div className="space-y-4">
 
             {/* Trimestre + Local */}
@@ -200,7 +200,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                 Valores realizados
               </p>
               <div className="overflow-hidden rounded-[1.1rem] border border-border/70">
-                <ul role="list" className="divide-y divide-slate-100">
+                <ul role="list" className="divide-y divide-border/70">
                   {projeto.metas.map((meta) => (
                     <li key={meta.id} className="flex items-center justify-between gap-4 px-4 py-3">
                       <div className="min-w-0">
@@ -223,7 +223,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex items-center justify-between gap-2 border-t border-border/70 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex items-center justify-between gap-2 border-t border-border/70 bg-card py-4 mt-5">
             <div>
               {isEditing && (
                 <Button

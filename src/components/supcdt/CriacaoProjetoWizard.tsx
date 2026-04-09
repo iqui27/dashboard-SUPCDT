@@ -117,7 +117,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
                   className={`rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
                     activeStep === index
                       ? 'bg-primary text-white'
-                      : 'bg-white text-muted-foreground hover:bg-secondary hover:text-foreground'
+                      : 'bg-card text-muted-foreground hover:bg-secondary hover:text-foreground'
                   }`}
                 >
                   {step.label}
@@ -259,7 +259,7 @@ export function CriacaoProjetoWizard({ onClose, onSuccess }: CriacaoProjetoWizar
                 <p className="text-sm text-muted-foreground">
                   Ative os módulos de monitoramento que este projeto utilizará. Você poderá alterar essa configuração depois.
                 </p>
-                <div className="divide-y divide-slate-100 rounded-[1.35rem] border border-border bg-white">
+                <div className="divide-y divide-border/70 rounded-[1.35rem] border border-border bg-card">
                   {MODULOS_CONFIG.map((mod) => (
                     <label
                       key={mod.key}

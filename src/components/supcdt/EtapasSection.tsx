@@ -143,7 +143,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
 
       <div className="border-t border-border/70">
         {addingEtapa && (
-          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
+          <div className="divide-y divide-border/70 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
               <div className="flex-1 space-y-1">
                 <label className="text-xs font-medium text-muted-foreground">Nome da etapa</label>
@@ -152,7 +152,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                   value={newEtapaNome}
                   onChange={(e) => setNewEtapaNome(e.target.value)}
                   placeholder="Ex: Planejamento, Execução, Encerramento..."
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   autoFocus
                 />
               </div>
@@ -164,7 +164,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                   max={100}
                   value={newEtapaPercentual}
                   onChange={(e) => setNewEtapaPercentual(Number(e.target.value))}
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
               <div className="flex gap-2">
@@ -195,11 +195,11 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
 
         {etapas.length === 0 && !addingEtapa ? (
           <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-            <ListChecks className="mx-auto h-8 w-8 text-slate-300" />
+            <ListChecks className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-2">Nenhuma etapa cadastrada. Clique em "Nova etapa" para começar.</p>
           </div>
         ) : (
-          <ul role="list" className="divide-y divide-slate-100">
+          <ul role="list" className="divide-y divide-border/70">
             {etapas.map((etapa) => (
               <li key={etapa.id} className="px-5 py-4">
                 <div className="flex items-start justify-between gap-3">
@@ -214,7 +214,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                             max={100}
                             value={editPercentualValue}
                             onChange={(e) => setEditPercentualValue(Number(e.target.value))}
-                            className="h-7 w-16 rounded-lg border border-border px-2 text-sm outline-none focus:ring-2 focus:ring-sky-500"
+                            className="h-7 w-16 rounded-lg border border-border px-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                             autoFocus
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') handleUpdatePercentual(etapa);
@@ -224,7 +224,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                           <button
                             type="button"
                             onClick={() => handleUpdatePercentual(etapa)}
-                            className="rounded-full p-1 text-primary hover:bg-sky-50"
+                            className="rounded-full p-1 text-primary hover:bg-primary/10"
                           >
                             <Check className="h-4 w-4" />
                           </button>
@@ -250,7 +250,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                       )}
                       <div className="h-1.5 flex-1 rounded-full bg-secondary">
                         <div
-                          className="h-1.5 rounded-full bg-sky-600 transition-all"
+                          className="h-1.5 rounded-full bg-primary transition-all"
                           style={{ width: `${Math.min(100, Math.max(0, etapa.percentual))}%` }}
                         />
                       </div>
@@ -266,8 +266,8 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                               onClick={() => handleToggleEntregavel(etapa, ent.id, ent.concluido)}
                               className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border transition ${
                                 ent.concluido
-                                  ? 'border-emerald-500 bg-emerald-500 text-white'
-                                  : 'border-input bg-white hover:border-slate-400'
+                                  ? 'border-emerald-500 bg-success text-white'
+                                  : 'border-input bg-card hover:border-border'
                               }`}
                             >
                               {ent.concluido && <Check className="h-3 w-3" />}
@@ -278,7 +278,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                             <button
                               type="button"
                               onClick={() => handleDeleteEntregavel(etapa.id, ent.id)}
-                              className="rounded-full p-0.5 text-slate-300 hover:bg-secondary hover:text-muted-foreground"
+                              className="rounded-full p-0.5 text-muted-foreground hover:bg-secondary hover:text-muted-foreground"
                             >
                               <X className="h-3 w-3" />
                             </button>
@@ -295,7 +295,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                           value={newEntregavelNome}
                           onChange={(e) => setNewEntregavelNome(e.target.value)}
                           placeholder="Nome do entregável..."
-                          className="h-7 flex-1 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-sky-500"
+                          className="h-7 flex-1 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                           autoFocus
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') handleAddEntregavel(etapa.id);
@@ -313,7 +313,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                         <button
                           type="button"
                           onClick={() => handleAddEntregavel(etapa.id)}
-                          className="rounded-full p-1 text-primary hover:bg-sky-50"
+                          className="rounded-full p-1 text-primary hover:bg-primary/10"
                         >
                           <Check className="h-4 w-4" />
                         </button>
@@ -333,7 +333,7 @@ export function EtapasSection({ projeto, onUpdate }: EtapasSectionProps) {
                   <button
                     type="button"
                     onClick={() => handleDeleteEtapa(etapa.id)}
-                    className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+                    className="rounded-full p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>

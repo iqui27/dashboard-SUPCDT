@@ -230,7 +230,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           <Button
             onClick={() => openCreateModal()}
             disabled={apiStatus === 'unavailable'}
-            className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-primary/90 disabled:bg-slate-300"
+            className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-primary/90 disabled:bg-muted"
           >
             <Plus className="mr-1.5 h-3 w-3" />
             Novo ponto
@@ -283,7 +283,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           className={`rounded-[1.5rem] border px-5 py-4 text-sm ${
             apiStatus === 'unavailable'
               ? 'border-warning/40 bg-warning/10 text-warning'
-              : 'border-sky-200 bg-sky-50 text-sky-900'
+              : 'border-primary/25 bg-primary/10 text-primary'
           }`}
         >
           {apiMessage}
@@ -293,7 +293,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
       {loading ? (
         <div className="flex min-h-[40vh] items-center justify-center rounded-[1.45rem] border border-border/80 bg-card/85 px-8 py-10 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
           <div className="flex flex-col items-center gap-4">
-            <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-sky-200 border-t-sky-700" />
+            <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-primary/25 border-t-sky-700" />
             <div className="text-center">
               <p className="font-semibold text-foreground">Carregando operação Wi‑Fi</p>
               <p className="mt-1 text-sm text-muted-foreground">Buscando pontos, cobertura e métricas territoriais.</p>
@@ -301,7 +301,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           </div>
         </div>
       ) : apiStatus === 'unavailable' ? (
-        <div className="rounded-[1.45rem] border border-dashed border-warning/40 bg-white/85 px-8 py-14 text-center shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+        <div className="rounded-[1.45rem] border border-dashed border-warning/40 bg-card/85 px-8 py-14 text-center shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
           <p className="text-lg font-semibold text-foreground">Módulo Wi‑Fi Social indisponível neste ambiente</p>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
             O frontend foi publicado antes do backend que expõe as rotas de Wi‑Fi Social. O restante do dashboard pode continuar operando, mas esta área depende da publicação das rotas

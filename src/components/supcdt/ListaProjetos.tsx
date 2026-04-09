@@ -19,10 +19,10 @@ function getStatusClasses(status: string) {
     return 'bg-emerald-600 text-white';
   }
   if (normalized.includes('planejamento') || normalized.includes('analise')) {
-    return 'bg-sky-600 text-white';
+    return 'bg-primary text-primary-foreground';
   }
   if (normalized.includes('atras') || normalized.includes('paralis') || normalized.includes('cancel')) {
-    return 'bg-rose-600 text-white';
+    return 'bg-destructive text-destructive-foreground';
   }
   return 'bg-primary text-primary-foreground';
 }
@@ -100,7 +100,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
               key={projeto.id}
               type="button"
               onClick={() => onProjectSelect(projeto.id)}
-              className="group rounded-[1.45rem] border border-border/80 bg-card/85 p-5 text-left shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-sky-200"
+              className="group rounded-[1.45rem] border border-border/80 bg-card/85 p-5 text-left shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/25"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -115,7 +115,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                       Risco {nivelRisco}
                     </span>
                     {precisaAcao && (
-                      <span className="inline-flex rounded-full bg-warning/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800">
+                      <span className="inline-flex rounded-full bg-warning/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-warning">
                         Requer ação
                       </span>
                     )}
@@ -165,7 +165,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                   <span className="font-semibold text-foreground">{progresso.toFixed(0)}%</span>
                 </div>
                 <div className="mt-3 h-2 rounded-full bg-secondary">
-                  <div className="h-2 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
+                  <div className="h-2 rounded-full bg-primary transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
                 </div>
               </div>
             </button>

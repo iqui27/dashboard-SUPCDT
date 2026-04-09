@@ -117,11 +117,11 @@ export function GovernancaSection({ projeto, onUpdate }: GovernancaSectionProps)
         <div className="border-t border-border/70">
           {decisoes.length === 0 ? (
             <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-              <Gavel className="mx-auto h-8 w-8 text-slate-300" />
+              <Gavel className="mx-auto h-8 w-8 text-muted-foreground" />
               <p className="mt-2">Nenhuma decisão registrada. Clique em "Nova decisão" para começar.</p>
             </div>
           ) : (
-            <ul role="list" className="divide-y divide-slate-100">
+            <ul role="list" className="divide-y divide-border/70">
               {sortedDecisoes.map((decisao) => (
                 <li key={decisao.id} className="flex items-start justify-between gap-3 px-5 py-4">
                   <div className="min-w-0 flex-1">
@@ -141,7 +141,7 @@ export function GovernancaSection({ projeto, onUpdate }: GovernancaSectionProps)
                   <button
                     type="button"
                     onClick={() => handleDelete(decisao.id)}
-                    className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+                    className="rounded-full p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -177,10 +177,10 @@ export function GovernancaSection({ projeto, onUpdate }: GovernancaSectionProps)
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4 bg-white px-6 pt-5 pb-0">
+            <form onSubmit={handleSubmit} className="space-y-4 bg-card px-6 pt-5 pb-0">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  Título <span className="text-rose-500">*</span>
+                  Título <span className="text-destructive">*</span>
                 </label>
                 <input
                   required
@@ -196,7 +196,7 @@ export function GovernancaSection({ projeto, onUpdate }: GovernancaSectionProps)
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
                   <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                    Data <span className="text-rose-500">*</span>
+                    Data <span className="text-destructive">*</span>
                   </label>
                   <input
                     required

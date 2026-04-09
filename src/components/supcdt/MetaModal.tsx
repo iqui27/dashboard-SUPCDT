@@ -125,33 +125,33 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-white px-6 pt-5 pb-0 overscroll-contain">
+        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-card px-6 pt-5 pb-0 overscroll-contain">
           <div className="space-y-4">
 
             {/* Código + Unidade */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  Código <span className="text-rose-500">*</span>
+                  Código <span className="text-destructive">*</span>
                 </label>
                 <input
                   required
                   type="text"
                   placeholder="1.1"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={codigo}
                   onChange={(e) => setCodigo(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5 sm:col-span-2">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                  Unidade de medida <span className="text-rose-500">*</span>
+                  Unidade de medida <span className="text-destructive">*</span>
                 </label>
                 <input
                   required
                   type="text"
                   placeholder="Pessoas, Relatórios, Unidades..."
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={unidade}
                   onChange={(e) => setUnidade(e.target.value)}
                 />
@@ -161,13 +161,13 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
             {/* Descrição */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                Descrição da meta <span className="text-rose-500">*</span>
+                Descrição da meta <span className="text-destructive">*</span>
               </label>
               <textarea
                 required
                 rows={2}
                 placeholder="Ex: Realizar formações presenciais com jovens das escolas."
-                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
               />
@@ -179,7 +179,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
                 Previsto por trimestre
               </p>
               <div className="overflow-hidden rounded-[1.1rem] border border-border/70">
-                <ul role="list" className="divide-y divide-slate-100">
+                <ul role="list" className="divide-y divide-border/70">
                   {Array.from({ length: totalTrimesters }).map((_, idx) => (
                     <li key={idx} className="flex items-center justify-between gap-4 px-4 py-3">
                       <p className="text-sm text-muted-foreground">{getTrimestreLabel(idx, projeto.dataInicio)}</p>
@@ -188,7 +188,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
                         min="0"
                         step="any"
                         placeholder="0"
-                        className="h-8 w-24 shrink-0 rounded-full border border-border bg-muted px-3 text-sm text-right text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        className="h-8 w-24 shrink-0 rounded-full border border-border bg-muted px-3 text-sm text-right text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                         value={previsto[idx] || ''}
                         onChange={(e) => handlePrevistoChange(idx, e.target.value)}
                       />
@@ -204,7 +204,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-card py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>

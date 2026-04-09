@@ -65,7 +65,7 @@ export function Login() {
 
           <form onSubmit={handleSubmit} className="bg-card px-6 py-5 transition-colors">
             {infoMessage && (
-              <div className="mb-4 rounded-[0.9rem] border border-amber-500/30 bg-warning/100/10 px-4 py-3 text-sm text-amber-800 dark:text-amber-200">
+              <div className="mb-4 rounded-[0.9rem] border border-warning/40 bg-warning/10 px-4 py-3 text-sm text-warning">
                 {infoMessage}
               </div>
             )}

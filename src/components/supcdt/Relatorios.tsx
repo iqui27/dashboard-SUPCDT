@@ -90,7 +90,7 @@ export function Relatorios({ projetos }: RelatoriosProps) {
                     <select
                       value={pdfSelectIndex}
                       onChange={(e) => setPdfSelectIndex(e.target.value)}
-                      className="rounded-full border border-border bg-white px-3 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-600/30"
+                      className="rounded-full border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/30"
                     >
                       {projetos.map((p, idx) => (
                         <option key={p.id} value={String(idx)}>

@@ -134,7 +134,7 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
 
       <div className="border-t border-border/70">
         {addingIndicador && (
-          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
+          <div className="divide-y divide-border/70 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="space-y-3">
               <div className="flex flex-col gap-3 sm:flex-row">
                 <div className="flex-1 space-y-1">
@@ -144,7 +144,7 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
                     value={newNome}
                     onChange={(e) => setNewNome(e.target.value)}
                     placeholder="Nome do indicador"
-                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-teal-500"
+                    className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                     autoFocus
                   />
                 </div>
@@ -155,7 +155,7 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
                     value={newCategoria}
                     onChange={(e) => setNewCategoria(e.target.value)}
                     placeholder="Ex: Impacto"
-                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-teal-500"
+                    className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   />
                 </div>
               </div>
@@ -170,20 +170,20 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
                       value={serie.label}
                       onChange={(e) => handleSerieChange(idx, 'label', e.target.value)}
                       placeholder="Label"
-                      className="h-8 flex-1 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-teal-500"
+                      className="h-8 flex-1 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                     />
                     <input
                       type="number"
                       value={serie.valor || ''}
                       onChange={(e) => handleSerieChange(idx, 'valor', parseFloat(e.target.value) || 0)}
                       placeholder="Valor"
-                      className="h-8 w-24 rounded-lg border border-border bg-white px-2 text-xs outline-none focus:ring-2 focus:ring-teal-500"
+                      className="h-8 w-24 rounded-lg border border-border bg-card px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
                     />
                     {newSeries.length > 1 && (
                       <button
                         type="button"
                         onClick={() => handleRemoveSerie(idx)}
-                        className="rounded-full p-1 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+                        className="rounded-full p-1 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
@@ -229,11 +229,11 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
 
         {indicadores.length === 0 && !addingIndicador ? (
           <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-            <BarChart3 className="mx-auto h-8 w-8 text-slate-300" />
+            <BarChart3 className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-2">Nenhum indicador cadastrado. Clique em "Novo indicador" para começar.</p>
           </div>
         ) : (
-          <ul role="list" className="divide-y divide-slate-100">
+          <ul role="list" className="divide-y divide-border/70">
             {indicadores.map((indicador) => (
               <li key={indicador.id} className="flex items-start justify-between gap-3 px-5 py-4">
                 <div className="min-w-0 flex-1">
@@ -250,7 +250,7 @@ export function IndicadoresSection({ projeto, onUpdate }: IndicadoresSectionProp
                 <button
                   type="button"
                   onClick={() => handleDeleteIndicador(indicador.id)}
-                  className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+                  className="rounded-full p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

@@ -184,21 +184,21 @@ function getStatusTone(status: string) {
     return {
       surface: 'border-emerald-200 bg-emerald-50/70',
       badge: 'bg-emerald-600 text-white',
-      progress: 'bg-emerald-500'
+      progress: 'bg-success'
     };
   }
   if (normalized.includes('planejamento') || normalized.includes('analise')) {
     return {
-      surface: 'border-sky-200 bg-sky-50/70',
-      badge: 'bg-sky-600 text-white',
-      progress: 'bg-sky-500'
+      surface: 'border-primary/25 bg-primary/10',
+      badge: 'bg-primary text-white',
+      progress: 'bg-primary/100'
     };
   }
   if (normalized.includes('atras') || normalized.includes('paralis') || normalized.includes('cancel')) {
     return {
-      surface: 'border-rose-200 bg-rose-50/70',
-      badge: 'bg-rose-600 text-white',
-      progress: 'bg-rose-500'
+      surface: 'border-destructive/25 bg-destructive/10',
+      badge: 'bg-destructive text-white',
+      progress: 'bg-destructive/100'
     };
   }
   return {
@@ -211,26 +211,26 @@ function getStatusTone(status: string) {
 function getRiskTone(nivelRisco: string) {
   const normalized = normalizeText(nivelRisco);
   if (normalized.includes('critico')) {
-    return 'bg-destructive/20 text-rose-800 ring-1 ring-rose-200';
+    return 'bg-destructive/20 text-destructive ring-1 ring-rose-200';
   }
   if (normalized.includes('alto')) {
-    return 'bg-warning/20 text-amber-800 ring-1 ring-amber-200';
+    return 'bg-warning/20 text-warning ring-1 ring-amber-200';
   }
   if (normalized.includes('medio')) {
     return 'bg-primary/20 text-primary/90 ring-1 ring-sky-200';
   }
-  return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
+  return 'bg-success/20 text-emerald-800 ring-1 ring-emerald-200';
 }
 
 function getHealthTone(saudeEntrega: string) {
   const normalized = normalizeText(saudeEntrega);
   if (normalized.includes('risco')) {
-    return 'bg-destructive/20 text-rose-800 ring-1 ring-rose-200';
+    return 'bg-destructive/20 text-destructive ring-1 ring-rose-200';
   }
   if (normalized.includes('observ')) {
-    return 'bg-warning/20 text-amber-800 ring-1 ring-amber-200';
+    return 'bg-warning/20 text-warning ring-1 ring-amber-200';
   }
-  return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
+  return 'bg-success/20 text-emerald-800 ring-1 ring-emerald-200';
 }
 
 function CategoryBarList({ data }: { data: { name: string; value: number; fill: string }[] }) {
@@ -370,7 +370,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
             <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Portfólio</p>
             <p className="text-base font-bold text-foreground">{projetos.length} projetos</p>
           </div>
-          <div className="h-7 w-px bg-slate-200" />
+          <div className="h-7 w-px bg-secondary" />
           <div className="text-right">
             <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Integração</p>
             <p className="text-base font-bold text-foreground">{portfolio.chavesIntegracao} chaves</p>
@@ -441,12 +441,12 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                 {portfolio.alertas.length} itens
               </span>
             </div>
-            <div className="mt-3 divide-y divide-slate-100">
+            <div className="mt-3 divide-y divide-border/70">
               {portfolio.alertas.length ? (
                 portfolio.alertas.slice(0, 5).map((alerta) => (
                   <div key={alerta.projetoId} className="flex items-start gap-3 py-2.5">
                     <span className={`mt-1 h-2 w-2 shrink-0 rounded-full ${
-                      alerta.severidade === 'critico' ? 'bg-rose-500' : 'bg-amber-400'
+                      alerta.severidade === 'critico' ? 'bg-destructive/100' : 'bg-warning'
                     }`} />
                     <div className="min-w-0">
                       <p className="truncate text-[13px] font-semibold text-foreground">{alerta.projetoNome}</p>
@@ -455,8 +455,8 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                   </div>
                 ))
               ) : (
-                <div className="flex items-center gap-2 py-3 text-xs text-emerald-700">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <div className="flex items-center gap-2 py-3 text-xs text-success">
+                  <span className="h-2 w-2 rounded-full bg-success" />
                   Nenhum alerta identificado
                 </div>
               )}
@@ -482,8 +482,8 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                 ))}
               </div>
             ) : (
-              <div className="mt-3 flex items-center gap-2 text-xs text-emerald-700">
-                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+              <div className="mt-3 flex items-center gap-2 text-xs text-success">
+                <span className="h-2 w-2 rounded-full bg-success" />
                 Cobertura mínima para monitoramento executivo atingida.
               </div>
             )}
@@ -498,7 +498,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         </div>
 
         <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
-          <ul role="list" className="divide-y divide-slate-100">
+          <ul role="list" className="divide-y divide-border/70">
             {projetos.map((projeto) => {
               const status = getProjetoStatus(projeto);
               const nivelRisco = getProjetoNivelRisco(projeto);
@@ -520,7 +520,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${tone.badge}`}>{status}</span>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getRiskTone(nivelRisco)}`}>Risco {nivelRisco}</span>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getHealthTone(saudeEntrega)}`}>{saudeEntrega}</span>
-                    {precisaAcao && <span className="shrink-0 rounded-full bg-warning/20 px-2 py-0.5 text-[10px] font-semibold text-amber-800">Prioritária</span>}
+                    {precisaAcao && <span className="shrink-0 rounded-full bg-warning/20 px-2 py-0.5 text-[10px] font-semibold text-warning">Prioritária</span>}
                   </div>
 
                   {/* Metadata lines */}

@@ -65,7 +65,7 @@ const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
 
 const ROLE_BADGE_VARIANTS: Record<UserRole, string> = {
   admin: 'bg-primary/10 text-primary border-primary/20',
-  editor: 'bg-warning/100/10 text-warning border-amber-500/20',
+  editor: 'bg-warning/10 text-warning border-warning/40',
   viewer: 'bg-muted text-foreground border-border'
 };
 
@@ -355,7 +355,7 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-[1.65rem] border border-white/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+      <div className="rounded-[1.65rem] border border-border/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/80">Governança de acesso</p>
@@ -411,7 +411,7 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
           variant="outline"
           onClick={() => loadUsers(false)}
           disabled={isLoading || isRefreshing}
-          className="inline-flex h-10 items-center gap-2 rounded-full border-border bg-white text-muted-foreground hover:bg-muted"
+          className="inline-flex h-10 items-center gap-2 rounded-full border-border bg-card text-muted-foreground hover:bg-muted"
         >
           <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           Atualizar lista

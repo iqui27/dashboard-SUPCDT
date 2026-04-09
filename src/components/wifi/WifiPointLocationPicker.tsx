@@ -59,7 +59,7 @@ export function WifiPointLocationPicker({
     <div className="overflow-hidden rounded-[1.5rem] border border-border bg-muted">
       <div className="flex items-center justify-between border-b border-border/80 px-4 py-3 text-xs text-muted-foreground">
         <span>Clique no mapa, arraste o marcador ou use o scroll para dar zoom e posicionar o ponto com precisão.</span>
-        <span className="rounded-full bg-white px-2.5 py-1 font-semibold text-muted-foreground">
+        <span className="rounded-full bg-card px-2.5 py-1 font-semibold text-muted-foreground">
           {latitude.toFixed(5)}, {longitude.toFixed(5)}
         </span>
       </div>

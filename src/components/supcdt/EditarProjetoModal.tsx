@@ -150,19 +150,19 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-white px-6 pt-5 pb-0 overscroll-contain" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
+        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-card px-6 pt-5 pb-0 overscroll-contain" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
           <div className="space-y-4">
 
             {/* Nome */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-                Nome do projeto <span className="text-rose-500">*</span>
+                Nome do projeto <span className="text-destructive">*</span>
               </label>
               <input
                 required
                 type="text"
                 placeholder="Nome completo do projeto"
-                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
               />
@@ -173,7 +173,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Status</label>
                 <select
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={status}
                   onChange={(e) => setStatus(e.target.value)}
                 >
@@ -185,7 +185,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Categoria</label>
                 <select
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={categoria}
                   onChange={(e) => setCategoria(e.target.value)}
                 >
@@ -208,7 +208,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                   </div>
                 ) : (
                   <select
-                    className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                     value={nomeOSC}
                     onChange={(e) => setNomeOSC(e.target.value)}
                   >
@@ -228,7 +228,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                   </div>
                 ) : (
                   <select
-                    className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                     value={responsavelSECTI}
                     onChange={(e) => setResponsavelSECTI(e.target.value)}
                   >
@@ -250,7 +250,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <input
                   type="text"
                   placeholder="Instituição parceira"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={parceiro}
                   onChange={(e) => setParceiro(e.target.value)}
                 />
@@ -260,7 +260,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <input
                   type="text"
                   placeholder="Região Administrativa"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={raPerigao}
                   onChange={(e) => setRaPerigao(e.target.value)}
                 />
@@ -274,7 +274,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <input
                   type="text"
                   placeholder="Ex: 001/2025"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={numeroTermo}
                   onChange={(e) => setNumeroTermo(e.target.value)}
                 />
@@ -284,7 +284,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <input
                   type="text"
                   placeholder="Ex: 00390-00012345/2025-00"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={processoSEI}
                   onChange={(e) => setProcessoSEI(e.target.value)}
                 />
@@ -299,7 +299,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 min="0"
                 step="0.01"
                 placeholder="0,00"
-                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                 value={valorTotal}
                 onChange={(e) => setValorTotal(e.target.value)}
               />
@@ -311,7 +311,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Data de início</label>
                 <input
                   type="date"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={dataInicio}
                   onChange={(e) => setDataInicio(e.target.value)}
                 />
@@ -320,7 +320,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Data de fim</label>
                 <input
                   type="date"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={dataFim}
                   onChange={(e) => setDataFim(e.target.value)}
                 />
@@ -333,7 +333,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
               <textarea
                 rows={3}
                 placeholder="Descrição resumida do projeto..."
-                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={descricao}
                 onChange={(e) => setDescricao(e.target.value)}
               />
@@ -345,7 +345,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
               <textarea
                 rows={3}
                 placeholder="Objetivos do projeto..."
-                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={objetivos}
                 onChange={(e) => setObjetivos(e.target.value)}
               />
@@ -354,7 +354,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-card py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-muted-foreground">
               Cancelar
             </Button>

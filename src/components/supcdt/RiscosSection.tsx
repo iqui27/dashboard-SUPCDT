@@ -16,8 +16,8 @@ const PROBABILIDADE_OPTIONS: ProbabilidadeRisco[] = ['Baixa', 'Média', 'Alta'];
 const IMPACTO_OPTIONS: ImpactoRisco[] = ['Baixo', 'Médio', 'Alto'];
 
 const STATUS_OPTIONS: { value: StatusRisco; label: string; color: string }[] = [
-  { value: 'Aberto', label: 'Aberto', color: 'bg-rose-100 text-rose-700 border-rose-200' },
-  { value: 'Mitigado', label: 'Mitigado', color: 'bg-amber-100 text-amber-700 border-warning/40' },
+  { value: 'Aberto', label: 'Aberto', color: 'bg-destructive/10 text-destructive border-destructive/25' },
+  { value: 'Mitigado', label: 'Mitigado', color: 'bg-warning/10 text-warning border-warning/40' },
   { value: 'Encerrado', label: 'Encerrado', color: 'bg-secondary text-muted-foreground border-border' },
 ];
 
@@ -35,17 +35,17 @@ function getStatusColor(status: StatusRisco): string {
  */
 function getSeverityColor(probabilidade: ProbabilidadeRisco, impacto: ImpactoRisco): string {
   if (probabilidade === 'Alta') {
-    if (impacto === 'Alto' || impacto === 'Médio') return 'bg-red-500';
-    return 'bg-warning/100'; // Alta × Baixo
+    if (impacto === 'Alto' || impacto === 'Médio') return 'bg-destructive';
+    return 'bg-warning'; // Alta × Baixo
   }
   if (probabilidade === 'Média') {
-    if (impacto === 'Alto') return 'bg-warning/100';
-    if (impacto === 'Médio') return 'bg-yellow-500';
-    return 'bg-green-500'; // Média × Baixo
+    if (impacto === 'Alto') return 'bg-warning';
+    if (impacto === 'Médio') return 'bg-warning';
+    return 'bg-success'; // Média × Baixo
   }
   // Baixa
-  if (impacto === 'Alto') return 'bg-yellow-500';
-  return 'bg-green-500'; // Baixa × Médio, Baixa × Baixo
+  if (impacto === 'Alto') return 'bg-warning';
+  return 'bg-success'; // Baixa × Médio, Baixa × Baixo
 }
 
 export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
@@ -157,7 +157,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
             value={risco.status}
             onChange={(e) => handleUpdateStatus(risco.id, e.target.value as StatusRisco)}
             onBlur={() => setEditingStatus(null)}
-            className="h-7 rounded-full border px-2.5 text-xs font-medium outline-none focus:ring-2 focus:ring-rose-500"
+            className="h-7 rounded-full border px-2.5 text-xs font-medium outline-none focus:ring-2 focus:ring-ring"
             autoFocus
           >
             {STATUS_OPTIONS.map((opt) => (
@@ -176,7 +176,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
         <button
           type="button"
           onClick={() => handleDeleteRisco(risco.id)}
-          className="rounded-full p-1.5 text-muted-foreground hover:bg-rose-50 hover:text-destructive"
+          className="rounded-full p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
         >
           <Trash2 className="h-4 w-4" />
         </button>
@@ -188,7 +188,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
     <div className="overflow-hidden rounded-[1.35rem] border border-border/80 bg-card/80 shadow-sm">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-rose-700/70">Gestão</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-destructive/70">Gestão</p>
           <h3 className="mt-0.5 text-sm font-bold text-foreground">Riscos</h3>
         </div>
         <Button
@@ -205,7 +205,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
 
       <div className="border-t border-border/70">
         {addingRisco && (
-          <div className="divide-y divide-slate-100 border-b border-border/70 bg-muted/50 px-5 py-4">
+          <div className="divide-y divide-border/70 border-b border-border/70 bg-muted/50 px-5 py-4">
             <div className="space-y-3">
               <div className="space-y-1">
                 <label className="text-xs font-medium text-muted-foreground">Descrição *</label>
@@ -214,7 +214,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                   value={newDescricao}
                   onChange={(e) => setNewDescricao(e.target.value)}
                   placeholder="Descreva o risco..."
-                  className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                  className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   autoFocus
                 />
               </div>
@@ -224,7 +224,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                   <select
                     value={newProbabilidade}
                     onChange={(e) => setNewProbabilidade(e.target.value as ProbabilidadeRisco)}
-                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                    className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   >
                     {PROBABILIDADE_OPTIONS.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -236,7 +236,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                   <select
                     value={newImpacto}
                     onChange={(e) => setNewImpacto(e.target.value as ImpactoRisco)}
-                    className="h-9 w-full rounded-xl border border-border bg-white px-3 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                    className="h-9 w-full rounded-xl border border-border bg-card px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
                   >
                     {IMPACTO_OPTIONS.map((opt) => (
                       <option key={opt} value={opt}>{opt}</option>
@@ -251,7 +251,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                   onChange={(e) => setNewMitigacao(e.target.value)}
                   placeholder="Como este risco está sendo mitigado..."
                   rows={2}
-                  className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-rose-500"
+                  className="w-full rounded-xl border border-border bg-card px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
                 />
               </div>
               <div className="flex gap-2">
@@ -284,14 +284,14 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
 
         {riscos.length === 0 && !addingRisco ? (
           <div className="px-5 py-10 text-center text-sm text-muted-foreground">
-            <AlertTriangle className="mx-auto h-8 w-8 text-slate-300" />
+            <AlertTriangle className="mx-auto h-8 w-8 text-muted-foreground" />
             <p className="mt-2">Nenhum risco cadastrado. Clique em "Novo risco" para começar.</p>
           </div>
         ) : (
           <>
             {/* Open risks */}
             {openRiscos.length > 0 && (
-              <ul role="list" className="divide-y divide-slate-100">
+              <ul role="list" className="divide-y divide-border/70">
                 {openRiscos.map((risco) => renderRisco(risco))}
               </ul>
             )}
@@ -302,7 +302,7 @@ export function RiscosSection({ projeto, onUpdate }: RiscosSectionProps) {
                 <div className="border-t border-border bg-muted px-5 py-2">
                   <p className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Encerrados</p>
                 </div>
-                <ul role="list" className="divide-y divide-slate-100">
+                <ul role="list" className="divide-y divide-border/70">
                   {closedRiscos.map((risco) => renderRisco(risco, true))}
                 </ul>
               </>

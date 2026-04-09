@@ -21,7 +21,7 @@ export function WifiDashboard({ stats, points }: WifiDashboardProps) {
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           { label: 'Total de Pontos', value: stats.totalPontos, helper: 'Pontos cadastrados na operação', icon: Wifi, tone: 'bg-primary/20 text-primary' },
-          { label: 'Pontos Críticos', value: stats.pontosCriticos, helper: 'Fila com criticidade máxima', icon: ShieldAlert, tone: 'bg-rose-100 text-destructive' },
+          { label: 'Pontos Críticos', value: stats.pontosCriticos, helper: 'Fila com criticidade máxima', icon: ShieldAlert, tone: 'bg-destructive/15 text-destructive' },
           { label: 'Manutenção Pendente', value: stats.manutencaoPendente, helper: 'Pontos em corretiva ou pendente', icon: Wrench, tone: 'bg-warning/20 text-warning' },
           { label: 'Incidentes Abertos', value: stats.incidentesAbertos, helper: 'Volume atual de ocorrências registradas', icon: AlertTriangle, tone: 'bg-secondary text-muted-foreground' }
         ].map((item) => (
@@ -166,7 +166,7 @@ export function WifiDashboard({ stats, points }: WifiDashboardProps) {
                     <p className="font-medium text-foreground">{item.regiaoAdministrativa}</p>
                     <span className="text-sm text-muted-foreground">{item.total} ponto(s)</span>
                   </div>
-                  <div className="mt-3 h-2 rounded-full bg-slate-200">
+                  <div className="mt-3 h-2 rounded-full bg-secondary">
                     <div className="h-2 rounded-full bg-warning/100" style={{ width: `${Math.min(100, item.total * 18)}%` }} />
                   </div>
                 </div>
