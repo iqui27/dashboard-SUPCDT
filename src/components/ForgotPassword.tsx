@@ -51,9 +51,9 @@ export function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-[linear-gradient(135deg,#eaf4fb_0%,#f8fafc_40%,#eef6f2_100%)] px-4">
-      <Card className="w-full max-w-lg rounded-[1.75rem] border border-border/80 bg-card/88 shadow-[0_40px_120px_-60px_rgba(15,23,42,0.45)] backdrop-blur-xl">
-        <CardHeader className="space-y-3 border-b border-border/70 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.10),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82))] px-6 py-6 text-center sm:px-8">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.16),transparent_28%),radial-gradient(circle_at_bottom_right,hsl(var(--accent)/0.10),transparent_24%),linear-gradient(180deg,hsl(var(--background))_0%,hsl(var(--muted))_100%)] px-4">
+      <Card className="w-full max-w-lg rounded-[1.75rem] border border-border/80 bg-card/88 shadow-[0_40px_120px_-60px_hsl(var(--foreground)/0.32)] backdrop-blur-xl">
+        <CardHeader className="space-y-3 border-b border-border/70 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.12),transparent_34%),linear-gradient(180deg,hsl(var(--card)/0.98),hsl(var(--card)/0.82))] px-6 py-6 text-center sm:px-8">
           <CardTitle className="text-[1.75rem] font-extrabold tracking-tight text-foreground">Recuperar senha</CardTitle>
           <CardDescription>
             Informe seu e-mail institucional para localizarmos sua conta e um e-mail pessoal para receber o link de redefinição.

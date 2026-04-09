@@ -355,7 +355,7 @@ export function UserManagement({ currentUserId }: UserManagementProps) {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-[1.65rem] border border-border/80 bg-[radial-gradient(circle_at_top_left,rgba(14,116,144,0.08),transparent_36%),linear-gradient(135deg,rgba(255,255,255,0.95),rgba(255,255,255,0.74))] p-5 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+      <div className="rounded-[1.65rem] border border-border/80 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.12),transparent_36%),linear-gradient(135deg,hsl(var(--card)/0.98),hsl(var(--card)/0.74))] p-5 shadow-[0_30px_80px_-45px_hsl(var(--foreground)/0.28)]">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-primary/80">Governança de acesso</p>
