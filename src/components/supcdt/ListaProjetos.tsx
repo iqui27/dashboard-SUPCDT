@@ -59,7 +59,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Base operacional</p>
           <h2 className="mt-0.5 text-lg font-bold tracking-tight text-foreground">Projetos monitorados</h2>
         </div>
-        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
+        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-slate-800">
           <Plus className="mr-1.5 h-3 w-3" />
           Novo projeto
         </Button>
@@ -155,7 +155,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                 </div>
                 <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
                   <Link2 className="h-4 w-4 text-muted-foreground" />
-                  <span className="truncate font-mono text-xs text-slate-800">{projeto.chaveIntegracao}</span>
+                  <span className="truncate font-mono text-xs text-muted-foreground">{projeto.chaveIntegracao}</span>
                 </div>
               </div>
 
@@ -164,7 +164,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                   <span>Progresso físico</span>
                   <span className="font-semibold text-foreground">{progresso.toFixed(0)}%</span>
                 </div>
-                <div className="mt-3 h-2 rounded-full bg-slate-200">
+                <div className="mt-3 h-2 rounded-full bg-secondary">
                   <div className="h-2 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
                 </div>
               </div>

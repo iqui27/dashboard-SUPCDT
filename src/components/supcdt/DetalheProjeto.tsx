@@ -6,26 +6,26 @@ function getSemaforoCor(label: string, value: string): string {
   switch (label) {
     case 'Status atual':
       if (['Em andamento', 'Assinado'].includes(v)) return 'bg-success/100';
-      if (['Suspenso'].includes(v)) return 'bg-amber-400';
+      if (['Suspenso'].includes(v)) return 'bg-warning';
       if (['Encerrado'].includes(v)) return 'bg-slate-400';
-      return 'bg-slate-300';
+      return 'bg-muted';
     case 'Status operacional':
       if (['Operando'].includes(v)) return 'bg-success/100';
-      if (['Planejado', 'Em implantação'].includes(v)) return 'bg-amber-400';
-      if (['Atenção', 'Crítico', 'Encerrado'].includes(v)) return 'bg-rose-500';
-      return 'bg-slate-300';
+      if (['Planejado', 'Em implantação'].includes(v)) return 'bg-warning';
+      if (['Atenção', 'Crítico', 'Encerrado'].includes(v)) return 'bg-destructive';
+      return 'bg-muted';
     case 'Nível de risco':
       if (['Baixo'].includes(v)) return 'bg-success/100';
-      if (['Médio'].includes(v)) return 'bg-amber-400';
-      if (['Alto', 'Crítico'].includes(v)) return 'bg-rose-500';
-      return 'bg-slate-300';
+      if (['Médio'].includes(v)) return 'bg-warning';
+      if (['Alto', 'Crítico'].includes(v)) return 'bg-destructive';
+      return 'bg-muted';
     case 'Saúde da entrega':
       if (['Saudável'].includes(v)) return 'bg-success/100';
-      if (['Observação'].includes(v)) return 'bg-amber-400';
-      if (['Risco'].includes(v)) return 'bg-rose-500';
-      return 'bg-slate-300';
+      if (['Observação'].includes(v)) return 'bg-warning';
+      if (['Risco'].includes(v)) return 'bg-destructive';
+      return 'bg-muted';
     default:
-      return 'bg-slate-300';
+      return 'bg-muted';
   }
 }
 import { toast } from 'sonner';
@@ -114,7 +114,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">{status}</span>
+              <span className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">{status}</span>
               <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">{projeto.categoria || 'Sem categoria'}</p>
             </div>
             <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-foreground">{nome}</h1>
@@ -153,7 +153,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <Download className="mr-1.5 h-3 w-3" />
               Exportar PDF
             </Button>
-            <Button onClick={() => setIsModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
+            <Button onClick={() => setIsModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-slate-800">
               <Plus className="mr-1.5 h-3 w-3" />
               Novo lançamento
             </Button>
@@ -251,7 +251,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <span className="rounded-full bg-slate-900 px-2.5 py-0.5 text-xs font-semibold text-white">{meta.codigo}</span>
+                              <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-white">{meta.codigo}</span>
                               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{meta.unidade}</p>
                             </div>
                             <h4 className="mt-2 text-sm font-semibold text-foreground">{meta.descricao}</h4>
@@ -370,12 +370,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                         <div className="min-w-0 flex-1">
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-slate-900 px-2.5 py-0.5 text-xs font-semibold text-white">{lanc.trimestre}º Trim</span>
+                            <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-white">{lanc.trimestre}º Trim</span>
                             <span className="text-xs text-muted-foreground">
                               Reg. {new Date(lanc.dataRegistro).toLocaleDateString('pt-BR')} · {lanc.registradoPor}
                             </span>
                             {lanc.dataAtividade && (
-                              <span className="text-xs text-sky-600 font-medium">
+                              <span className="text-xs text-primary font-medium">
                                 Ativ. {new Date(lanc.dataAtividade + 'T00:00:00').toLocaleDateString('pt-BR')}
                               </span>
                             )}
@@ -442,7 +442,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   <p className="mt-0.5 text-sm font-medium text-foreground">{item.value}</p>
                 </li>
               ))}
-              <li className="bg-slate-950 px-5 py-3 text-white">
+              <li className="bg-primary px-5 py-3 text-white">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-slate-300">Chave de integração</p>
                 <p className="mt-0.5 break-all font-mono text-xs text-slate-200">{projeto.chaveIntegracao}</p>
               </li>
@@ -455,7 +455,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <div className="flex items-center gap-2 px-5 py-4">
                 <ShieldAlert className="h-4 w-4 shrink-0 text-warning" />
                 <div>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-600/80">Atenção</p>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-warning/80">Atenção</p>
                   <h3 className="mt-0.5 text-sm font-bold text-foreground">Lacunas remanescentes</h3>
                 </div>
               </div>
@@ -472,7 +472,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           {/* Operational panel */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="flex items-center gap-2 px-5 py-4">
-              <Radar className="h-4 w-4 shrink-0 text-sky-600" />
+              <Radar className="h-4 w-4 shrink-0 text-primary" />
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Operação</p>
                 <h3 className="mt-0.5 text-sm font-bold text-foreground">Painel operacional</h3>
@@ -536,7 +536,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Evidências</p>
                   <div className="mt-1 space-y-1">
                     {operacional.evidencias.map((item) => (
-                      <a key={`${item.titulo}-${item.url}`} href={item.url} target="_blank" rel="noreferrer" className="block text-sm font-medium text-primary hover:text-sky-800">
+                      <a key={`${item.titulo}-${item.url}`} href={item.url} target="_blank" rel="noreferrer" className="block text-sm font-medium text-primary hover:text-primary/90">
                         {item.titulo}
                       </a>
                     ))}

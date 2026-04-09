@@ -183,7 +183,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
         {/* Header */}
         <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
           <div className="flex items-center gap-2.5">
-            <Activity className="h-4 w-4 text-sky-600" />
+            <Activity className="h-4 w-4 text-primary" />
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Monitoramento</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">Painel operacional</h2>
@@ -373,7 +373,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-slate-600">
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">
+            <Button type="submit" disabled={loading} className="h-8 rounded-full bg-primary px-4 text-xs text-white hover:bg-slate-800">
               {loading ? 'Salvando...' : 'Salvar'}
             </Button>
           </div>
