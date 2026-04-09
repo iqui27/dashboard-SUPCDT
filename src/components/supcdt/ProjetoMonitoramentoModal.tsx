@@ -185,8 +185,8 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
           <div className="flex items-center gap-2.5">
             <Activity className="h-4 w-4 text-sky-600" />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Monitoramento</p>
-              <h2 className="text-sm font-bold text-slate-900 leading-tight">Painel operacional</h2>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Monitoramento</p>
+              <h2 className="text-sm font-bold text-foreground leading-tight">Painel operacional</h2>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -206,7 +206,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Status operacional</label>
                 <select
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={statusOperacional}
                   onChange={(e) => setStatusOperacional(e.target.value)}
                 >
@@ -218,7 +218,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Nível de risco</label>
                 <select
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={nivelRisco}
                   onChange={(e) => setNivelRisco(e.target.value)}
                 >
@@ -234,7 +234,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Saúde da entrega</label>
                 <select
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={saudeEntrega}
                   onChange={(e) => setSaudeEntrega(e.target.value)}
                 >
@@ -246,7 +246,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Manutenção</label>
                 <select
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={manutencaoStatus}
                   onChange={(e) => setManutencaoStatus(e.target.value)}
                 >
@@ -258,15 +258,15 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             </div>
 
             {/* Checkbox ação prioritária */}
-            <div className="rounded-[1rem] border border-slate-200 bg-slate-50 px-4 py-3">
+            <div className="rounded-[1rem] border border-border bg-muted px-4 py-3">
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={precisaAcao}
                   onChange={(e) => setPrecisaAcao(e.target.checked)}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus:ring-sky-700"
+                  className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
                 />
-                <p className="text-sm font-medium text-slate-900">Projeto exige ação prioritária</p>
+                <p className="text-sm font-medium text-foreground">Projeto exige ação prioritária</p>
               </label>
             </div>
 
@@ -277,7 +277,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <input
                   type="number"
                   min={0}
-                  className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={incidentesAbertos}
                   onChange={(e) => setIncidentesAbertos(e.target.value)}
                 />
@@ -285,13 +285,13 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <div className="space-y-1.5">
                 <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Responsável operacional</label>
                 {loadingUsers ? (
-                  <div className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 flex items-center">
+                  <div className="h-9 w-full rounded-full border border-border bg-muted px-3 flex items-center">
                     <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
                     <span className="ml-2 text-sm text-slate-400">Carregando...</span>
                   </div>
                 ) : (
                   <select
-                    className="h-9 w-full rounded-full border border-slate-200 bg-slate-50 px-3 text-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                    className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                     value={responsavelOperacional}
                     onChange={(e) => setResponsavelOperacional(e.target.value)}
                   >
@@ -312,7 +312,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
               <textarea
                 rows={3}
                 placeholder="Resumo curto do estado atual..."
-                className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={resumoExecutivo}
                 onChange={(e) => setResumoExecutivo(e.target.value)}
               />
@@ -325,7 +325,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={bloqueios}
                   onChange={(e) => setBloqueios(e.target.value)}
                 />
@@ -335,7 +335,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={proximosPassos}
                   onChange={(e) => setProximosPassos(e.target.value)}
                 />
@@ -349,7 +349,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={coberturaDetalhada}
                   onChange={(e) => setCoberturaDetalhada(e.target.value)}
                 />
@@ -359,7 +359,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 <textarea
                   rows={3}
                   placeholder="Nome | URL"
-                  className="w-full rounded-[0.9rem] border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={evidencias}
                   onChange={(e) => setEvidencias(e.target.value)}
                 />
@@ -370,7 +370,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
 
           {/* Footer */}
           <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-100 bg-white py-4 mt-5">
-            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-slate-200 px-4 text-xs text-slate-600">
+            <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-slate-600">
               Cancelar
             </Button>
             <Button type="submit" disabled={loading} className="h-8 rounded-full bg-slate-950 px-4 text-xs text-white hover:bg-slate-800">

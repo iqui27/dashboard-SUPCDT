@@ -137,7 +137,7 @@ export function EditarProjetoModal({ projeto, onClose, onSuccess }: EditarProjet
           <div className="flex items-center gap-2.5">
             <FolderOpen className="h-4 w-4 text-sky-600" />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Projeto</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Projeto</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">Editar dados básicos</h2>
             </div>
           </div>

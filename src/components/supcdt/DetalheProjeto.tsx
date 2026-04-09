@@ -5,22 +5,22 @@ function getSemaforoCor(label: string, value: string): string {
   const v = value.trim();
   switch (label) {
     case 'Status atual':
-      if (['Em andamento', 'Assinado'].includes(v)) return 'bg-emerald-500';
+      if (['Em andamento', 'Assinado'].includes(v)) return 'bg-success/100';
       if (['Suspenso'].includes(v)) return 'bg-amber-400';
       if (['Encerrado'].includes(v)) return 'bg-slate-400';
       return 'bg-slate-300';
     case 'Status operacional':
-      if (['Operando'].includes(v)) return 'bg-emerald-500';
+      if (['Operando'].includes(v)) return 'bg-success/100';
       if (['Planejado', 'Em implantação'].includes(v)) return 'bg-amber-400';
       if (['Atenção', 'Crítico', 'Encerrado'].includes(v)) return 'bg-rose-500';
       return 'bg-slate-300';
     case 'Nível de risco':
-      if (['Baixo'].includes(v)) return 'bg-emerald-500';
+      if (['Baixo'].includes(v)) return 'bg-success/100';
       if (['Médio'].includes(v)) return 'bg-amber-400';
       if (['Alto', 'Crítico'].includes(v)) return 'bg-rose-500';
       return 'bg-slate-300';
     case 'Saúde da entrega':
-      if (['Saudável'].includes(v)) return 'bg-emerald-500';
+      if (['Saudável'].includes(v)) return 'bg-success/100';
       if (['Observação'].includes(v)) return 'bg-amber-400';
       if (['Risco'].includes(v)) return 'bg-rose-500';
       return 'bg-slate-300';
@@ -115,7 +115,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white">{status}</span>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">{projeto.categoria || 'Sem categoria'}</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">{projeto.categoria || 'Sem categoria'}</p>
             </div>
             <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-foreground">{nome}</h1>
             {projeto.descricao && (
@@ -174,7 +174,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">{item.label}</p>
               <div className="mt-0.5 flex items-center gap-2">
                 <span className={`h-2 w-2 shrink-0 rounded-full ${getSemaforoCor(item.label, item.value)}`} />
-                <p className={`text-sm font-bold ${item.flag ? 'text-rose-700' : 'text-foreground'}`}>{item.value}</p>
+                <p className={`text-sm font-bold ${item.flag ? 'text-destructive' : 'text-foreground'}`}>{item.value}</p>
               </div>
             </div>
           ))}
@@ -182,12 +182,12 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
         <div className="grid divide-y divide-slate-100 border-t border-slate-100 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           <div className="px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">Progresso físico</p>
-            <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-emerald-700' : 'text-foreground'}`}>
+            <p className={`mt-0.5 text-sm font-bold ${progresso > 100 ? 'text-success' : 'text-foreground'}`}>
               {progresso.toFixed(0)}%
-              {progresso > 100 && <span className="ml-1 text-[10px] font-normal text-emerald-600">Acima do previsto</span>}
+              {progresso > 100 && <span className="ml-1 text-[10px] font-normal text-success">Acima do previsto</span>}
             </p>
             <div className="mt-1.5 h-1 rounded-full bg-secondary">
-              <div className="h-1 rounded-full bg-sky-600 transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
+              <div className="h-1 rounded-full bg-primary transition-all" style={{ width: `${Math.min(100, Math.max(0, progresso))}%` }} />
             </div>
           </div>
           <div className="px-4 py-3">
@@ -212,7 +212,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           {/* Objective */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Escopo</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Escopo</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Objetivo e escopo atual</h3>
             </div>
             <div className="divide-y divide-slate-100 border-t border-slate-100 text-sm leading-6 text-muted-foreground">
@@ -231,7 +231,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="flex items-center justify-between px-5 py-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Execução</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Execução</p>
                 <h3 className="mt-0.5 text-sm font-bold text-foreground">Acompanhamento das metas</h3>
               </div>
               <Button variant="outline" size="sm" onClick={() => setIsMetaModalOpen(true)} className="h-8 rounded-full border-border px-3 text-xs">
@@ -269,7 +269,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                               <p className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Execução</p>
                               <p className="mt-0.5 text-base font-semibold text-foreground">{meta.realizadoTotal} / {meta.totalPrevisto}</p>
                               {meta.totalPrevisto > 0 && meta.realizadoTotal > meta.totalPrevisto && (
-                                <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                                <span className="mt-1 inline-block rounded-full bg-success/20 px-2 py-0.5 text-[10px] font-semibold text-success">
                                   Meta superada ({percentual.toFixed(0)}%)
                                 </span>
                               )}
@@ -280,13 +280,13 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                         <div className="mt-3">
                           <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>Progresso</span>
-                            <span className={`font-semibold ${metaSuperada ? 'text-emerald-600' : 'text-foreground'}`}>
+                            <span className={`font-semibold ${metaSuperada ? 'text-success' : 'text-foreground'}`}>
                               {metaSuperada ? `Meta atingida (${percentual.toFixed(0)}%)` : `${percentual.toFixed(0)}%`}
                             </span>
                           </div>
                           <div className="mt-1.5 h-1.5 rounded-full bg-secondary">
                             <div
-                              className={`h-1.5 rounded-full ${metaSuperada ? 'bg-emerald-500' : 'bg-sky-600'}`}
+                              className={`h-1.5 rounded-full ${metaSuperada ? 'bg-success/100' : 'bg-primary'}`}
                               style={{ width: `${Math.min(100, Math.max(0, percentual))}%` }}
                             />
                           </div>
@@ -354,7 +354,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           {/* Lançamentos */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Histórico</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Histórico</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Histórico de lançamentos</h3>
             </div>
 
@@ -425,7 +425,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           {/* Governance */}
           <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
             <div className="px-5 py-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Estrutura</p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Estrutura</p>
               <h3 className="mt-0.5 text-sm font-bold text-foreground">Governança do projeto</h3>
             </div>
             <ul role="list" className="divide-y divide-slate-100 border-t border-slate-100">
@@ -461,7 +461,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
               </div>
               <div className="flex flex-wrap gap-1.5 border-t border-slate-100 px-5 py-4">
                 {lacunas.map((lacuna) => (
-                  <span key={lacuna} className="rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-[11px] text-amber-700">
+                  <span key={lacuna} className="rounded-full border border-warning/40 bg-warning/10 px-2.5 py-0.5 text-[11px] text-warning">
                     {lacuna}
                   </span>
                 ))}
@@ -474,7 +474,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
             <div className="flex items-center gap-2 px-5 py-4">
               <Radar className="h-4 w-4 shrink-0 text-sky-600" />
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Operação</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Operação</p>
                 <h3 className="mt-0.5 text-sm font-bold text-foreground">Painel operacional</h3>
               </div>
             </div>
@@ -536,7 +536,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
                   <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Evidências</p>
                   <div className="mt-1 space-y-1">
                     {operacional.evidencias.map((item) => (
-                      <a key={`${item.titulo}-${item.url}`} href={item.url} target="_blank" rel="noreferrer" className="block text-sm font-medium text-sky-700 hover:text-sky-800">
+                      <a key={`${item.titulo}-${item.url}`} href={item.url} target="_blank" rel="noreferrer" className="block text-sm font-medium text-primary hover:text-sky-800">
                         {item.titulo}
                       </a>
                     ))}

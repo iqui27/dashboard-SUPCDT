@@ -56,7 +56,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-4 px-1 py-1">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">Base operacional</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Base operacional</p>
           <h2 className="mt-0.5 text-lg font-bold tracking-tight text-foreground">Projetos monitorados</h2>
         </div>
         <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-slate-950 px-3 text-xs text-white hover:bg-slate-800">
@@ -115,18 +115,18 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                       Risco {nivelRisco}
                     </span>
                     {precisaAcao && (
-                      <span className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800">
+                      <span className="inline-flex rounded-full bg-warning/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-800">
                         Requer ação
                       </span>
                     )}
                   </div>
-                  <h3 className="mt-3.5 text-lg font-bold text-foreground transition-colors group-hover:text-sky-700">
+                  <h3 className="mt-3.5 text-lg font-bold text-foreground transition-colors group-hover:text-primary">
                     {getProjetoNome(projeto)}
                   </h3>
                   <p className="mt-1 text-[13px] text-muted-foreground">{osc}</p>
                 </div>
 
-                <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-sky-700" />
+                <ArrowUpRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary" />
               </div>
 
               <div className="mt-4 grid gap-3 sm:grid-cols-2">

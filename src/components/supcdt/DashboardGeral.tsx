@@ -211,13 +211,13 @@ function getStatusTone(status: string) {
 function getRiskTone(nivelRisco: string) {
   const normalized = normalizeText(nivelRisco);
   if (normalized.includes('critico')) {
-    return 'bg-rose-100 text-rose-800 ring-1 ring-rose-200';
+    return 'bg-destructive/20 text-rose-800 ring-1 ring-rose-200';
   }
   if (normalized.includes('alto')) {
-    return 'bg-amber-100 text-amber-800 ring-1 ring-amber-200';
+    return 'bg-warning/20 text-amber-800 ring-1 ring-amber-200';
   }
   if (normalized.includes('medio')) {
-    return 'bg-sky-100 text-sky-800 ring-1 ring-sky-200';
+    return 'bg-primary/20 text-sky-800 ring-1 ring-sky-200';
   }
   return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
 }
@@ -225,10 +225,10 @@ function getRiskTone(nivelRisco: string) {
 function getHealthTone(saudeEntrega: string) {
   const normalized = normalizeText(saudeEntrega);
   if (normalized.includes('risco')) {
-    return 'bg-rose-100 text-rose-800 ring-1 ring-rose-200';
+    return 'bg-destructive/20 text-rose-800 ring-1 ring-rose-200';
   }
   if (normalized.includes('observ')) {
-    return 'bg-amber-100 text-amber-800 ring-1 ring-amber-200';
+    return 'bg-warning/20 text-amber-800 ring-1 ring-amber-200';
   }
   return 'bg-emerald-100 text-emerald-800 ring-1 ring-emerald-200';
 }
@@ -265,7 +265,7 @@ function CategoryBarList({ data }: { data: { name: string; value: number; fill: 
           {selected && (
             <button
               onClick={clearSelected}
-              className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground transition hover:bg-slate-200"
+              className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground transition hover:bg-secondary"
             >
               {selected}
               <X className="h-3 w-3 text-muted-foreground" />
@@ -362,7 +362,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         className="flex items-center justify-between gap-6 px-1 py-1"
       >
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-700/70">SUPCDT Monitoramento</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">SUPCDT Monitoramento</p>
           <h2 className="mt-0.5 text-lg font-bold tracking-tight text-foreground">Painel Executivo</h2>
         </div>
         <div className="flex items-center gap-5">
@@ -382,7 +382,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         <div className="rounded-[1.45rem] border border-border/80 bg-card/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">Investimento Total</span>
-            <div className="rounded-lg bg-sky-100 p-2 text-sky-700">
+            <div className="rounded-lg bg-primary/20 p-2 text-primary">
               <TrendingUp className="h-4 w-4" />
             </div>
           </div>
@@ -393,7 +393,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         <div className="rounded-[1.45rem] border border-border/80 bg-card/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">Projetos Ativos</span>
-            <div className="rounded-lg bg-teal-100 p-2 text-teal-700">
+            <div className="rounded-lg bg-primary/20 p-2 text-primary">
               <Activity className="h-4 w-4" />
             </div>
           </div>
@@ -407,7 +407,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         <div className="rounded-[1.45rem] border border-border/80 bg-card/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">Exigem Ação</span>
-            <div className="rounded-lg bg-amber-100 p-2 text-amber-700">
+            <div className="rounded-lg bg-warning/20 p-2 text-warning">
               <Radar className="h-4 w-4" />
             </div>
           </div>
@@ -418,7 +418,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
         <div className="rounded-[1.45rem] border border-border/80 bg-card/85 p-5 shadow-[0_20px_70px_-42px_rgba(15,23,42,0.35)]">
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium text-muted-foreground">Incidentes Abertos</span>
-            <div className="rounded-lg bg-rose-100 p-2 text-rose-700">
+            <div className="rounded-lg bg-destructive/20 p-2 text-destructive">
               <AlertTriangle className="h-4 w-4" />
             </div>
           </div>
@@ -520,7 +520,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${tone.badge}`}>{status}</span>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getRiskTone(nivelRisco)}`}>Risco {nivelRisco}</span>
                     <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${getHealthTone(saudeEntrega)}`}>{saudeEntrega}</span>
-                    {precisaAcao && <span className="shrink-0 rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-semibold text-amber-800">Prioritária</span>}
+                    {precisaAcao && <span className="shrink-0 rounded-full bg-warning/20 px-2 py-0.5 text-[10px] font-semibold text-amber-800">Prioritária</span>}
                   </div>
 
                   {/* Metadata lines */}
@@ -549,7 +549,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
                       {incidentesAbertos > 0 && (
                         <span className="flex items-center gap-1">
                           <span className="uppercase tracking-[0.12em] text-muted-foreground">Incidentes</span>
-                          <span className="font-semibold text-rose-700">{incidentesAbertos}</span>
+                          <span className="font-semibold text-destructive">{incidentesAbertos}</span>
                         </span>
                       )}
                       <span className="flex items-center gap-1.5 ml-auto">

@@ -110,7 +110,7 @@ export function MetaModal({ projeto, meta, onClose, onSuccess }: MetaModalProps)
           <div className="flex items-center gap-2.5">
             <Target className="h-4 w-4 text-sky-600" />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Metas</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Metas</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">
                 {isEditing ? 'Editar meta' : 'Nova meta'}
               </h2>

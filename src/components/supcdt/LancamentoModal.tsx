@@ -114,7 +114,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
           <div className="flex items-center gap-2.5">
             <ClipboardList className="h-4 w-4 text-sky-600" />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Monitoramento</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Monitoramento</p>
               <h2 className="text-sm font-bold text-foreground leading-tight">
                 {isEditing ? 'Editar lançamento' : 'Novo lançamento'}
               </h2>
@@ -140,7 +140,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                 </label>
                 <select
                   title="Trimestre"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={trimestre}
                   onChange={(e) => setTrimestre(Number(e.target.value))}
                 >
@@ -159,7 +159,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                 <input
                   type="text"
                   placeholder="Ex: CEF 01 do Recanto das Emas"
-                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                  className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={localAtendido}
                   onChange={(e) => setLocalAtendido(e.target.value)}
                 />
@@ -173,7 +173,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
               </label>
               <input
                 type="date"
-                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                 value={dataAtividade}
                 onChange={(e) => setDataAtividade(e.target.value)}
               />
@@ -188,7 +188,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                 required
                 rows={3}
                 placeholder="Descreva o que foi feito de forma resumida, mas clara..."
-                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={descricaoAtividade}
                 onChange={(e) => setDescricaoAtividade(e.target.value)}
               />
@@ -211,7 +211,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                         type="number"
                         min="0"
                         placeholder="0"
-                        className="h-8 w-24 shrink-0 rounded-full border border-border bg-muted px-3 text-sm text-right text-foreground focus:outline-none focus:ring-2 focus:ring-sky-500/40"
+                        className="h-8 w-24 shrink-0 rounded-full border border-border bg-muted px-3 text-sm text-right text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                         value={valores[meta.id] || ''}
                         onChange={(e) => handleMudarValor(meta.id, e.target.value)}
                       />
@@ -231,7 +231,7 @@ export function LancamentoModal({ projeto, lancamento, onClose, onSuccess }: Lan
                   variant="ghost"
                   onClick={handleDelete}
                   disabled={loading}
-                  className="h-8 rounded-full px-4 text-xs text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+                  className="h-8 rounded-full px-4 text-xs text-destructive hover:bg-destructive/10 hover:text-destructive"
                 >
                   <Trash2 className="mr-1.5 h-3 w-3" />
                   Excluir
