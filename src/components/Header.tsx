@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { canAccessUserManagement } from '../lib/auth';
 import { Button } from './ui/button';
+import { ThemeToggle } from './ThemeToggle';
 
 interface HeaderProps {
   currentTab: string;
@@ -76,6 +77,7 @@ export function Header({
           </div>
 
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <div className="hidden items-center gap-1.5 sm:flex">
               <p className="text-sm font-medium text-foreground">{user?.fullName || user?.username}</p>
               <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-secondary-foreground">{user?.role}</span>
