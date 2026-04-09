@@ -434,7 +434,7 @@ export function DashboardGeral({ projetos }: DashboardGeralProps) {
           <div className="rounded-[1.45rem] border border-border/80 bg-card/85 p-5 shadow-[0_24px_70px_-42px_rgba(15,23,42,0.35)]">
             <div className="flex items-center justify-between">
               <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <AlertTriangle className="h-4 w-4 text-amber-500" />
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 Radar de atenção
               </h3>
               <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-muted-foreground">

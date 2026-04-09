@@ -33,6 +33,12 @@
     --destructive: 0 72% 52%;
     --destructive-foreground: 0 0% 100%;
 
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 45 93% 47%;
+    --warning-foreground: 0 0% 100%;
+
     --ring: 201 89% 38%;
 
     --radius: 1rem;
@@ -64,6 +70,10 @@
     --secondary-foreground: 210 22% 94%;
     --destructive: 0 68% 56%;
     --destructive-foreground: 0 0% 100%;
+    --success: 142 76% 46%;
+    --success-foreground: 222 47% 11%;
+    --warning: 45 93% 57%;
+    --warning-foreground: 222 47% 11%;
     --ring: 196 100% 60%;
     --radius: 1rem;
     --chart-1: 196 100% 60%;

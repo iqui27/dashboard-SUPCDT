@@ -453,7 +453,7 @@ export function DetalheProjeto({ projeto, onUpdate }: DetalheProjetoProps) {
           {lacunas.length > 0 && (
             <div className="overflow-hidden rounded-[1.35rem] border border-white/80 bg-white/80 shadow-sm">
               <div className="flex items-center gap-2 px-5 py-4">
-                <ShieldAlert className="h-4 w-4 shrink-0 text-amber-500" />
+                <ShieldAlert className="h-4 w-4 shrink-0 text-warning" />
                 <div>
                   <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-amber-600/80">Atenção</p>
                   <h3 className="mt-0.5 text-sm font-bold text-foreground">Lacunas remanescentes</h3>
