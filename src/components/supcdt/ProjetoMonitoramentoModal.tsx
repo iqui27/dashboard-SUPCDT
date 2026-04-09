@@ -178,10 +178,10 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
 
   return (
     <div className="fixed inset-0 z-[160] flex items-center justify-center overflow-y-auto bg-black/60 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-xl overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
+      <div className="w-full max-w-xl overflow-hidden rounded-[1.5rem] border border-border/80 bg-card shadow-[0_40px_100px_-30px_rgba(15,23,42,0.4)]">
 
         {/* Header */}
-        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-3.5 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-border/70 bg-card/95 px-6 py-3.5 backdrop-blur-sm">
           <div className="flex items-center gap-2.5">
             <Activity className="h-4 w-4 text-primary" />
             <div>
@@ -190,21 +190,21 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="max-w-[180px] truncate text-[11px] text-slate-400">{getProjetoNome(projeto)}</span>
+            <span className="max-w-[180px] truncate text-[11px] text-muted-foreground">{getProjetoNome(projeto)}</span>
             <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
-              <X className="h-4 w-4 text-slate-400" />
+              <X className="h-4 w-4 text-muted-foreground" />
             </Button>
           </div>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-white px-6 pt-5 pb-0 overscroll-contain" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
+        <form onSubmit={handleSubmit} className="min-h-0 overflow-y-auto bg-card px-6 pt-5 pb-0 overscroll-contain" style={{ maxHeight: 'calc(90vh - 4rem)' }}>
           <div className="space-y-4">
 
             {/* Status operacional + Nível de risco */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Status operacional</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Status operacional</label>
                 <select
                   className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={statusOperacional}
@@ -216,7 +216,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 </select>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Nível de risco</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Nível de risco</label>
                 <select
                   className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={nivelRisco}
@@ -232,7 +232,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             {/* Saúde da entrega + Manutenção */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Saúde da entrega</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Saúde da entrega</label>
                 <select
                   className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={saudeEntrega}
@@ -244,7 +244,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 </select>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Manutenção</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Manutenção</label>
                 <select
                   className="h-9 w-full rounded-full border border-border bg-muted px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/40"
                   value={manutencaoStatus}
@@ -273,7 +273,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             {/* Incidentes + Responsável */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Incidentes abertos</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Incidentes abertos</label>
                 <input
                   type="number"
                   min={0}
@@ -283,11 +283,11 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Responsável operacional</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Responsável operacional</label>
                 {loadingUsers ? (
                   <div className="h-9 w-full rounded-full border border-border bg-muted px-3 flex items-center">
-                    <Loader2 className="h-4 w-4 animate-spin text-slate-400" />
-                    <span className="ml-2 text-sm text-slate-400">Carregando...</span>
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                    <span className="ml-2 text-sm text-muted-foreground">Carregando...</span>
                   </div>
                 ) : (
                   <select
@@ -308,11 +308,11 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
 
             {/* Resumo executivo */}
             <div className="space-y-1.5">
-              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Resumo executivo</label>
+              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Resumo executivo</label>
               <textarea
                 rows={3}
                 placeholder="Resumo curto do estado atual..."
-                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
+                className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                 value={resumoExecutivo}
                 onChange={(e) => setResumoExecutivo(e.target.value)}
               />
@@ -321,21 +321,21 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             {/* Bloqueios + Próximos passos */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Bloqueios e riscos</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Bloqueios e riscos</label>
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={bloqueios}
                   onChange={(e) => setBloqueios(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Próximos passos</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Próximos passos</label>
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={proximosPassos}
                   onChange={(e) => setProximosPassos(e.target.value)}
                 />
@@ -345,21 +345,21 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
             {/* Cobertura + Evidências */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Cobertura detalhada</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Cobertura detalhada</label>
                 <textarea
                   rows={3}
                   placeholder="Um item por linha..."
-                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={coberturaDetalhada}
                   onChange={(e) => setCoberturaDetalhada(e.target.value)}
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Evidências e links</label>
+                <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">Evidências e links</label>
                 <textarea
                   rows={3}
                   placeholder="Nome | URL"
-                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
+                  className="w-full rounded-[0.9rem] border border-border bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 resize-none"
                   value={evidencias}
                   onChange={(e) => setEvidencias(e.target.value)}
                 />
@@ -369,7 +369,7 @@ export function ProjetoMonitoramentoModal({ projeto, onClose, onSuccess }: Proje
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-slate-100 bg-white py-4 mt-5">
+          <div className="sticky bottom-0 flex justify-end gap-2 border-t border-border/70 bg-white py-4 mt-5">
             <Button type="button" variant="outline" onClick={onClose} disabled={loading} className="h-8 rounded-full border-border px-4 text-xs text-slate-600">
               Cancelar
             </Button>

@@ -24,7 +24,7 @@ function getStatusClasses(status: string) {
   if (normalized.includes('atras') || normalized.includes('paralis') || normalized.includes('cancel')) {
     return 'bg-rose-600 text-white';
   }
-  return 'bg-slate-800 text-white';
+  return 'bg-primary text-primary-foreground';
 }
 
 export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProjetosProps) {
@@ -59,7 +59,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/70">Base operacional</p>
           <h2 className="mt-0.5 text-lg font-bold tracking-tight text-foreground">Projetos monitorados</h2>
         </div>
-        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-slate-800">
+        <Button onClick={() => setIsProjetoModalOpen(true)} className="h-8 rounded-full bg-primary px-3 text-xs text-white hover:bg-primary/90">
           <Plus className="mr-1.5 h-3 w-3" />
           Novo projeto
         </Button>
@@ -111,7 +111,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
                     <span className="inline-flex rounded-full bg-secondary px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
                       {statusOperacional}
                     </span>
-                    <span className="inline-flex rounded-full bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ring-1 ring-slate-200">
+                    <span className="inline-flex rounded-full bg-card px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground ring-1 ring-border">
                       Risco {nivelRisco}
                     </span>
                     {precisaAcao && (
@@ -173,7 +173,7 @@ export function ListaProjetos({ projetos, onProjectSelect, onUpdate }: ListaProj
         })}
 
         {filtered.length === 0 && (
-          <div className="col-span-full rounded-[1.45rem] border border-dashed border-border bg-white/75 py-14 text-center">
+          <div className="col-span-full rounded-[1.45rem] border border-dashed border-border bg-card/75 py-14 text-center">
             <p className="text-base font-medium text-muted-foreground">Nenhum projeto encontrado.</p>
             <p className="mt-2 text-sm text-muted-foreground">Ajuste a busca ou cadastre um novo projeto para iniciar o monitoramento.</p>
           </div>
