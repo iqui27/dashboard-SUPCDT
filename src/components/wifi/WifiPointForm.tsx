@@ -305,14 +305,14 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
           <div className="flex items-center gap-2.5">
             <Wifi className="h-4 w-4 text-sky-600" />
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-sky-700/70 leading-none">Wi‑Fi Social</p>
-              <h2 className="text-sm font-bold text-slate-900 leading-tight">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/70 leading-none">Wi‑Fi Social</p>
+              <h2 className="text-sm font-bold text-foreground leading-tight">
                 {point ? 'Editar ponto' : 'Novo ponto de cobertura'}
               </h2>
             </div>
           </div>
           <Button type="button" variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full">
-            <X className="h-4 w-4 text-slate-400" />
+            <X className="h-4 w-4 text-muted-foreground" />
           </Button>
         </div>
 
@@ -347,7 +347,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
               <Label>CEP</Label>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <div className="relative flex-1">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     value={form.cep}
                     inputMode="numeric"
@@ -365,7 +365,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                   variant="outline"
                   onClick={handleCepLookup}
                   disabled={lookingUpCep}
-                  className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  className="rounded-full border-border bg-white text-muted-foreground hover:bg-muted"
                 >
                   {lookingUpCep ? (
                     <>
@@ -381,7 +381,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                 </Button>
               </div>
               {errors.cep && <p className="text-xs text-rose-600">{errors.cep}</p>}
-              {cepFeedback && <p className="text-xs text-slate-500">{cepFeedback}</p>}
+              {cepFeedback && <p className="text-xs text-muted-foreground">{cepFeedback}</p>}
             </div>
 
             <div className="space-y-2 md:col-span-2">
@@ -391,14 +391,14 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
             </div>
 
             <div className="space-y-3 md:col-span-2">
-              <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-4">
+              <div className="rounded-[1.75rem] border border-border bg-muted/80 p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div className="flex items-center gap-2">
-                      <MapPinned className="h-4 w-4 text-sky-700" />
-                      <Label className="text-sm font-semibold text-slate-900">Localização exata</Label>
+                      <MapPinned className="h-4 w-4 text-primary" />
+                      <Label className="text-sm font-semibold text-foreground">Localização exata</Label>
                     </div>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
                       Você pode usar o CEP ou simplesmente marcar o ponto no mapa. Ao mover o marcador, o endereço e o CEP tentam ser preenchidos automaticamente.
                     </p>
                   </div>
@@ -406,7 +406,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                     type="button"
                     variant="outline"
                     onClick={() => setManualCoordinates((current) => !current)}
-                    className="rounded-full border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+                    className="rounded-full border-border bg-white text-muted-foreground hover:bg-secondary"
                   >
                     {manualCoordinates ? 'Ocultar coordenadas' : 'Ajuste manual'}
                   </Button>
@@ -422,8 +422,8 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
                 </div>
 
                 {(pointFeedback || lookingUpPointAddress) && (
-                  <div className="mt-3 flex items-start gap-2 rounded-[1.15rem] border border-slate-200 bg-white px-3.5 py-3 text-xs leading-5 text-slate-600">
-                    {lookingUpPointAddress ? <Loader2 className="mt-0.5 h-3.5 w-3.5 animate-spin text-sky-700" /> : <MapPinned className="mt-0.5 h-3.5 w-3.5 text-sky-700" />}
+                  <div className="mt-3 flex items-start gap-2 rounded-[1.15rem] border border-border bg-white px-3.5 py-3 text-xs leading-5 text-muted-foreground">
+                    {lookingUpPointAddress ? <Loader2 className="mt-0.5 h-3.5 w-3.5 animate-spin text-primary" /> : <MapPinned className="mt-0.5 h-3.5 w-3.5 text-primary" />}
                     <span>{pointFeedback}</span>
                   </div>
                 )}
@@ -520,17 +520,17 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
               <Input type="date" value={form.ultimaManutencao} onChange={(e) => setForm((current) => ({ ...current, ultimaManutencao: e.target.value }))} className="rounded-2xl" />
             </div>
 
-            <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 px-4 py-3 md:col-span-2">
+            <div className="rounded-[1.5rem] border border-border bg-muted px-4 py-3 md:col-span-2">
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={form.precisaAcao}
                   onChange={(e) => setForm((current) => ({ ...current, precisaAcao: e.target.checked }))}
-                  className="h-4 w-4 rounded border-slate-300 text-sky-700 focus:ring-sky-700"
+                  className="h-4 w-4 rounded border-slate-300 text-primary focus:ring-sky-700"
                 />
                 <div>
-                  <p className="text-sm font-semibold text-slate-900">Ponto exige ação prioritária</p>
-                  <p className="text-xs text-slate-500">Use quando houver problema operacional, manutenção pendente ou ação em campo.</p>
+                  <p className="text-sm font-semibold text-foreground">Ponto exige ação prioritária</p>
+                  <p className="text-xs text-muted-foreground">Use quando houver problema operacional, manutenção pendente ou ação em campo.</p>
                 </div>
               </label>
             </div>
