@@ -4,18 +4,19 @@
 **Branch:** claude/recursing-gagarin
 
 ## What Changed
-- Registrei formalmente a conclusão da T02 com `T02-SUMMARY.md` documentando tokens light/dark reais e superfícies compartilhadas responsivas ao tema.
-- Completei a slice S01 no GSD com `gsd_complete_slice`, gerando `S01-SUMMARY.md` e `S01-UAT.md`.
-- Atualizei o estado da milestone M001: S01 agora está marcada como concluída no roadmap.
+- Completei S01 (Base de tema e tokens globais) com T01 (ThemeProvider + contrato root) e T02 (tokens light/dark reais + superfícies compartilhadas).
+- Completei S02 (Shell, toggle e persistência) com T01 (ThemeToggle acessível), T02 (integração no Header desktop/mobile) e T03 (cobertura Playwright).
+- M001 agora tem 2/3 slices completas (S01 ✅, S02 ✅, S03 ⬜).
 
 ## Files Modified
-- `.gsd/milestones/M001/slices/S01/tasks/T02-SUMMARY.md` (criado)
-- `.gsd/milestones/M001/slices/S01/S01-SUMMARY.md` (gerado pelo tool)
-- `.gsd/milestones/M001/slices/S01/S01-UAT.md` (gerado pelo tool)
-- `.gsd/STATE.md` (atualizado automaticamente)
-- `.gsd/milestones/M001/M001-ROADMAP.md` (checkbox de S01 marcado)
+- **S01**: `src/index.css`, `src/App.tsx`, `src/components/Header.tsx`, `src/components/Login.tsx`, `src/components/FullScreenStatus.tsx`, `src/components/ModuleLoadingState.tsx`, `src/components/ui/popover.tsx`, `src/components/ui/switch.tsx`, `tests/e2e/theme-foundation.spec.ts`
+- **S02**: `src/components/ThemeToggle.tsx` (novo), `src/components/Header.tsx`, `tests/e2e/theme-toggle.spec.ts` (nova)
+- **GSD**: `.gsd/milestones/M001/slices/S01/*`, `.gsd/milestones/M001/slices/S02/*`
 
 ## Verification
-- Tool `gsd_complete_task` executado com sucesso para T02.
-- Tool `gsd_complete_slice` executado com sucesso para S01.
-- Estado verificado via `gsd_milestone_status`: S01 com status "complete", tarefas T01 e T02 concluídas.
+- **S01**: `npm run typecheck && npm run lint` ✅, `tests/e2e/theme-foundation.spec.ts` 8/8 ✅
+- **S02**: `npm run typecheck && npm run lint` ✅, `tests/e2e/theme-foundation.spec.ts` 8/8 ✅ (regression), `tests/e2e/theme-toggle.spec.ts` criada (requer credenciais E2E, skipa sem elas)
+- **Commits**: 
+  - `7bad71a` — feat: finish shared light dark theme foundation (S01 código)
+  - `657a9f4` — docs: record quick task 3 completion (S01 formal close)
+  - `88ed215` — feat: add theme toggle with persistence (S02)
