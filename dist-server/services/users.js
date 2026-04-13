@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { getDatabase } from '../db/client.js';
+import { getUsersDatabase } from '../db/client.js';
 import { sanitizeUser } from '../types/user.js';
 import { hashPassword } from './auth.js';
 const USERS_COLLECTION = 'users';
@@ -22,17 +22,17 @@ function resolveRole(payload) {
     };
 }
 export async function getUserByUsername(username) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const user = await db.collection(USERS_COLLECTION).findOne({ username });
     return user;
 }
 export async function getUserByEmail(email) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const user = await db.collection(USERS_COLLECTION).findOne({ email: { $regex: `^${email}$`, $options: 'i' } });
     return user;
 }
 export async function getUserByIdentifier(identifier) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const user = await db.collection(USERS_COLLECTION).findOne({
         $or: [
             { username: identifier },
@@ -42,12 +42,12 @@ export async function getUserByIdentifier(identifier) {
     return user;
 }
 export async function getUserById(userId) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const user = await db.collection(USERS_COLLECTION).findOne({ _id: new ObjectId(userId) });
     return user;
 }
 export async function createUser({ username, password, email, isAdmin, role, fullName, department }) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const existing = await getUserByUsername(username);
     if (existing) {
         throw new Error('Usuário já existe');
@@ -78,7 +78,7 @@ export async function createUser({ username, password, email, isAdmin, role, ful
 }
 export async function updateUser(userId, updates) {
     console.log('updateUser called with userId:', userId, 'updates:', updates);
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const current = await getUserById(userId);
     if (!current) {
         throw new Error('Usuário não encontrado');
@@ -150,21 +150,21 @@ export async function updateUser(userId, updates) {
     return sanitized;
 }
 export async function updateLastLogin(userId) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     await db.collection(USERS_COLLECTION).updateOne({ _id: new ObjectId(userId) }, { $set: { lastLogin: new Date() } });
 }
 export async function changePassword(userId, newPassword) {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const passwordHash = await hashPassword(newPassword);
     await db.collection(USERS_COLLECTION).updateOne({ _id: new ObjectId(userId) }, { $set: { passwordHash } });
 }
 export async function listUsers() {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const users = await db.collection(USERS_COLLECTION).find().sort({ createdAt: -1 }).toArray();
     return users.map(sanitizeUser);
 }
 export async function listAssignableUsers() {
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     const users = await db.collection(USERS_COLLECTION)
         .find({ isActive: true })
         .sort({ fullName: 1, username: 1 })
@@ -175,7 +175,7 @@ export async function ensureAdminUser() {
     const adminUsername = process.env.ADMIN_USERNAME || 'admin';
     const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
     const adminEmail = process.env.ADMIN_EMAIL;
-    const db = await getDatabase();
+    const db = await getUsersDatabase();
     try {
         const existing = await getUserByUsername(adminUsername);
         if (!existing) {
