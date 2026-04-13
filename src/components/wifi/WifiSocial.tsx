@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { LayoutGrid, ListFilter, MapPinned, Plus, RadioTower, Search, ShieldAlert } from 'lucide-react';
+import { Building2, LayoutGrid, ListFilter, MapPinned, Plus, RadioTower, Search, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
@@ -10,6 +10,7 @@ import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
+import { EmpresasTab } from './EmpresasTab';
 import { WifiDashboard } from './WifiDashboard';
 import { WifiMap } from './WifiMap';
 import { WifiPointForm } from './WifiPointForm';
@@ -19,7 +20,7 @@ interface WifiSocialProps {
   projetos: Projeto[];
 }
 
-type WifiView = 'mapa' | 'painel' | 'lista';
+type WifiView = 'mapa' | 'painel' | 'lista' | 'empresas';
 
 const EMPTY_STATS: WifiStats = {
   totalPontos: 0,
@@ -209,7 +210,8 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
             {[
               { id: 'mapa', label: 'Mapa', icon: MapPinned },
               { id: 'painel', label: 'Painel', icon: LayoutGrid },
-              { id: 'lista', label: 'Lista', icon: ListFilter }
+              { id: 'lista', label: 'Lista', icon: ListFilter },
+              { id: 'empresas', label: 'Empresas', icon: Building2 }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -340,6 +342,8 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
               onDeletePoint={handleDeletePoint}
             />
           )}
+
+          {view === 'empresas' && <EmpresasTab points={points} />}
         </>
       )}
 

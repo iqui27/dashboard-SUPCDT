@@ -1,5 +1,5 @@
 import { API_URL } from './base';
-import { WifiPoint, WifiPointInput, WifiStats } from '../../types/wifi';
+import { WifiEmpresa, WifiEmpresaInput, WifiPoint, WifiPointInput, WifiStats } from '../../types/wifi';
 
 export class ApiRequestError extends Error {
   status: number;
@@ -124,5 +124,62 @@ export async function deleteWifiPoint(token: string, id: string): Promise<void> 
 
   if (!response.ok) {
     await parseApiError(response, 'Falha ao excluir ponto Wi-Fi');
+  }
+}
+
+export async function fetchWifiEmpresas(): Promise<WifiEmpresa[]> {
+  const response = await fetch(`${API_URL}/wifi-empresas`);
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao carregar empresas Wi-Fi');
+  }
+
+  return response.json();
+}
+
+export async function createWifiEmpresa(token: string, payload: WifiEmpresaInput): Promise<WifiEmpresa> {
+  const response = await fetch(`${API_URL}/wifi-empresas`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao criar empresa Wi-Fi');
+  }
+
+  return response.json();
+}
+
+export async function updateWifiEmpresa(token: string, id: string, payload: WifiEmpresaInput): Promise<WifiEmpresa> {
+  const response = await fetch(`${API_URL}/wifi-empresas/${id}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao atualizar empresa Wi-Fi');
+  }
+
+  return response.json();
+}
+
+export async function deleteWifiEmpresa(token: string, id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/wifi-empresas/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao excluir empresa Wi-Fi');
   }
 }

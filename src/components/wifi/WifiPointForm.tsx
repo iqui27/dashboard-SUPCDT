@@ -4,6 +4,7 @@ import { Loader2, MapPinned, Save, Search, Wifi, X } from 'lucide-react';
 import { z } from 'zod';
 
 import { formatCep, lookupCepAddress, normalizeCep, reverseLookupPointAddress } from '../../lib/wifiLocation';
+import { fetchWifiEmpresas } from '../../lib/api/wifi';
 import { ResponsavelOperacionalField } from '../ResponsavelOperacionalField';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -14,6 +15,7 @@ import {
   REGIOES_ADMINISTRATIVAS_DF,
   WIFI_MAINTENANCE_STATUSES,
   WIFI_POINT_STATUSES,
+  WifiEmpresa,
   WifiMaintenanceStatus,
   WifiPoint,
   WifiPointInput,
@@ -46,6 +48,7 @@ const wifiPointSchema = z.object({
   statusManutencao: z.enum(WIFI_MAINTENANCE_STATUSES),
   incidentesAbertos: z.number().min(0, 'Incidentes não pode ser negativo'),
   responsavelOperacional: z.string().nullable(),
+  empresaId: z.string().nullable(),
   ultimaManutencao: z.string().nullable(),
   observacoes: z.string().nullable()
 });
@@ -66,6 +69,7 @@ function buildInitialState(point?: WifiPoint | null, initialPosition?: { latitud
     statusManutencao: point?.statusManutencao ?? ('pendente' as WifiMaintenanceStatus),
     incidentesAbertos: String(point?.incidentesAbertos ?? 0),
     responsavelOperacional: point?.responsavelOperacional ?? '',
+    empresaId: point?.empresaId ?? '',
     ultimaManutencao: point?.ultimaManutencao ? point.ultimaManutencao.slice(0, 10) : '',
     observacoes: point?.observacoes ?? ''
   };
@@ -80,6 +84,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
   const [pointFeedback, setPointFeedback] = useState<string | null>(null);
   const [lookingUpPointAddress, setLookingUpPointAddress] = useState(false);
   const [manualCoordinates, setManualCoordinates] = useState(false);
+  const [empresas, setEmpresas] = useState<WifiEmpresa[]>([]);
   const initialLookupDoneRef = useRef(false);
   const reverseLookupRequestRef = useRef(0);
 
@@ -121,6 +126,14 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
       document.body.style.width = originalBodyWidth;
       window.scrollTo(0, scrollY);
     };
+  }, []);
+
+  useEffect(() => {
+    fetchWifiEmpresas()
+      .then(setEmpresas)
+      .catch(() => {
+        // Silently fail - empresas dropdown can be empty
+      });
   }, []);
 
   const applyReverseLookup = useCallback(async (latitude: number, longitude: number) => {
@@ -266,6 +279,7 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
       statusManutencao: form.statusManutencao,
       incidentesAbertos: Number(form.incidentesAbertos),
       responsavelOperacional: form.responsavelOperacional.trim() || null,
+      empresaId: form.empresaId.trim() || null,
       ultimaManutencao: form.ultimaManutencao || null,
       observacoes: form.observacoes.trim() || null
     });
@@ -514,6 +528,24 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
               value={form.responsavelOperacional}
               onChange={(value) => setForm((current) => ({ ...current, responsavelOperacional: value }))}
             />
+
+            <div className="space-y-2">
+              <Label>Empresa responsável</Label>
+              <Select
+                value={form.empresaId ?? ''}
+                onValueChange={(value) => setForm((current) => ({ ...current, empresaId: value || '' }))}
+              >
+                <SelectTrigger className="rounded-2xl">
+                  <SelectValue placeholder="Nenhuma empresa" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Sem empresa</SelectItem>
+                  {empresas.map((empresa) => (
+                    <SelectItem key={empresa.id} value={empresa.id}>{empresa.nome}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             <div className="space-y-2">
               <Label>Última manutenção</Label>
