@@ -142,24 +142,11 @@ export function mapWifiPointToApi(point: DBWifiPoint): WifiPointApi {
     statusManutencao,
     incidentesAbertos: normalizeRequiredNumber(point.incidentesAbertos),
     responsavelOperacional: sanitizeText(point.responsavelOperacional),
-    empresaId: point.empresaId ? point.empresaId.toString() : null,
     ultimaManutencao: toIsoDate(ultimaManutencao),
     observacoes: sanitizeText(point.observacoes),
     createdAt: toIsoDate(point.createdAt),
     updatedAt: toIsoDate(point.updatedAt)
   };
-}
-
-function parseOptionalObjectId(value?: string | null): ObjectId | null {
-  if (!value || typeof value !== 'string') {
-    return null;
-  }
-
-  try {
-    return ObjectId.isValid(value) ? new ObjectId(value) : null;
-  } catch {
-    return null;
-  }
 }
 
 export function normalizeWifiPointInput(input: WifiPointInput): Omit<DBWifiPoint, '_id'> {
@@ -182,7 +169,6 @@ export function normalizeWifiPointInput(input: WifiPointInput): Omit<DBWifiPoint
     statusManutencao: normalizeMaintenanceStatus(input.statusManutencao, { status, precisaAcao, ultimaManutencao }),
     incidentesAbertos: normalizeRequiredNumber(input.incidentesAbertos),
     responsavelOperacional: sanitizeText(input.responsavelOperacional),
-    empresaId: parseOptionalObjectId(input.empresaId),
     ultimaManutencao,
     observacoes: sanitizeText(input.observacoes)
   };

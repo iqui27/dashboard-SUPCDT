@@ -7,7 +7,7 @@ import { createPasswordResetToken, consumePasswordResetToken } from '../services
 import { sendPasswordResetEmail } from '../services/email.js';
 const router = express.Router();
 function resolvePasswordResetBaseUrl(req) {
-    const fallback = process.env.APP_BASE_URL || 'https://dashboard-supcdt.vercel.app';
+    const fallback = process.env.APP_BASE_URL || 'https://dashboard-secti-2025.vercel.app';
     const requestOrigin = req.headers.origin?.trim();
     if (!requestOrigin) {
         return fallback;
@@ -15,6 +15,7 @@ function resolvePasswordResetBaseUrl(req) {
     const allowedOrigins = new Set([
         process.env.FRONTEND_URL,
         fallback,
+        'https://dashboard-secti-2025.vercel.app',
         'https://dashboard-supcdt.vercel.app',
         'https://dashboard-supcdt-iqui27s-projects.vercel.app'
     ].filter((value) => typeof value === 'string' && value.length > 0));

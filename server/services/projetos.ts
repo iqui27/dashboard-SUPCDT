@@ -1,8 +1,17 @@
 import { ObjectId } from 'mongodb';
 import { getDatabase } from '../db/client.js';
-import { DBProjeto, DBProjetoMonitoramento, ProjetoApi, ProjetoInput } from '../types/projeto.js';
+import {
+  DBProjeto,
+  DBProjetoHistoricoAlteracao,
+  DBProjetoHistoricoItem,
+  DBProjetoMonitoramento,
+  ProjetoApi,
+  ProjetoHistoricoAcao,
+  ProjetoInput
+} from '../types/projeto.js';
 
 const COLLECTION_NAME = 'projetos_supcdt';
+const MAX_HISTORICO_ALTERACOES = 120;
 
 type ResolvedMonitoramentoOperacional = {
   statusOperacional: string;
@@ -19,6 +28,54 @@ type ResolvedMonitoramentoOperacional = {
   responsavelOperacional: string | null;
   ultimaAtualizacao: Date | null;
 };
+
+type ProjetoAuditSnapshot = Record<string, string | null>;
+
+const AUDIT_FIELD_DEFINITIONS = [
+  { key: 'nome', label: 'Nome do projeto' },
+  { key: 'nomeOSC', label: 'OSC' },
+  { key: 'status', label: 'Status do projeto' },
+  { key: 'responsavelSECTI', label: 'Responsável SECTI' },
+  { key: 'numeroUnico', label: 'Número único' },
+  { key: 'numeroTermo', label: 'Número do termo' },
+  { key: 'processoSEI', label: 'Processo SEI' },
+  { key: 'parceiro', label: 'Parceiro institucional' },
+  { key: 'categoria', label: 'Categoria' },
+  { key: 'dataInicio', label: 'Data de início' },
+  { key: 'dataFim', label: 'Data de fim' },
+  { key: 'valorTotal', label: 'Valor total' },
+  { key: 'raPerigao', label: 'Território declarado' },
+  { key: 'descricao', label: 'Descrição operacional' },
+  { key: 'objetivos', label: 'Objetivos' },
+  { key: 'metas', label: 'Metas cadastradas' },
+  { key: 'cronograma', label: 'Cronograma' },
+  { key: 'statusOperacional', label: 'Status operacional' },
+  { key: 'nivelRisco', label: 'Nível de risco' },
+  { key: 'saudeEntrega', label: 'Saúde da entrega' },
+  { key: 'precisaAcao', label: 'Ação prioritária' },
+  { key: 'incidentesAbertos', label: 'Incidentes abertos' },
+  { key: 'manutencaoStatus', label: 'Status de manutenção' },
+  { key: 'responsavelOperacional', label: 'Responsável operacional' },
+  { key: 'resumoExecutivo', label: 'Resumo executivo' },
+  { key: 'bloqueios', label: 'Bloqueios' },
+  { key: 'proximosPassos', label: 'Próximos passos' },
+  { key: 'coberturaDetalhada', label: 'Cobertura detalhada' },
+  { key: 'evidencias', label: 'Evidências' }
+] as const;
+
+export interface ProjetoHistoricoActorInput {
+  userId?: string | null;
+  username?: string | null;
+  fullName?: string | null;
+}
+
+interface ProjetoHistoricoPayload {
+  acao: ProjetoHistoricoAcao;
+  resumo: string;
+  alteracoes?: DBProjetoHistoricoAlteracao[];
+  usuario?: ProjetoHistoricoActorInput;
+  data?: Date;
+}
 
 function sanitizeText(value?: string | null): string | null {
   const trimmed = value?.trim() ?? '';
@@ -81,6 +138,192 @@ function toIsoDate(value?: Date | null): string | null {
   }
 
   return Number.isNaN(value.getTime()) ? null : value.toISOString();
+}
+
+function formatCurrencyValue(value?: number | null): string | null {
+  if (typeof value !== 'number' || Number.isNaN(value)) {
+    return null;
+  }
+
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  }).format(value);
+}
+
+function formatAuditDate(value?: Date | null): string | null {
+  if (!value || Number.isNaN(value.getTime())) {
+    return null;
+  }
+
+  return new Intl.DateTimeFormat('pt-BR').format(value);
+}
+
+function summarizeText(value?: string | null, maxLength = 140): string | null {
+  const sanitized = sanitizeText(value)?.replace(/\s+/g, ' ');
+  if (!sanitized) {
+    return null;
+  }
+
+  return sanitized.length <= maxLength ? sanitized : `${sanitized.slice(0, maxLength - 1)}…`;
+}
+
+function summarizeList(values?: string[] | null, emptyLabel?: string): string | null {
+  const sanitized = sanitizeTextList(values);
+  if (!sanitized.length) {
+    return emptyLabel ?? null;
+  }
+
+  if (sanitized.length <= 3) {
+    return sanitized.join('; ');
+  }
+
+  return `${sanitized.slice(0, 3).join('; ')} (+${sanitized.length - 3})`;
+}
+
+function summarizeMetas(metas?: DBProjeto['metas']): string | null {
+  if (!Array.isArray(metas) || !metas.length) {
+    return 'Nenhuma meta';
+  }
+
+  const labels = metas
+    .map((meta) => sanitizeText(meta.codigo) ?? summarizeText(meta.descricao, 48))
+    .filter((value): value is string => Boolean(value));
+
+  const preview = labels.slice(0, 3).join(', ');
+  return `${metas.length} meta(s)${preview ? `: ${preview}` : ''}${labels.length > 3 ? ` (+${labels.length - 3})` : ''}`;
+}
+
+function summarizeEvidencias(evidencias?: DBProjetoMonitoramento['evidencias']): string | null {
+  const normalized = normalizeEvidencias(evidencias);
+  if (!normalized.length) {
+    return 'Nenhuma evidência';
+  }
+
+  const preview = normalized
+    .slice(0, 2)
+    .map((item) => item.titulo)
+    .join(', ');
+
+  return `${normalized.length} evidência(s)${preview ? `: ${preview}` : ''}${normalized.length > 2 ? ` (+${normalized.length - 2})` : ''}`;
+}
+
+function resolveHistoricoUsuario(usuario?: ProjetoHistoricoActorInput) {
+  return {
+    userId: sanitizeText(usuario?.userId),
+    username: sanitizeText(usuario?.username) ?? 'sistema',
+    fullName: sanitizeText(usuario?.fullName)
+  };
+}
+
+function buildProjetoAuditSnapshot(projeto: Partial<DBProjeto>): ProjetoAuditSnapshot {
+  const monitoramento = projeto.monitoramento ?? {};
+
+  return {
+    nome: sanitizeText(projeto.nome) ?? null,
+    nomeOSC: sanitizeText(projeto.nomeOSC) ?? null,
+    status: sanitizeText(projeto.status) ?? null,
+    responsavelSECTI: sanitizeText(projeto.responsavelSECTI) ?? null,
+    numeroUnico: sanitizeText(projeto.numeroUnico) ?? null,
+    numeroTermo: sanitizeText(projeto.numeroTermo) ?? null,
+    processoSEI: sanitizeText(projeto.processoSEI) ?? null,
+    parceiro: sanitizeText(projeto.parceiro) ?? null,
+    categoria: sanitizeText(projeto.categoria) ?? null,
+    dataInicio: formatAuditDate(projeto.dataInicio) ?? null,
+    dataFim: formatAuditDate(projeto.dataFim) ?? null,
+    valorTotal: formatCurrencyValue(projeto.valorTotal) ?? null,
+    raPerigao: sanitizeText(projeto.raPerigao) ?? null,
+    descricao: summarizeText(projeto.descricao) ?? null,
+    objetivos: summarizeText(projeto.objetivos) ?? null,
+    metas: summarizeMetas(projeto.metas) ?? null,
+    cronograma:
+      projeto.cronograma?.totalTrimestres && Number(projeto.cronograma.totalTrimestres) > 0
+        ? `${Math.max(1, Number(projeto.cronograma.totalTrimestres))} trimestre(s)`
+        : null,
+    statusOperacional: sanitizeText(monitoramento.statusOperacional) ?? null,
+    nivelRisco: sanitizeText(monitoramento.nivelRisco) ?? null,
+    saudeEntrega: sanitizeText(monitoramento.saudeEntrega) ?? null,
+    precisaAcao:
+      typeof monitoramento.precisaAcao === 'boolean'
+        ? (monitoramento.precisaAcao ? 'Sim' : 'Não')
+        : null,
+    incidentesAbertos:
+      typeof monitoramento.incidentesAbertos === 'number'
+        ? String(Number(monitoramento.incidentesAbertos) || 0)
+        : null,
+    manutencaoStatus: sanitizeText(monitoramento.manutencaoStatus) ?? null,
+    responsavelOperacional: sanitizeText(monitoramento.responsavelOperacional) ?? null,
+    resumoExecutivo: summarizeText(monitoramento.resumoExecutivo) ?? null,
+    bloqueios: summarizeList(monitoramento.bloqueios, 'Nenhum bloqueio') ?? null,
+    proximosPassos: summarizeList(monitoramento.proximosPassos, 'Nenhum próximo passo') ?? null,
+    coberturaDetalhada: summarizeList(monitoramento.coberturaDetalhada, 'Cobertura não detalhada') ?? null,
+    evidencias: summarizeEvidencias(monitoramento.evidencias) ?? null
+  };
+}
+
+function buildProjetoHistoricoAlteracoes(
+  anterior: Partial<DBProjeto>,
+  atual: Partial<DBProjeto>
+): DBProjetoHistoricoAlteracao[] {
+  const snapshotAnterior = buildProjetoAuditSnapshot(anterior);
+  const snapshotAtual = buildProjetoAuditSnapshot(atual);
+
+  return AUDIT_FIELD_DEFINITIONS.flatMap(({ key, label }) => {
+    const antes = snapshotAnterior[key];
+    const depois = snapshotAtual[key];
+    if (antes === depois) {
+      return [];
+    }
+
+    return [{
+      campo: label,
+      antes: antes ?? null,
+      depois: depois ?? null
+    }];
+  });
+}
+
+function buildProjetoHistoricoCriacao(projeto: Omit<DBProjeto, '_id'>): DBProjetoHistoricoAlteracao[] {
+  const snapshot = buildProjetoAuditSnapshot(projeto);
+
+  return AUDIT_FIELD_DEFINITIONS.flatMap(({ key, label }) => {
+    const depois = snapshot[key];
+    if (!depois) {
+      return [];
+    }
+
+    return [{
+      campo: label,
+      depois
+    }];
+  });
+}
+
+function buildResumoAtualizacao(alteracoes: DBProjetoHistoricoAlteracao[]): string {
+  if (alteracoes.length === 0) {
+    return 'Atualizou dados do projeto.';
+  }
+
+  if (alteracoes.length === 1) {
+    return `Atualizou ${alteracoes[0].campo.toLowerCase()}.`;
+  }
+
+  if (alteracoes.length <= 3) {
+    return `Atualizou ${alteracoes.map((item) => item.campo.toLowerCase()).join(', ')}.`;
+  }
+
+  return `Atualizou ${alteracoes.length} campos do projeto.`;
+}
+
+function buildHistoricoItem(payload: ProjetoHistoricoPayload): DBProjetoHistoricoItem {
+  return {
+    id: new ObjectId().toString(),
+    acao: payload.acao,
+    data: payload.data ?? new Date(),
+    resumo: sanitizeText(payload.resumo) ?? 'Atualização registrada no projeto.',
+    usuario: resolveHistoricoUsuario(payload.usuario),
+    alteracoes: Array.isArray(payload.alteracoes) ? payload.alteracoes : []
+  };
 }
 
 function normalizeMeta(meta: DBProjeto['metas'][number]) {
@@ -275,13 +518,24 @@ export function mapProjetoToApi(projeto: DBProjeto): ProjetoApi {
         ultimaAtualizacao: toIsoDate(operacional.ultimaAtualizacao)
       }
     },
-    modulosAtivos: projeto.modulosAtivos ?? undefined,
-    etapas: projeto.etapas ?? undefined,
-    rubricas: projeto.rubricas ?? undefined,
-    parceirosModulo: projeto.parceirosModulo ?? undefined,
-    riscos: projeto.riscos ?? undefined,
-    decisoes: projeto.decisoes ?? undefined,
-    indicadores: projeto.indicadores ?? undefined,
+    historicoAlteracoes: (projeto.historicoAlteracoes ?? []).map((item) => ({
+      id: item.id,
+      acao: item.acao,
+      data: toIsoDate(item.data) ?? new Date().toISOString(),
+      resumo: item.resumo,
+      usuario: {
+        userId: sanitizeText(item.usuario?.userId),
+        username: sanitizeText(item.usuario?.username) ?? 'sistema',
+        fullName: sanitizeText(item.usuario?.fullName)
+      },
+      alteracoes: Array.isArray(item.alteracoes)
+        ? item.alteracoes.map((alteracao) => ({
+            campo: alteracao.campo,
+            antes: sanitizeText(alteracao.antes),
+            depois: sanitizeText(alteracao.depois)
+          }))
+        : []
+    })),
     createdAt: toIsoDate(projeto.createdAt),
     updatedAt: toIsoDate(projeto.updatedAt)
   };
@@ -325,12 +579,23 @@ export function normalizeProjetoInput(input: ProjetoInput): Omit<DBProjeto, '_id
   };
 }
 
-export async function createProjeto(projetoData: Omit<DBProjeto, '_id'>): Promise<DBProjeto> {
+export async function createProjeto(
+  projetoData: Omit<DBProjeto, '_id'>,
+  usuario?: ProjetoHistoricoActorInput
+): Promise<DBProjeto> {
   const db = await getDatabase('dashboard_supcdt');
   const collection = db.collection<DBProjeto>(COLLECTION_NAME);
 
   const novaEntrada: DBProjeto = {
     ...projetoData,
+    historicoAlteracoes: [
+      buildHistoricoItem({
+        acao: 'criado',
+        resumo: 'Projeto cadastrado na carteira monitorada.',
+        alteracoes: buildProjetoHistoricoCriacao(projetoData),
+        usuario
+      })
+    ],
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -342,7 +607,7 @@ export async function createProjeto(projetoData: Omit<DBProjeto, '_id'>): Promis
 export async function getProjetos(): Promise<DBProjeto[]> {
   const db = await getDatabase('dashboard_supcdt');
   const collection = db.collection<DBProjeto>(COLLECTION_NAME);
-  return collection.find({}).sort({ createdAt: -1 }).toArray();
+  return collection.find({}).sort({ updatedAt: -1, createdAt: -1 }).toArray();
 }
 
 export async function getProjetoById(id: string): Promise<DBProjeto | null> {
@@ -356,17 +621,73 @@ export async function getProjetoById(id: string): Promise<DBProjeto | null> {
   }
 }
 
-export async function updateProjeto(id: string, updateData: Partial<DBProjeto>): Promise<boolean> {
+export async function registrarProjetoHistorico(
+  projetoId: string,
+  payload: ProjetoHistoricoPayload
+): Promise<void> {
   const db = await getDatabase('dashboard_supcdt');
   const collection = db.collection<DBProjeto>(COLLECTION_NAME);
 
   try {
-    const { _id, createdAt, ...fieldsToUpdate } = updateData as DBProjeto;
+    const projeto = await collection.findOne({ _id: new ObjectId(projetoId) });
+    if (!projeto) {
+      return;
+    }
+
+    const historicoAtualizado = [
+      ...(projeto.historicoAlteracoes ?? []),
+      buildHistoricoItem(payload)
+    ].slice(-MAX_HISTORICO_ALTERACOES);
+
+    await collection.updateOne(
+      { _id: new ObjectId(projetoId) },
+      { $set: { historicoAlteracoes: historicoAtualizado } }
+    );
+  } catch {
+    // Mantemos o fluxo principal resiliente mesmo se a escrita do histórico falhar.
+  }
+}
+
+export async function updateProjeto(
+  id: string,
+  updateData: Partial<DBProjeto>,
+  usuario?: ProjetoHistoricoActorInput
+): Promise<boolean> {
+  const db = await getDatabase('dashboard_supcdt');
+  const collection = db.collection<DBProjeto>(COLLECTION_NAME);
+
+  try {
+    const projetoAtual = await collection.findOne({ _id: new ObjectId(id) });
+    if (!projetoAtual) {
+      return false;
+    }
+
+    const { _id, createdAt, historicoAlteracoes, ...fieldsToUpdate } = updateData as DBProjeto;
+    const proximoProjeto: DBProjeto = {
+      ...projetoAtual,
+      ...fieldsToUpdate,
+      monitoramento: fieldsToUpdate.monitoramento ?? projetoAtual.monitoramento,
+      metas: fieldsToUpdate.metas ?? projetoAtual.metas,
+      cronograma: fieldsToUpdate.cronograma ?? projetoAtual.cronograma
+    };
+    const alteracoes = buildProjetoHistoricoAlteracoes(projetoAtual, proximoProjeto);
+    const proximoHistorico = alteracoes.length
+      ? [
+          ...(projetoAtual.historicoAlteracoes ?? []),
+          buildHistoricoItem({
+            acao: 'atualizado',
+            resumo: buildResumoAtualizacao(alteracoes),
+            alteracoes,
+            usuario
+          })
+        ].slice(-MAX_HISTORICO_ALTERACOES)
+      : projetoAtual.historicoAlteracoes;
     const result = await collection.updateOne(
       { _id: new ObjectId(id) },
       {
         $set: {
           ...fieldsToUpdate,
+          ...(alteracoes.length ? { historicoAlteracoes: proximoHistorico } : {}),
           updatedAt: new Date()
         }
       }

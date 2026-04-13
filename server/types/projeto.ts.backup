@@ -36,31 +36,6 @@ export interface DBProjetoMonitoramento {
   ultimaAtualizacao?: Date | null;
 }
 
-// ─── Histórico de Alterações ─────────────────────────────────────────────────
-
-export type ProjetoHistoricoAcao = 'criado' | 'atualizado' | 'lancamento';
-
-export interface DBProjetoHistoricoUsuario {
-  userId?: string | null;
-  username: string;
-  fullName?: string | null;
-}
-
-export interface DBProjetoHistoricoAlteracao {
-  campo: string;
-  antes?: string | null;
-  depois?: string | null;
-}
-
-export interface DBProjetoHistoricoItem {
-  id: string;
-  acao: ProjetoHistoricoAcao;
-  data: Date;
-  resumo: string;
-  usuario: DBProjetoHistoricoUsuario;
-  alteracoes: DBProjetoHistoricoAlteracao[];
-}
-
 // ─── Módulo: Etapas ──────────────────────────────────────────────────────────
 
 export interface DBEntregavel {
@@ -176,7 +151,6 @@ export interface DBProjeto {
     totalTrimestres: number;
   };
   monitoramento?: DBProjetoMonitoramento;
-  historicoAlteracoes?: DBProjetoHistoricoItem[];
   createdAt?: Date;
   updatedAt?: Date;
 
@@ -246,14 +220,6 @@ export interface ProjetoApi {
     totalTrimestres: number;
   };
   monitoramento: ProjetoMonitoramento;
-  historicoAlteracoes?: Array<{
-    id: string;
-    acao: ProjetoHistoricoAcao;
-    data: string;
-    resumo: string;
-    usuario: DBProjetoHistoricoUsuario;
-    alteracoes: DBProjetoHistoricoAlteracao[];
-  }>;
   createdAt?: string | null;
   updatedAt?: string | null;
 

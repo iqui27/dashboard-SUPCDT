@@ -1,8 +1,16 @@
 import { Router } from 'express';
 import { ObjectId } from 'mongodb';
-
 import { requireAuth } from '../middleware/auth.js';
-import { createWifiPoint, deleteWifiPoint, getWifiPointById, getWifiPoints, mapWifiPointToApi, normalizeWifiPointInput, updateWifiPoint, buildWifiStats } from '../services/wifi.js';
+import {
+  buildWifiStats,
+  createWifiPoint,
+  deleteWifiPoint,
+  getWifiPointById,
+  getWifiPoints,
+  mapWifiPointToApi,
+  normalizeWifiPointInput,
+  updateWifiPoint
+} from '../services/wifi.js';
 import { WifiPointInput } from '../types/wifi.js';
 
 const router = Router();
@@ -17,7 +25,7 @@ router.get('/', requireAuth, async (req, res) => {
 
     res.json(points.map(mapWifiPointToApi));
   } catch (error) {
-    console.error('Erro ao buscar pontos Wi-Fi:', error);
+    console.error('Erro ao buscar pontos Wi-Fi SUPCDT:', error);
     res.status(500).json({ error: 'Falha ao buscar pontos Wi-Fi' });
   }
 });
@@ -27,7 +35,7 @@ router.get('/stats', requireAuth, async (_req, res) => {
     const points = await getWifiPoints();
     res.json(buildWifiStats(points));
   } catch (error) {
-    console.error('Erro ao gerar estatísticas Wi-Fi:', error);
+    console.error('Erro ao gerar estatísticas Wi-Fi SUPCDT:', error);
     res.status(500).json({ error: 'Falha ao gerar estatísticas Wi-Fi' });
   }
 });
@@ -45,7 +53,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 
     return res.json(mapWifiPointToApi(point));
   } catch (error) {
-    console.error('Erro ao buscar ponto Wi-Fi:', error);
+    console.error('Erro ao buscar ponto Wi-Fi SUPCDT:', error);
     return res.status(500).json({ error: 'Falha ao buscar ponto Wi-Fi' });
   }
 });
@@ -56,7 +64,7 @@ router.post('/', requireAuth, async (req, res) => {
     const point = await createWifiPoint(data);
     res.status(201).json(mapWifiPointToApi(point));
   } catch (error) {
-    console.error('Erro ao criar ponto Wi-Fi:', error);
+    console.error('Erro ao criar ponto Wi-Fi SUPCDT:', error);
     res.status(500).json({ error: 'Falha ao criar ponto Wi-Fi' });
   }
 });
@@ -84,7 +92,7 @@ router.put('/:id', requireAuth, async (req, res) => {
 
     return res.json(mapWifiPointToApi(updated));
   } catch (error) {
-    console.error('Erro ao atualizar ponto Wi-Fi:', error);
+    console.error('Erro ao atualizar ponto Wi-Fi SUPCDT:', error);
     return res.status(500).json({ error: 'Falha ao atualizar ponto Wi-Fi' });
   }
 });
@@ -102,7 +110,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
     return res.status(204).send();
   } catch (error) {
-    console.error('Erro ao excluir ponto Wi-Fi:', error);
+    console.error('Erro ao excluir ponto Wi-Fi SUPCDT:', error);
     return res.status(500).json({ error: 'Falha ao excluir ponto Wi-Fi' });
   }
 });

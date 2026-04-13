@@ -9,7 +9,7 @@ import { sendPasswordResetEmail } from '../services/email.js';
 const router = express.Router();
 
 function resolvePasswordResetBaseUrl(req: Request): string {
-  const fallback = process.env.APP_BASE_URL || 'https://dashboard-supcdt.vercel.app';
+  const fallback = process.env.APP_BASE_URL || 'https://dashboard-secti-2025.vercel.app';
   const requestOrigin = req.headers.origin?.trim();
 
   if (!requestOrigin) {
@@ -20,6 +20,7 @@ function resolvePasswordResetBaseUrl(req: Request): string {
     [
       process.env.FRONTEND_URL,
       fallback,
+      'https://dashboard-secti-2025.vercel.app',
       'https://dashboard-supcdt.vercel.app',
       'https://dashboard-supcdt-iqui27s-projects.vercel.app'
     ].filter((value): value is string => typeof value === 'string' && value.length > 0)
