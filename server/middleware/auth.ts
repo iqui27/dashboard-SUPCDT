@@ -8,6 +8,7 @@ declare global {
       user?: {
         userId: string;
         username: string;
+        fullName?: string | null;
         isAdmin: boolean;
         role: 'admin' | 'editor' | 'viewer';
       };
@@ -40,6 +41,7 @@ export async function requireAuth(req: Request, res: Response, next: NextFunctio
     req.user = {
       userId: payload.userId,
       username: payload.username,
+      fullName: user.fullName ?? null,
       isAdmin: role === 'admin',
       role
     };
@@ -70,6 +72,7 @@ export async function optionalAuth(req: Request, _res: Response, next: NextFunct
         req.user = {
           userId: payload.userId,
           username: payload.username,
+          fullName: user.fullName ?? null,
           isAdmin: role === 'admin',
           role
         };
@@ -90,4 +93,3 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
 
   next();
 }
-

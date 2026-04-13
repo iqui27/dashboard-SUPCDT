@@ -19,6 +19,7 @@ export async function requireAuth(req, res, next) {
         req.user = {
             userId: payload.userId,
             username: payload.username,
+            fullName: user.fullName ?? null,
             isAdmin: role === 'admin',
             role
         };
@@ -45,6 +46,7 @@ export async function optionalAuth(req, _res, next) {
                 req.user = {
                     userId: payload.userId,
                     username: payload.username,
+                    fullName: user.fullName ?? null,
                     isAdmin: role === 'admin',
                     role
                 };
