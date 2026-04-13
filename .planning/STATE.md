@@ -72,8 +72,15 @@ Progress: [██████████] 100% (Phase 11 — COMPLETE)
 - TypeScript espelhado em dois lugares (`src/types/projeto.ts` e `server/types/projeto.ts`) — qualquer alteração nos tipos precisa ser feita em ambos
 - Endpoints do outro dashboard (English routes) NÃO podem ser modificados — produção em https://dashboard-secti-2025.vercel.app
 
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Status | Directory |
+|---|-------------|------|--------|--------|-----------|
+| 260413-ksf | Adicionar gestão de empresas no módulo Wi-Fi Social | 2026-04-13 | 22a694b | Verified | [260413-ksf-adicionar-gest-o-de-empresas-no-m-dulo-w](./quick/260413-ksf-adicionar-gest-o-de-empresas-no-m-dulo-w/) |
+
 ## Session Continuity
 
+Last activity: 2026-04-13 — Completed quick task 260413-ksf: Adicionar gestão de empresas no módulo Wi-Fi Social
 Last session: 2026-03-26
 Stopped at: Phase 11 COMPLETE — 11-04 ProjetoPDFExport window.print(), modal 4 seções visuais
 Next planned: All 11 phases complete — project ready for production
