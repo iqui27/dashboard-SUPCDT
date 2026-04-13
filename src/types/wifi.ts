@@ -41,6 +41,23 @@ export type WifiPointStatus = (typeof WIFI_POINT_STATUSES)[number];
 export const WIFI_MAINTENANCE_STATUSES = ['em_dia', 'preventiva', 'corretiva', 'pendente'] as const;
 export type WifiMaintenanceStatus = (typeof WIFI_MAINTENANCE_STATUSES)[number];
 
+export interface WifiEmpresa {
+  id: string;
+  nome: string;
+  contatoNome?: string | null;
+  telefone?: string | null;
+  email?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+}
+
+export interface WifiEmpresaInput {
+  nome: string;
+  contatoNome?: string | null;
+  telefone?: string | null;
+  email?: string | null;
+}
+
 export interface WifiPoint {
   id: string;
   nome: string;
@@ -57,6 +74,7 @@ export interface WifiPoint {
   statusManutencao: WifiMaintenanceStatus;
   incidentesAbertos: number;
   responsavelOperacional?: string | null;
+  empresaId?: string | null;
   ultimaManutencao?: string | null;
   observacoes?: string | null;
   createdAt?: string | null;
@@ -78,6 +96,7 @@ export interface WifiPointInput {
   statusManutencao: WifiMaintenanceStatus;
   incidentesAbertos: number;
   responsavelOperacional?: string | null;
+  empresaId?: string | null;
   ultimaManutencao?: string | null;
   observacoes?: string | null;
 }
