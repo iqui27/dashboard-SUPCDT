@@ -179,7 +179,7 @@ router.post('/users', requireAuth, requireAdmin, async (req: Request, res: Respo
 
 router.patch('/users/:id', requireAuth, requireAdmin, async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const { username, email, isAdmin, isActive, password, role, fullName, department } = req.body;
 
     console.log('PATCH /users/:id received:', {

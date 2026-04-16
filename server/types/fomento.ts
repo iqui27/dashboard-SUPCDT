@@ -1,4 +1,4 @@
-// removed missing import
+import { StatusUpdate } from '../routes/statusUpdates.js';
 
 export type StatusProjeto = 'Assinado' | 'Não assinado' | 'Reprovado';
 export type Categoria = 'Emenda' | 'INEX' | 'Convênio' | 'Outro';
@@ -60,7 +60,7 @@ export interface Fomento {
   diasParado?: number;
   diasLimite?: number;
   historicoMovimentacoes: MovimentacaoHistorico[];
-  localStatusUpdate?: any;
+  localStatusUpdate?: StatusUpdate;
   overrideNeedsSync?: boolean;
   overrideLastUpdatedAt?: Date | null;
   overrideLastSyncedAt?: Date | null;

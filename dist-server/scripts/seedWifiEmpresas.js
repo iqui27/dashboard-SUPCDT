@@ -9,55 +9,55 @@ import { getDatabase } from '../db/client.js';
 const SEED_EMPRESAS = [
     {
         nome: 'uaifacil',
-        contatoNome: 'claudio henrique',
+        contato: 'claudio henrique',
         telefone: '61984272787',
         email: 'claudio@uaifacil.com.br'
     },
     {
         nome: 'maiwifi',
-        contatoNome: 'bruna/rafael',
+        contato: 'bruna/rafael',
         telefone: '61983236748',
-        email: 'bruna@gestãopublicidade.com.br'
+        email: 'bruna@gestaopublicidade.com.br'
     },
     {
         nome: 'clickmidia',
-        contatoNome: 'bruna/rafael',
+        contato: 'bruna/rafael',
         telefone: '61983236748',
-        email: 'bruna@gestãopublicidade.com.br'
+        email: 'bruna@gestaopublicidade.com.br'
     },
     {
         nome: 'mfi',
-        contatoNome: 'bruna/rafael',
+        contato: 'bruna/rafael',
         telefone: '61983236748',
-        email: 'bruna@gestãopublicidade.com.br'
+        email: 'bruna@gestaopublicidade.com.br'
     },
     {
         nome: 'sr midia',
-        contatoNome: 'bruna/rafael',
+        contato: 'bruna/rafael',
         telefone: '61983236748',
-        email: 'bruna@gestãopublicidade.com.br'
+        email: 'bruna@gestaopublicidade.com.br'
     },
     {
         nome: 'conecta',
-        contatoNome: 'alesson Silva',
+        contato: 'alesson Silva',
         telefone: '61999227775',
         email: 'alesson@uaisfacil.com.br'
     },
     {
         nome: 'cleanmídia',
-        contatoNome: 'felix silva',
+        contato: 'felix silva',
         telefone: '991816101',
         email: 'felixestera@gmail.com'
     },
     {
         nome: 'mixdftelecom',
-        contatoNome: 'bruno melo',
+        contato: 'bruno melo',
         telefone: '61998271477',
         email: 'bruno@mixdftelecom.com.br'
     },
     {
         nome: 'mobtv',
-        contatoNome: 'pedro',
+        contato: 'pedro',
         telefone: '62 991584939',
         email: 'redes@dsgroupbr.com'
     }
@@ -92,7 +92,7 @@ async function main() {
         const empresas = await collection.find({}).sort({ nome: 1 }).toArray();
         console.log('\n📋 Empresas no banco:');
         for (const empresa of empresas) {
-            console.log(`   - ${empresa.nome} (${empresa.contatoNome ?? 'sem contato'}) - ${empresa._id}`);
+            console.log(`   - ${empresa.nome} (${empresa.contato ?? 'sem contato'}) - ${empresa._id}`);
         }
         process.exit(0);
     }

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 import { requireAuth } from '../middleware/auth.js';
 
 const COLLECTION_NAME = 'project_overrides';
@@ -120,7 +120,7 @@ export const projectOverridesRouter = Router();
 projectOverridesRouter.get('/', async (req: Request, res: Response) => {
   try {
     const { projectId } = req.query as { projectId?: string };
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
 
     const filter = projectId ? { projectId } : {};
@@ -135,10 +135,10 @@ projectOverridesRouter.get('/', async (req: Request, res: Response) => {
 
 projectOverridesRouter.put('/:projectId', requireAuth, async (req: Request, res: Response) => {
   try {
-    const { projectId } = req.params;
+    const { projectId } = req.params as { projectId: string };
     const { overrides: overridesPayload } = req.body as { overrides?: Record<string, unknown> };
 
-    if (!projectId?.trim()) {
+    if (!(projectId as string)?.trim()) {
       return res.status(400).json({ error: 'Project id is required' });
     }
 
@@ -154,10 +154,10 @@ projectOverridesRouter.put('/:projectId', requireAuth, async (req: Request, res:
 
     const overrides = normalizeOverrides(normalizedPayload);
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
 
-    const existing = await collection.findOne({ projectId });
+    const existing = await collection.findOne({ projectId: projectId as string });
     const mergedOverrides = {
       ...(existing?.overrides ?? {}),
       ...overrides
@@ -198,14 +198,14 @@ projectOverridesRouter.put('/:projectId', requireAuth, async (req: Request, res:
 
 projectOverridesRouter.post('/:projectId/sync', requireAuth, async (req: Request, res: Response) => {
   try {
-    const { projectId } = req.params;
-    if (!projectId?.trim()) {
+    const { projectId } = req.params as { projectId: string };
+    if (!(projectId as string)?.trim()) {
       return res.status(400).json({ error: 'Project id is required' });
     }
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<ProjectOverrideDoc>(COLLECTION_NAME);
-    const overrideDoc = await collection.findOne({ projectId });
+    const overrideDoc = await collection.findOne({ projectId: projectId as string });
 
     if (!overrideDoc) {
       return res.status(404).json({ error: 'Override not found for project' });

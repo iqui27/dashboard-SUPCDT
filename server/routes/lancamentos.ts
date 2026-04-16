@@ -9,7 +9,7 @@ const router = Router();
 // GET /api/lancamentos/projeto/:projetoId - Lançamentos de um projeto
 router.get('/projeto/:projetoId', requireAuth, async (req, res) => {
     try {
-        const { projetoId } = req.params;
+        const { projetoId } = req.params as { projetoId: string };
         if (!ObjectId.isValid(projetoId)) {
             return res.status(400).json({ error: 'ID de projeto inválido' });
         }

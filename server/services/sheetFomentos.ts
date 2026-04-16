@@ -89,15 +89,10 @@ const headerMap: Record<string, keyof SheetRow | null> = {
   'prorrogacao da apresentacao da prestacao de contas, se necessario (+ 30 dias)': 'prorrogacaoPrestacaoContasMais30'
 };
 
-function stripControlCharacters(value: string): string {
-  return Array.from(value)
-    .filter(char => char.charCodeAt(0) > 31)
-    .join('');
-}
-
 function normalizeHeader(header: string): string {
-  return stripControlCharacters(header)
+  return header
     .normalize('NFD')
+    .replace(/[\u0000-\u001f]/g, '')
     .replace(/\s+/g, ' ')
     .replace(/[\u0300-\u036f]/g, '')
     .trim()

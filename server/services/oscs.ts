@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 import type { OSC, OSCInput } from '../types/osc.js';
 
 const COLLECTION_NAME = 'oscs';
@@ -177,7 +177,7 @@ function applyUpdates(existing: OscDocument, input: OSCInput, now: Date): OscDoc
 }
 
 export async function getOscCollection() {
-  const db = await getUsersDatabase();
+  const db = await getDatabase();
   return db.collection<OscDocument>(COLLECTION_NAME);
 }
 
@@ -206,14 +206,8 @@ export async function createOsc(input: OSCInput): Promise<OSC> {
   const now = new Date();
   const doc = buildDocument(input, now);
 
-  if (!doc.processo) {
-    throw new Error('Campo "processo" é obrigatório.');
-  }
   if (!doc.osc) {
     throw new Error('Campo "OSC" é obrigatório.');
-  }
-  if (!doc.projeto) {
-    throw new Error('Campo "projeto" é obrigatório.');
   }
 
   const collection = await getOscCollection();
@@ -286,14 +280,8 @@ export async function upsertOscByProcesso(input: OSCInput): Promise<{ osc: OSC; 
   const oscName = sanitizeString(input.osc);
   const projeto = sanitizeString(input.projeto);
 
-  if (!processo) {
-    throw new Error('Campo "processo" é obrigatório.');
-  }
   if (!oscName) {
     throw new Error('Campo "OSC" é obrigatório.');
-  }
-  if (!projeto) {
-    throw new Error('Campo "projeto" é obrigatório.');
   }
 
   const existing = await collection.findOne({ processo: processo, osc: oscName, projeto: projeto });

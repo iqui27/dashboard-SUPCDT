@@ -108,23 +108,23 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY
   ?? '';
 
 const RAW_MODEL = process.env.GEMINI_MODEL?.trim();
+const FALLBACK_MODEL = process.env.GEMINI_MODEL_FALLBACK?.trim() || 'gemini-3.1-flash-lite-preview';
 const MODEL_CANDIDATES = Array.from(
   new Set(
     [
       RAW_MODEL,
+      FALLBACK_MODEL,
+      'gemini-3-flash-preview',
+      'gemini-3.1-flash-lite-preview',
       'gemini-2.5-flash',
       'models/gemini-2.5-flash',
-      'gemini-2.5-pro',
-      'models/gemini-2.5-pro',
       'gemini-1.5-flash',
       'models/gemini-1.5-flash',
-      'gemini-1.5-pro',
-      'models/gemini-1.5-pro'
     ].filter((value): value is string => Boolean(value && value.length > 0))
   )
 );
 
-const DEFAULT_MODEL = MODEL_CANDIDATES[0] ?? 'gemini-2.5-flash';
+const DEFAULT_MODEL = MODEL_CANDIDATES[0] ?? 'gemini-3-flash-preview';
 const MAX_RETRIES = Number(process.env.GEMINI_MAX_RETRIES) || 3;
 const RETRY_DELAY_MS = Number(process.env.GEMINI_RETRY_DELAY_MS) || 1000;
 const CACHE_ENABLED = process.env.GEMINI_CACHE_ENABLED !== 'false';

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { ObjectId } from 'mongodb';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 
 interface StatusResponsibleDoc {
   _id?: ObjectId;
@@ -115,7 +115,7 @@ let seedPromise: Promise<void> | null = null;
 async function ensureSeeded() {
   if (!seedPromise) {
     seedPromise = (async () => {
-      const db = await getUsersDatabase();
+      const db = await getDatabase();
       const collection = db.collection<StatusResponsibleDoc>('status_responsibles');
       const now = new Date();
 
@@ -163,7 +163,7 @@ export const statusResponsiblesRouter = Router();
 statusResponsiblesRouter.get('/', async (_req: Request, res: Response) => {
   try {
     await ensureSeeded();
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<StatusResponsibleDoc>('status_responsibles');
     const responsibles = await collection.find({ active: { $ne: false } }).sort({ name: 1 }).toArray();
     res.json(responsibles.map(serialize));

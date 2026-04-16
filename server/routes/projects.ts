@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import multer from 'multer';
 import { ObjectId, type Filter } from 'mongodb';
 import type { Document } from 'mongodb';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 import { extractProjectFromPdf } from '../services/geminiImport.js';
 import { requireAuth } from '../middleware/auth.js';
 
@@ -168,7 +168,7 @@ projectsRouter.post('/import', requireAuth, upload.single('file'), async (req: R
 
 projectsRouter.get('/', async (_req: Request, res: Response) => {
   try {
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<CustomProjectDoc>(COLLECTION_NAME);
     const projects = await collection.find({}).toArray();
 
@@ -187,13 +187,13 @@ projectsRouter.get('/', async (_req: Request, res: Response) => {
 
 projectsRouter.get('/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'Invalid project id' });
     }
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<CustomProjectDoc>(COLLECTION_NAME);
     const project = await collection.findOne({ _id: new ObjectId(id) });
 
@@ -233,7 +233,7 @@ projectsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
       updatedAt: new Date()
     });
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<CustomProjectDoc>(COLLECTION_NAME);
     const result = await collection.insertOne(doc);
 
@@ -263,7 +263,7 @@ projectsRouter.post('/', requireAuth, async (req: Request, res: Response) => {
 
 projectsRouter.put('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     console.log('PUT request received for project id:', id);
 
     const payload = req.body as Record<string, unknown>;
@@ -284,7 +284,7 @@ projectsRouter.put('/:id', requireAuth, async (req: Request, res: Response) => {
 
     doc.id = id;
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<CustomProjectDoc>(COLLECTION_NAME);
 
     const filters: Filter<CustomProjectDoc>[] = [];
@@ -379,12 +379,12 @@ projectsRouter.put('/:id', requireAuth, async (req: Request, res: Response) => {
 
 projectsRouter.delete('/:id', requireAuth, async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'Invalid project id' });
     }
 
-    const db = await getUsersDatabase();
+    const db = await getDatabase();
     const collection = db.collection<CustomProjectDoc>(COLLECTION_NAME);
     const result = await collection.deleteOne({ _id: new ObjectId(id) });
 

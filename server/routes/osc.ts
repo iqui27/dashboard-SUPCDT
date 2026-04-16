@@ -59,7 +59,7 @@ oscsRouter.post('/', async (req: Request, res: Response) => {
 
 oscsRouter.put('/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const input = parseOscInput(req.body);
     const osc = await updateOsc(id, input);
     res.json(osc);
@@ -73,7 +73,7 @@ oscsRouter.put('/:id', async (req: Request, res: Response) => {
 
 oscsRouter.delete('/:id', async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     await deleteOsc(id);
     res.status(204).send();
   } catch (error) {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 import { requireAuth } from '../middleware/auth.js';
 const COLLECTION_NAME = 'project_overrides';
 const DATE_FIELDS = [
@@ -94,7 +94,7 @@ export const projectOverridesRouter = Router();
 projectOverridesRouter.get('/', async (req, res) => {
     try {
         const { projectId } = req.query;
-        const db = await getUsersDatabase();
+        const db = await getDatabase();
         const collection = db.collection(COLLECTION_NAME);
         const filter = projectId ? { projectId } : {};
         const overrides = await collection.find(filter).toArray();
@@ -121,9 +121,9 @@ projectOverridesRouter.put('/:projectId', requireAuth, async (req, res) => {
             normalizedPayload.responsavelAlteracao = req.user.username;
         }
         const overrides = normalizeOverrides(normalizedPayload);
-        const db = await getUsersDatabase();
+        const db = await getDatabase();
         const collection = db.collection(COLLECTION_NAME);
-        const existing = await collection.findOne({ projectId });
+        const existing = await collection.findOne({ projectId: projectId });
         const mergedOverrides = {
             ...(existing?.overrides ?? {}),
             ...overrides
@@ -160,9 +160,9 @@ projectOverridesRouter.post('/:projectId/sync', requireAuth, async (req, res) =>
         if (!projectId?.trim()) {
             return res.status(400).json({ error: 'Project id is required' });
         }
-        const db = await getUsersDatabase();
+        const db = await getDatabase();
         const collection = db.collection(COLLECTION_NAME);
-        const overrideDoc = await collection.findOne({ projectId });
+        const overrideDoc = await collection.findOne({ projectId: projectId });
         if (!overrideDoc) {
             return res.status(404).json({ error: 'Override not found for project' });
         }

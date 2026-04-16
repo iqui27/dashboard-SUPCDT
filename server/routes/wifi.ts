@@ -42,11 +42,11 @@ router.get('/stats', requireAuth, async (_req, res) => {
 
 router.get('/:id', requireAuth, async (req, res) => {
   try {
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(req.params.id as string)) {
       return res.status(400).json({ error: 'ID inválido' });
     }
 
-    const point = await getWifiPointById(req.params.id);
+    const point = await getWifiPointById(req.params.id as string);
     if (!point) {
       return res.status(404).json({ error: 'Ponto não encontrado' });
     }
@@ -71,7 +71,7 @@ router.post('/', requireAuth, async (req, res) => {
 
 router.put('/:id', requireAuth, async (req, res) => {
   try {
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(req.params.id as string)) {
       return res.status(400).json({ error: 'ID inválido' });
     }
 
@@ -80,12 +80,12 @@ router.put('/:id', requireAuth, async (req, res) => {
     delete payload.createdAt;
     delete payload.updatedAt;
 
-    const success = await updateWifiPoint(req.params.id, normalizeWifiPointInput(payload as WifiPointInput));
+    const success = await updateWifiPoint(req.params.id as string, normalizeWifiPointInput(payload as WifiPointInput));
     if (!success) {
       return res.status(404).json({ error: 'Ponto não encontrado' });
     }
 
-    const updated = await getWifiPointById(req.params.id);
+    const updated = await getWifiPointById(req.params.id as string);
     if (!updated) {
       return res.status(404).json({ error: 'Ponto não encontrado após atualização' });
     }
@@ -99,11 +99,11 @@ router.put('/:id', requireAuth, async (req, res) => {
 
 router.delete('/:id', requireAuth, async (req, res) => {
   try {
-    if (!ObjectId.isValid(req.params.id)) {
+    if (!ObjectId.isValid(req.params.id as string)) {
       return res.status(400).json({ error: 'ID inválido' });
     }
 
-    const success = await deleteWifiPoint(req.params.id);
+    const success = await deleteWifiPoint(req.params.id as string);
     if (!success) {
       return res.status(404).json({ error: 'Ponto não encontrado' });
     }

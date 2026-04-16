@@ -26,7 +26,7 @@ router.get('/', requireAuth, async (_req, res) => {
 
 router.get('/:id', requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'ID inválido' });
     }
@@ -46,7 +46,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 router.post('/', requireAuth, async (req, res) => {
   try {
     const projetoData = normalizeProjetoInput(req.body as ProjetoInput);
-    const novoProjeto = await createProjeto(projetoData);
+    const novoProjeto = await createProjeto(projetoData, req.user);
     res.status(201).json(mapProjetoToApi(novoProjeto));
   } catch (error) {
     console.error('Erro ao criar projeto:', error);
@@ -56,7 +56,7 @@ router.post('/', requireAuth, async (req, res) => {
 
 router.put('/:id', requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'ID inválido' });
     }
@@ -68,7 +68,7 @@ router.put('/:id', requireAuth, async (req, res) => {
     delete payload.chaveIntegracao;
     const updateData = normalizeProjetoInput(payload as ProjetoInput);
 
-    const success = await updateProjeto(id, updateData);
+    const success = await updateProjeto(id, updateData, req.user);
     if (!success) {
       return res.status(404).json({ error: 'Falha ao atualizar projeto (pode não existir)' });
     }
@@ -87,7 +87,7 @@ router.put('/:id', requireAuth, async (req, res) => {
 
 router.delete('/:id', requireAuth, async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     if (!ObjectId.isValid(id)) {
       return res.status(400).json({ error: 'ID inválido' });
     }

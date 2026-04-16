@@ -137,7 +137,7 @@ migrationRouter.post('/migrate-all', async (_req: Request, res: Response) => {
 // POST /api/migration/migrate/:projectName - Migrar projeto específico
 migrationRouter.post('/migrate/:projectName', async (req: Request, res: Response) => {
   try {
-    const { projectName } = req.params;
+    const { projectName } = req.params as { projectName: string };
     const sheetResult = await fetchSheetProjects();
     const sheetProjects = sheetResult.projects;
     
@@ -752,7 +752,7 @@ migrationRouter.get('/frontend-comparison', async (_req: Request, res: Response)
         // Converter números
         if (field === 'valorTotal' && value) {
           const numValue = typeof value === 'string' ? 
-            parseFloat(value.replace(/[R$.\s]/g, '').replace(',', '.')) : 
+            parseFloat(value.replace(/[R$\.\s]/g, '').replace(',', '.')) : 
             value;
           value = isNaN(numValue) ? 0 : numValue;
         }

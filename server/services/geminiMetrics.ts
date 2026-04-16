@@ -4,7 +4,7 @@ const METRICS_COLLECTION = 'gemini_metrics';
 
 export interface GeminiMetric {
   timestamp: Date;
-  operation: 'pdf_import';
+  operation: 'pdf_import' | 'sei_document_extraction' | 'sei_project_extraction';
   status: 'success' | 'error' | 'cache_hit';
   durationMs: number;
   fileSize?: number;
@@ -14,6 +14,9 @@ export interface GeminiMetric {
   errorMessage?: string;
   tokensUsed?: number;
   modelUsed: string;
+  // Additional metadata for SEI operations
+  processoSEI?: string;
+  phase?: string;
 }
 
 export interface MetricsSummary {

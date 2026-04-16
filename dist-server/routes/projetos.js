@@ -33,7 +33,7 @@ router.get('/:id', requireAuth, async (req, res) => {
 router.post('/', requireAuth, async (req, res) => {
     try {
         const projetoData = normalizeProjetoInput(req.body);
-        const novoProjeto = await createProjeto(projetoData);
+        const novoProjeto = await createProjeto(projetoData, req.user);
         res.status(201).json(mapProjetoToApi(novoProjeto));
     }
     catch (error) {
@@ -53,7 +53,7 @@ router.put('/:id', requireAuth, async (req, res) => {
         delete payload.updatedAt;
         delete payload.chaveIntegracao;
         const updateData = normalizeProjetoInput(payload);
-        const success = await updateProjeto(id, updateData);
+        const success = await updateProjeto(id, updateData, req.user);
         if (!success) {
             return res.status(404).json({ error: 'Falha ao atualizar projeto (pode não existir)' });
         }

@@ -1,6 +1,6 @@
 import { randomBytes, createHash } from 'crypto';
 import { ObjectId } from 'mongodb';
-import { getUsersDatabase } from '../db/client.js';
+import { getDatabase } from '../db/client.js';
 
 interface PasswordResetTokenDoc {
   _id?: ObjectId;
@@ -18,7 +18,7 @@ function hashToken(token: string): string {
 }
 
 export async function createPasswordResetToken(userId: string): Promise<{ token: string; expiresAt: Date }> {
-  const db = await getUsersDatabase();
+  const db = await getDatabase();
   const rawToken = randomBytes(32).toString('hex');
   const tokenHash = hashToken(rawToken);
   const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
@@ -38,7 +38,7 @@ export async function createPasswordResetToken(userId: string): Promise<{ token:
 }
 
 export async function consumePasswordResetToken(token: string): Promise<string> {
-  const db = await getUsersDatabase();
+  const db = await getDatabase();
   const tokenHash = hashToken(token);
   const collection = db.collection<PasswordResetTokenDoc>(PASSWORD_RESET_COLLECTION);
   const now = new Date();

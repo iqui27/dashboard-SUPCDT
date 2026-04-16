@@ -5,33 +5,6 @@ export type WifiPointStatus = (typeof WIFI_POINT_STATUSES)[number];
 export const WIFI_MAINTENANCE_STATUSES = ['em_dia', 'preventiva', 'corretiva', 'pendente'] as const;
 export type WifiMaintenanceStatus = (typeof WIFI_MAINTENANCE_STATUSES)[number];
 
-export interface DBWifiEmpresa {
-  _id?: ObjectId;
-  nome: string;
-  contatoNome?: string | null;
-  telefone?: string | null;
-  email?: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
-export interface WifiEmpresaApi {
-  id: string;
-  nome: string;
-  contatoNome?: string | null;
-  telefone?: string | null;
-  email?: string | null;
-  createdAt?: string | null;
-  updatedAt?: string | null;
-}
-
-export interface WifiEmpresaInput {
-  nome?: string;
-  contatoNome?: string | null;
-  telefone?: string | null;
-  email?: string | null;
-}
-
 export interface DBWifiPoint {
   _id?: ObjectId;
   nome: string;
@@ -48,7 +21,6 @@ export interface DBWifiPoint {
   statusManutencao: WifiMaintenanceStatus;
   incidentesAbertos: number;
   responsavelOperacional?: string | null;
-  empresaId?: ObjectId | null;
   ultimaManutencao?: Date | null;
   observacoes?: string | null;
   createdAt?: Date;
@@ -71,7 +43,6 @@ export interface WifiPointApi {
   statusManutencao: WifiMaintenanceStatus;
   incidentesAbertos: number;
   responsavelOperacional?: string | null;
-  empresaId?: string | null;
   ultimaManutencao?: string | null;
   observacoes?: string | null;
   createdAt?: string | null;
@@ -93,7 +64,6 @@ export interface WifiPointInput {
   statusManutencao?: WifiMaintenanceStatus;
   incidentesAbertos?: number | null;
   responsavelOperacional?: string | null;
-  empresaId?: string | null;
   ultimaManutencao?: string | Date | null;
   observacoes?: string | null;
 }
@@ -116,4 +86,43 @@ export interface WifiStatsApi {
   regioesCriticas: Array<{ regiaoAdministrativa: string; total: number }>;
   filaAtencao: WifiPointApi[];
   recentes: WifiPointApi[];
+}
+
+// ─── Wi-Fi Empresas ────────────────────────────────────────────────────────
+
+export interface DBWifiEmpresa {
+  _id?: ObjectId;
+  nome: string;
+  contato?: string | null;
+  telefone?: string | null;
+  email?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface WifiEmpresaApi {
+  id: string;
+  nome: string;
+  contato?: string | null;
+  telefone?: string | null;
+  email?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WifiEmpresaInput {
+  nome: string;
+  contato?: string | null;
+  telefone?: string | null;
+  email?: string | null;
+}
+
+export interface WifiEmpresaStatsApi {
+  totalPontos: number;
+  pontosOnline: number;
+  pontosOffline: number;
+  pontosImplantacao: number;
+  velocidadeMediaMbps: number | null;
+  regioesAtendidas: string[];
+  pontos: WifiPointApi[];
 }

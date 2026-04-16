@@ -9,6 +9,7 @@ import { dataSourcesRouter } from './routes/dataSources.js';
 import { geminiMetricsRouter } from './routes/geminiMetrics.js';
 import { maintenanceRouter } from './routes/maintenance.js';
 import { migrationRouter } from './routes/migration.js';
+import { startScheduledJobs } from './services/scheduledJobs.js';
 import { oscsRouter } from './routes/osc.js';
 import parlamentaresRouter from './routes/parlamentares.js';
 import { authRouter } from './routes/auth.js';
@@ -20,7 +21,6 @@ import wifiRouter from './routes/wifi.js';
 import wifiEmpresasRouter from './routes/wifiEmpresas.js';
 import { modulosEtapasOrcamentoRouter } from './routes/modulosEtapasOrcamento.js';
 import { modulosParceirosRiscosGovIndRouter } from './routes/modulosParceirosRiscosGovInd.js';
-import { startScheduledJobs } from './services/scheduledJobs.js';
 const app = express();
 const port = Number(process.env.PORT) || 4000;
 // Configuração de CORS mais permissiva para desenvolvimento local
@@ -52,7 +52,20 @@ app.use(cors({
     },
     credentials: true
 }));
-app.use(express.json());
+// Increased limit to accommodate base64 PDF content from SEI extension
+app.use(express.json({ limit: '50mb' }));
+// ⚠️ BACKEND COMPARTILHADO / CONTRATO DE ROTAS
+// Este backend atende mais de um frontend da SECTI.
+// As rotas abaixo são consideradas CONTRATO LEGADO e não podem ser removidas,
+// renomeadas ou deixar de ser montadas sem coordenar a mudança em TODOS os consumidores:
+// - /api/auth
+// - /api/projects
+// - /api/project-overrides
+// - /api/data-sources
+// - /api/status-updates
+// Além delas, este projeto também usa rotas em português (/api/projetos, /api/lancamentos, etc.).
+// Importante: serviços de usuários/autenticação devem usar getUsersDatabase()
+// para evitar regressão quando houver múltiplos bancos/projetos compartilhando o backend.
 app.use('/api/auth', authRouter);
 app.use('/api/status-updates', statusUpdatesRouter);
 app.use('/api/projects', projectsRouter);
@@ -93,6 +106,7 @@ const host = process.env.HOST || '0.0.0.0';
 app.listen(port, host, async () => {
     console.log(`🚀 Server running on http://${host}:${port}`);
     console.log(`   Also available at http://localhost:${port}`);
+    console.log('   Shared legacy routes enabled: /api/auth, /api/projects, /api/project-overrides, /api/data-sources, /api/status-updates');
     // Garante que o usuário admin existe
     await ensureAdminUser();
     // Inicia jobs de limpeza automática
