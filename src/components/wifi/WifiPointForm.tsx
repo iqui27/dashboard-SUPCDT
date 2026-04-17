@@ -531,15 +531,14 @@ export function WifiPointForm({ point, initialPosition, defaultRegion, onClose, 
 
             <div className="space-y-2">
               <Label>Empresa responsável</Label>
-              <Select
-                value={form.empresaId ?? ''}
-                onValueChange={(value) => setForm((current) => ({ ...current, empresaId: value || '' }))}
-              >
-                <SelectTrigger className="rounded-2xl">
-                  <SelectValue placeholder="Nenhuma empresa" />
+<Select
+                value={form.empresaId || '__none__'}
+                onValueChange={(value) => setForm((current) => ({ ...current, empresaId: value === '__none__' ? '' : value }))}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione a empresa responsável" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Sem empresa</SelectItem>
+                  <SelectItem value="__none__">Sem empresa</SelectItem>
                   {empresas.map((empresa) => (
                     <SelectItem key={empresa.id} value={empresa.id}>{empresa.nome}</SelectItem>
                   ))}
