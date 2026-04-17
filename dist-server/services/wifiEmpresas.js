@@ -15,19 +15,22 @@ export function mapWifiEmpresaToApi(empresa) {
     return {
         id: empresa._id?.toString() ?? '',
         nome: empresa.nome,
-        contatoNome: sanitizeText(empresa.contatoNome),
+        contato: sanitizeText(empresa.contato),
         telefone: sanitizeText(empresa.telefone),
         email: sanitizeText(empresa.email),
-        createdAt: toIsoDate(empresa.createdAt),
-        updatedAt: toIsoDate(empresa.updatedAt)
+        createdAt: toIsoDate(empresa.createdAt) ?? '',
+        updatedAt: toIsoDate(empresa.updatedAt) ?? ''
     };
 }
 export function normalizeWifiEmpresaInput(input) {
+    const now = new Date();
     return {
         nome: sanitizeText(input.nome) ?? 'Empresa sem nome',
-        contatoNome: sanitizeText(input.contatoNome),
+        contato: sanitizeText(input.contato),
         telefone: sanitizeText(input.telefone),
-        email: sanitizeText(input.email)
+        email: sanitizeText(input.email),
+        createdAt: now,
+        updatedAt: now
     };
 }
 export async function getWifiEmpresas() {
