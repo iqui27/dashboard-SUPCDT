@@ -44,7 +44,7 @@ export type WifiMaintenanceStatus = (typeof WIFI_MAINTENANCE_STATUSES)[number];
 export interface WifiEmpresa {
   id: string;
   nome: string;
-  contatoNome?: string | null;
+  contato?: string | null;
   telefone?: string | null;
   email?: string | null;
   createdAt?: string | null;
@@ -53,7 +53,7 @@ export interface WifiEmpresa {
 
 export interface WifiEmpresaInput {
   nome: string;
-  contatoNome?: string | null;
+  contato?: string | null;
   telefone?: string | null;
   email?: string | null;
 }

@@ -19,7 +19,7 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
   const [loading, setLoading] = useState(true);
   const [editingEmpresa, setEditingEmpresa] = useState<WifiEmpresa | null>(null);
   const [creatingEmpresa, setCreatingEmpresa] = useState(false);
-  const [form, setForm] = useState<WifiEmpresaInput>({ nome: '', contatoNome: '', telefone: '', email: '' });
+  const [form, setForm] = useState<WifiEmpresaInput>({ nome: '', contato: '', telefone: '', email: '' });
   const [saving, setSaving] = useState(false);
 
   const isAdmin = user?.role === 'admin';
@@ -65,7 +65,7 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
     try {
       const payload: WifiEmpresaInput = {
         nome: form.nome.trim(),
-        contatoNome: form.contatoNome?.trim() || null,
+        contato: form.contato?.trim() || null,
         telefone: form.telefone?.trim() || null,
         email: form.email?.trim() || null
       };
@@ -82,7 +82,7 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
 
       setCreatingEmpresa(false);
       setEditingEmpresa(null);
-      setForm({ nome: '', contatoNome: '', telefone: '', email: '' });
+      setForm({ nome: '', contato: '', telefone: '', email: '' });
     } catch (error) {
       toast.error('Não foi possível salvar a empresa.');
     } finally {
@@ -108,7 +108,7 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
     setCreatingEmpresa(false);
     setForm({
       nome: empresa.nome,
-      contatoNome: empresa.contatoNome ?? '',
+      contato: empresa.contato ?? '',
       telefone: empresa.telefone ?? '',
       email: empresa.email ?? ''
     });
@@ -117,13 +117,13 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
   const startCreate = () => {
     setEditingEmpresa(null);
     setCreatingEmpresa(true);
-    setForm({ nome: '', contatoNome: '', telefone: '', email: '' });
+    setForm({ nome: '', contato: '', telefone: '', email: '' });
   };
 
   const cancelForm = () => {
     setEditingEmpresa(null);
     setCreatingEmpresa(false);
-    setForm({ nome: '', contatoNome: '', telefone: '', email: '' });
+    setForm({ nome: '', contato: '', telefone: '', email: '' });
   };
 
   if (loading) {
@@ -180,8 +180,8 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
             <div className="space-y-2">
               <Label>Contato</Label>
               <Input
-                value={form.contatoNome ?? ''}
-                onChange={(e) => setForm((current) => ({ ...current, contatoNome: e.target.value }))}
+                value={form.contato ?? ''}
+                onChange={(e) => setForm((current) => ({ ...current, contato: e.target.value }))}
                 className="rounded-2xl"
               />
             </div>
@@ -259,12 +259,12 @@ export function EmpresasTab({ points }: EmpresasTabProps) {
             </div>
 
             {/* Contact info */}
-            {(empresa.contatoNome || empresa.telefone || empresa.email) && (
+            {(empresa.contato || empresa.telefone || empresa.email) && (
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-2 text-xs text-muted-foreground">
-                {empresa.contatoNome && (
+                {empresa.contato && (
                   <span className="flex items-center gap-1">
                     <Users className="h-3 w-3" />
-                    {empresa.contatoNome}
+                    {empresa.contato}
                   </span>
                 )}
                 {empresa.telefone && (
