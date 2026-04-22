@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Building2, LayoutGrid, ListFilter, MapPinned, Plus, RadioTower, Search, ShieldAlert } from 'lucide-react';
+import { Building2, FileSearch, LayoutGrid, ListFilter, MapPinned, Plus, RadioTower, Search, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 import { EmpresasTab } from './EmpresasTab';
 import { WifiDashboard } from './WifiDashboard';
+import { WifiImportTab } from './WifiImportTab';
 import { WifiMap } from './WifiMap';
 import { WifiPointForm } from './WifiPointForm';
 import { WifiTable } from './WifiTable';
@@ -20,7 +21,7 @@ interface WifiSocialProps {
   projetos: Projeto[];
 }
 
-type WifiView = 'mapa' | 'painel' | 'lista' | 'empresas';
+type WifiView = 'mapa' | 'painel' | 'lista' | 'empresas' | 'importar';
 
 const EMPTY_STATS: WifiStats = {
   totalPontos: 0,
@@ -211,7 +212,8 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
               { id: 'mapa', label: 'Mapa', icon: MapPinned },
               { id: 'painel', label: 'Painel', icon: LayoutGrid },
               { id: 'lista', label: 'Lista', icon: ListFilter },
-              { id: 'empresas', label: 'Empresas', icon: Building2 }
+              { id: 'empresas', label: 'Empresas', icon: Building2 },
+              { id: 'importar', label: 'Importar', icon: FileSearch }
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -282,7 +284,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
 
       {apiMessage && (
         <div
-          className={`rounded-[1.5rem] border px-5 py-4 text-sm ${
+          className={`rounded-2xl border px-5 py-4 text-sm ${
             apiStatus === 'unavailable'
               ? 'border-warning/40 bg-warning/10 text-warning'
               : 'border-primary/25 bg-primary/10 text-primary'
@@ -293,7 +295,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
       )}
 
       {loading ? (
-        <div className="flex min-h-[40vh] items-center justify-center rounded-[1.45rem] border border-border/80 bg-card/85 px-8 py-10 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+        <div className="flex min-h-[40vh] items-center justify-center rounded-2xl border border-border/80 bg-card px-8 py-10 ">
           <div className="flex flex-col items-center gap-4">
             <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-primary/25 border-t-sky-700" />
             <div className="text-center">
@@ -303,7 +305,7 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           </div>
         </div>
       ) : apiStatus === 'unavailable' ? (
-        <div className="rounded-[1.45rem] border border-dashed border-warning/40 bg-card/85 px-8 py-14 text-center shadow-[0_30px_80px_-45px_rgba(15,23,42,0.35)]">
+        <div className="rounded-2xl border border-dashed border-warning/40 bg-card px-8 py-14 text-center ">
           <p className="text-lg font-semibold text-foreground">Módulo Wi‑Fi Social indisponível neste ambiente</p>
           <p className="mx-auto mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
             O frontend foi publicado antes do backend que expõe as rotas de Wi‑Fi Social. O restante do dashboard pode continuar operando, mas esta área depende da publicação das rotas
@@ -344,6 +346,10 @@ export function WifiSocial({ projetos }: WifiSocialProps) {
           )}
 
           {view === 'empresas' && <EmpresasTab points={points} />}
+
+          {view === 'importar' && (
+            <WifiImportTab onImportComplete={loadData} />
+          )}
         </>
       )}
 

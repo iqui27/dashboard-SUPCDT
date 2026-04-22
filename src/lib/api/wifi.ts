@@ -183,3 +183,84 @@ export async function deleteWifiEmpresa(token: string, id: string): Promise<void
     await parseApiError(response, 'Falha ao excluir empresa Wi-Fi');
   }
 }
+
+// ---------------------------------------------------------------------------
+// Wi-Fi Import from SEI
+// ---------------------------------------------------------------------------
+
+export interface WifiImportPoint {
+  nome: string;
+  endereco: string;
+  cep?: string | null;
+  regiaoAdministrativa: string;
+  latitude: number;
+  longitude: number;
+  status: string;
+  coberturaRaioMetros: number;
+  velocidadeMbps?: number | null;
+  usuariosConectados?: number | null;
+  responsavelOperacional?: string | null;
+  observacoes?: string | null;
+  sourceExcerpt?: string;
+}
+
+export interface WifiImportResult {
+  success: boolean;
+  points: WifiImportPoint[];
+  metadata: {
+    processoSEI: string;
+    documentsAnalyzed: number;
+    extractionModel: string;
+    durationMs: number;
+    error?: string;
+  };
+  error?: string;
+}
+
+export async function importWifiPointsFromSei(
+  token: string,
+  processoSEI: string
+): Promise<WifiImportResult> {
+  const response = await fetch(`${API_URL}/wifi/import-from-sei`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ processoSEI })
+  });
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao importar pontos Wi-Fi do processo SEI');
+  }
+
+  return response.json();
+}
+
+export interface WifiBulkCreateResult {
+  success: boolean;
+  created: WifiPoint[];
+  total: number;
+  createdCount: number;
+  errors: Array<{ index: number; error: string }>;
+}
+
+export async function bulkCreateWifiPoints(
+  token: string,
+  points: WifiPointInput[]
+): Promise<WifiBulkCreateResult> {
+  const response = await fetch(`${API_URL}/wifi/bulk`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ points })
+  });
+
+  if (!response.ok) {
+    await parseApiError(response, 'Falha ao criar pontos Wi-Fi em lote');
+  }
+
+  return response.json();
+}
