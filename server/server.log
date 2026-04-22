@@ -1,0 +1,30 @@
+
+> magic-patterns-vite-template@0.0.1 dev
+> concurrently "npm run server" "vite"
+
+[0] 
+[0] > magic-patterns-vite-template@0.0.1 server
+[0] > tsx --tsconfig server/tsconfig.json server/index.ts
+[0] 
+[1] Port 5173 is in use, trying another one...
+[1] Port 5174 is in use, trying another one...
+[1] Port 5175 is in use, trying another one...
+[1] Port 5176 is in use, trying another one...
+[1] 
+[1]   VITE v5.4.21  ready in 271 ms
+[1] 
+[1]   ➜  Local:   http://localhost:5177/
+[1]   ➜  Network: http://192.168.3.59:5177/
+[1]   ➜  Network: http://172.25.133.122:5177/
+[1]   ➜  Network: http://100.118.122.46:5177/
+[1] [baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+[0] 🚀 Server running on http://0.0.0.0:4000
+[0]    Also available at http://localhost:4000
+[0] [Scheduled Jobs] Starting with 24h interval
+[0] [Scheduled Job] Starting cleanup jobs...
+[0] [Scheduled Jobs] Next cleanup in 24 hours
+[0] [Scheduled Job] Cleaned up 0 expired cache entries
+[0] [Gemini Metrics] Cleaned up 0 old metrics
+[0] [Scheduled Job] Cleanup complete - Cache: 0 entries, Metrics: 0 records
+[0] npm run server exited with code SIGHUP
+[1] vite exited with code 0
