@@ -33,6 +33,7 @@ export function WifiImportTab({ onImportComplete }: WifiImportTabProps) {
   const [selectedPoints, setSelectedPoints] = useState<Set<number>>(new Set());
   const [bulkResult, setBulkResult] = useState<{ created: number; errors: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [scrapingProgress, setScrapingProgress] = useState<string>('');
 
   const handleScrape = useCallback(async () => {
     const process = processoSEI.trim();
@@ -50,9 +51,19 @@ export function WifiImportTab({ onImportComplete }: WifiImportTabProps) {
     setError(null);
     setImportResult(null);
     setSelectedPoints(new Set());
+    setScrapingProgress('Conectando ao SEI...');
+
+    // Show a progress timer while polling
+    const progressInterval = setInterval(() => {
+      setScrapingProgress((prev) => {
+        if (prev.endsWith('...')) return prev.replace(/\.\.\.+$/, '..');
+        return prev + '.';
+      });
+    }, 1500);
 
     try {
       const result = await importWifiPointsFromSei(token, process);
+      clearInterval(progressInterval);
 
       if (!result.success) {
         setError(result.error || result.metadata.error || 'Falha ao importar pontos do processo');
@@ -64,6 +75,7 @@ export function WifiImportTab({ onImportComplete }: WifiImportTabProps) {
       setSelectedPoints(new Set(result.points.map((_, i) => i)));
       setPhase(result.points.length > 0 ? 'review' : 'done');
     } catch (err) {
+      clearInterval(progressInterval);
       const message = err instanceof Error ? err.message : 'Erro ao buscar processo SEI';
       setError(message);
       setPhase('idle');
@@ -201,6 +213,11 @@ export function WifiImportTab({ onImportComplete }: WifiImportTabProps) {
               </>
             )}
           </Button>
+
+          {/* Progress message during scraping */}
+          {phase === 'scraping' && scrapingProgress && (
+            <p className="mt-3 text-xs text-muted-foreground">{scrapingProgress}</p>
+          )}
         </div>
       </div>
 
